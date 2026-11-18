@@ -8,6 +8,24 @@
   <link rel="apple-touch-icon" href="media/logo-roccia-games.png?v=3">
   <meta name="description" content="SUPERPERSONA, action horror 2D a stanze di Roccia Games. Spada, pistola, orde. Gioca la demo da computer.">
   <meta name="theme-color" content="#000000">
+  <!-- anteprima del link (WhatsApp e simili): indirizzi assoluti -->
+  <link rel="canonical" href="https://rocciagames.com/">
+  <meta property="og:site_name" content="Roccia Games">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Roccia Games — SUPERPERSONA">
+  <meta property="og:description" content="SUPERPERSONA, action horror 2D a stanze di Roccia Games. Spada, pistola, orde. Gioca la demo da computer.">
+  <meta property="og:url" content="https://rocciagames.com/">
+  <meta property="og:image" content="https://rocciagames.com/media/SUPERPERSONA-demo.jpg">
+  <meta property="og:image:secure_url" content="https://rocciagames.com/media/SUPERPERSONA-demo.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="800">
+  <meta property="og:image:alt" content="SUPERPERSONA: il protagonista col mantello rosso in una stanza del gioco">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Roccia Games — SUPERPERSONA">
+  <meta name="twitter:description" content="SUPERPERSONA, action horror 2D a stanze di Roccia Games. Spada, pistola, orde. Gioca la demo da computer.">
+  <meta name="twitter:image" content="https://rocciagames.com/media/SUPERPERSONA-demo.jpg">
   <link rel="stylesheet" href="stile.css">
   <!-- l'apertura parte appena ha questi due file: il protagonista fermo, il resto arriva mentre gira -->
   <link rel="preload" href="media/sprite/sprite.json" as="fetch" crossorigin>
@@ -141,7 +159,16 @@
   <!-- (Carlo 18/11) video demo in uno schermo sopra il sito: si apre da «Guarda il gameplay», si chiude con la X, con Esc o toccando fuori -->
   <dialog class="schermo-video" id="video-demo" aria-label="Video demo di SUPERPERSONA">
     <button class="schermo-video__chiudi" type="button" aria-label="Chiudi il video" data-chiudi-video>&times;</button>
+    <!-- (Carlo 18/11) condivide la paginetta video/ (anteprima con la copertina), come le tracce di Roccia Music -->
+    <button class="schermo-video__condividi" type="button" data-condividi-video>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>
+      Condividi
+    </button>
     <video src="media/SUPERPERSONA-demo.mp4" poster="media/SUPERPERSONA-demo.jpg" controls playsinline preload="none" width="1280" height="800"></video>
+    <div class="schermo-video__avviso" role="status" aria-live="polite">
+      <span data-avviso-testo></span>
+      <input type="text" readonly value="https://rocciagames.com/video/" aria-label="Link del video" data-avviso-link hidden>
+    </div>
   </dialog>
   <script src="sito.js" defer></script>
   <script src="ascii.js" defer></script>

@@ -2766,10 +2766,13 @@
     return { li, cv, g: null, a, corpo, N: Nstriscia, aTerra, t: 0, fUlt: -1, sd: 1, Wc: 1, Hc: 1, X: 0, Y: 0 };
   }
   // sd: px CSS per px della striscia (1, 1/2, … per le strisce a 4×; intero per quelle a 1×)
-  function dimensionaBoss(v, larg, Hbox, sd) {
+  // liscio (telefono, riduzione forte): tela in px del dispositivo, la striscia si riduce al disegno col filtro buono
+  function dimensionaBoss(v, larg, Hbox, sd, liscio) {
     v.sd = sd;
     v.Wc = Math.max(1, Math.floor(larg / sd)); v.Hc = Math.max(1, Math.floor(Hbox / sd));
-    v.g = dimensiona(v.cv, v.Wc, v.Hc, sd);
+    const q = liscio ? Math.min(1, sd * Math.min(2, window.devicePixelRatio || 1)) : 1;
+    v.g = dimensiona(v.cv, Math.max(1, Math.round(v.Wc * q)), Math.max(1, Math.round(v.Hc * q)), sd / q);
+    if (q !== 1) { v.g.imageSmoothingEnabled = true; v.g.imageSmoothingQuality = 'high'; v.g.setTransform(q, 0, 0, q, 0, 0); }
     v.cv.style.width = v.Wc * sd + 'px'; v.cv.style.height = v.Hc * sd + 'px';
     const c = v.corpo, a = v.a, terra = Math.round(10 / sd);
     v.X = Math.round(v.Wc / 2 - ((c.x0 + c.x1) / 2 - a.px));
@@ -2838,8 +2841,15 @@
       ulBoss.hidden = !capi.length;
       ulFila.hidden = !elencoComuni.length;
 
+      // Telefono: la fila dei nemici è nascosta (stile.css) e non si carica finché non si vede
+      const filaVisibile = () => !ulFila.hidden && getComputedStyle(ulFila).display !== 'none';
+      let comuniAvviati = null;
+
       quandoVicino(sez, async () => {
-        const Hbox = () => (innerWidth < 760 ? 300 : 340);
+        const telefono = () => innerWidth <= 760;
+        const Hbox = () => (telefono() ? 0 : 340);   // telefono: riquadro alto quanto il corpo, niente vuoto
+        // spazio utile del riquadro (larghezza meno il padding di stile.css)
+        const utile = (li) => { const cs = getComputedStyle(li); return li.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight); };
         // Mini boss: la sola clip `vetrina` (ripiego: `fermo`); corpo dai dati (`corpo: [x, y, w, h]`) o misurato
         await Promise.all(capi.map(async ([id, m], j) => {
           const d = m.vetrina || m.clip.fermo || m.clip.avanza;
@@ -2853,7 +2863,7 @@
           boss[j] = bossSprite(liBoss[j], m.nome || id, a, corpo, N, !!m.vetrina);
         }));
         // Nemici comuni: un solo fotogramma di `avanza`, ritagliato sul corpo, con dietro la sua ombra ASCII
-        await Promise.all(elencoComuni.map(async ([id, n], j) => {
+        const caricaComuni = () => (comuniAvviati ||= Promise.all(elencoComuni.map(async ([id, n], j) => {
           const a = await atlanteOpz(n && n.clip && n.clip.avanza, GIOCO);
           if (!a) { liComuni[j].remove(); return; }
           const f = Math.min(a.n - 1, POSA_COMUNI[id] || 0), alt = +n.altezza_px || a.fh * 0.5;
@@ -2870,31 +2880,35 @@
           fig.append(cv);
           dimensiona(cv, w, h, 0).drawImage(a.img, f * a.fw + x0, y0, w, h, 0, 0, w, h);
           comuni[j] = { li: liComuni[j], cv, ombra, img: a.img, f, fw: a.fw, fh: a.fh, x0, y0, w, h, dw: w, dh: h };
-        }));
+        })));
+        if (filaVisibile()) await caricaComuni();
 
         // Scala comune dei mini boss: stessi px CSS per px di gioco per i tre (il Pressatore resta il più grosso).
         // Strisce a N× (vetrina, 4×): 1:1, oppure ridotte di un fattore intero r se non entrano (su telefono almeno 1/2),
         // mai ingrandite; il riquadro si alza fino a 480 px perché entri il corpo (si taglia solo l'aura). Strisce a 1×:
         // ingrandite a scala intera col corpo più alto a circa il 75% del riquadro.
+        // Telefono: tre riquadri piccoli su una riga; r cresce (anche 1/4 e oltre) finché il corpo intero entra in larghezza.
         const scala = () => {
-          const vivi = boss.filter(Boolean);
+          const vivi = boss.filter(Boolean), tel = telefono();
           if (vivi.length) {
-            const larg = Math.max(60, vivi[0].li.clientWidth - 24), Nm = Math.max(...vivi.map((v) => v.N));
+            const larg = Math.max(tel ? 40 : 60, utile(vivi[0].li)), Nm = Math.max(...vivi.map((v) => v.N));
             const Hg = Math.max(...vivi.map((v) => (v.corpo.y1 - v.corpo.y0) / v.N));   // corpo più alto, px di gioco
             const Wg = Math.max(...vivi.map((v) => (v.corpo.x1 - v.corpo.x0) / v.N));
             const base = Hbox();
             let k, Hb = base;
             if (Nm > 1) {
-              let r = innerWidth < 760 ? 2 : 1;
-              while (r < 8 && (Hg * Nm / r > 480 * 0.8 || Wg * Nm / r > larg)) r++;
+              let r = tel ? 2 : 1;
+              while (r < 16 && (Hg * Nm / r > 480 * 0.8 || Wg * Nm / r > larg)) r++;
               k = Nm / r;                                          // px CSS per px di gioco
               Hb = Math.max(base, Math.min(480, Math.ceil(Hg * k / 0.78)));
-            } else k = Math.max(1, Math.floor(base * 0.75 / Hg));
+            } else k = Math.max(1, Math.floor((base || 120) * 0.75 / Hg));
             for (const v of vivi) {
-              dimensionaBoss(v, larg, Hb, k / v.N);
+              dimensionaBoss(v, larg, Hb, k / v.N, tel && k / v.N < 1);
               disegnaBoss(v);
             }
           }
+          if (!filaVisibile()) return;
+          if (!comuniAvviati) { caricaComuni().then(scala); return; }   // fila tornata visibile (schermo allargato)
           const maxH = innerWidth < 760 ? 110 : 140;
           for (const v of comuni) {
             if (!v) continue;

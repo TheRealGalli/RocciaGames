@@ -1,7 +1,7 @@
 // Based on React Bits PixelBlast (JS-CSS) — reactbits.dev
 // Cambiato: niente React, solo la forma quadrata e niente piano inclinato; colori del gioco, velo scuro al centro,
 // pixel tenui e più vivi sotto il cursore; eventi sulla sezione #gioca, deriva lenta su touch, fermo con reduced-motion.
-(function () {
+(function avvia() {
   'use strict';
 
   // Opzioni regolabili (nomi come le props dell'originale)
@@ -36,6 +36,16 @@
   var sezione = document.getElementById('gioca');
   var canvas = sezione && sezione.querySelector('.gioca__sfondo');
   if (!canvas) return;
+  // Sezione nascosta (telefono, stile.css): niente WebGL; parte se lo schermo si allarga e la sezione si vede
+  if (window.getComputedStyle(sezione).display === 'none') {
+    var riprova = function () {
+      if (window.getComputedStyle(sezione).display === 'none') return;
+      window.removeEventListener('resize', riprova);
+      avvia();
+    };
+    window.addEventListener('resize', riprova);
+    return;
+  }
   var gl = null;
   try {
     gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false });
