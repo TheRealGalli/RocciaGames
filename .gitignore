@@ -1,0 +1,7 @@
+# Solo ciò che serve al sito in linea
+.DS_Store
+strumenti/
+media/modelli/
+media/vecchi-*/
+media/apertura.mp4
+media/apertura.jpg

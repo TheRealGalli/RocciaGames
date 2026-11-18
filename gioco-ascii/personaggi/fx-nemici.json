@@ -1,0 +1,3277 @@
+{
+  "debug": {
+    "nota": "(GP7 17/11, Carlo: «togliere tutte quelle linee gialle che indicano la portata, sia ai nemici sia allo scatto potenziato: non ci stanno») linee_portata true le riaccende solo per le prove: zona d'arrivo a terra del preavviso dei nemici (fx_nemici.mjs → _carica), puntini della direzione di tiro (nemici/proiettili.mjs → A.linea), portata dello scatto lungo a terra (prova.mjs → indiceAura).",
+    "linee_portata": false
+  },
+  "formato": "fx-nemici/1",
+  "autore": "FXN (giro 3, 14/11/2026)",
+  "stato": "proposta",
+  "nota": "Effetti visivi di nemici, oggetti e terreno (prova/fx_nemici.mjs). Misure in H (raggi, velocità in H/s, gravità in H/s²), tempi in ms (ms) o s (vita, rit). Tavolozze dalla più chiara alla più scura, sui toni del Sigillo (ambra, cera, pietra calda, ferro). Ogni ricetta è una lista di strati; 's' = tipo di strato. 'pal': '$' = tinta del nemico dell'evento. 'dove': punto (x,y dell'evento, predefinito) | suolo (x a terra) | portata (in fondo alla portata della mossa, a terra). 'rE': raggio preso da un campo dell'evento in px. 'verso': avanti | dietro | due.",
+  "tetti": {
+    "particelle": 720,
+    "segni": 64,
+    "terra": 18,
+    "emettitori": 12,
+    "carico_dimezza": 0.7,
+    "lontano_H": 3,
+    "lontano_k": 0.25
+  },
+  "pal": {
+    "ruggine": [
+      "#f6e6cc",
+      "#d89a5a",
+      "#a85c34",
+      "#6c3626",
+      "#3a2420"
+    ],
+    "cera_calda": [
+      "#fff4d6",
+      "#ffc878",
+      "#e8843c",
+      "#a8482a",
+      "#5c2a1e"
+    ],
+    "argento": [
+      "#ffffff",
+      "#e2eaf2",
+      "#aab8c8",
+      "#6c7c92",
+      "#3a4458"
+    ],
+    "bianco": [
+      "#ffffff",
+      "#fff6e0",
+      "#ffe9b8"
+    ],
+    "fuoco": [
+      "#fffbe8",
+      "#ffe08a",
+      "#ffb347",
+      "#ff7a2e",
+      "#d0402a",
+      "#6e2418"
+    ],
+    "fumo": [
+      "#6a5e58",
+      "#4e4442",
+      "#383030",
+      "#262020"
+    ],
+    "polvere": [
+      "#e2d6c4",
+      "#b0a08e",
+      "#807264",
+      "#54484a"
+    ],
+    "vapore": [
+      "#ffffff",
+      "#e4eef4",
+      "#bcd0dc",
+      "#8aa4b4"
+    ],
+    "cera": [
+      "#fff0c0",
+      "#ffb070",
+      "#e0603a",
+      "#a83224",
+      "#5e1c16"
+    ],
+    "scossa": [
+      "#ffffff",
+      "#d8f4ff",
+      "#8fd0ff",
+      "#4a8ae0",
+      "#2a3e8a"
+    ],
+    "metallo": [
+      "#ffffff",
+      "#d8ccc8",
+      "#a8989a",
+      "#6e6268",
+      "#3a3238"
+    ],
+    "pietra": [
+      "#e2d6be",
+      "#a89c88",
+      "#7a7064",
+      "#4e4640",
+      "#2b2826"
+    ],
+    "scaglie": [
+      "#ffffff",
+      "#fff2c0",
+      "#ffd36b",
+      "#c9a24a"
+    ],
+    "luce": [
+      "#fffef0",
+      "#fff2b0",
+      "#ffd36b",
+      "#ff9a3a"
+    ],
+    "filo": [
+      "#ffffff",
+      "#efe6ff",
+      "#c8b4ec",
+      "#8a74b8"
+    ],
+    "vetro": [
+      "#ffffff",
+      "#e8f8ff",
+      "#a8e0f0",
+      "#5a9ab0"
+    ],
+    "caldo": [
+      "#fff6d8",
+      "#ffd36b",
+      "#ffb347",
+      "#ff7a2e"
+    ],
+    "viola": [
+      "#ffffff",
+      "#e0b8ff",
+      "#b25cff",
+      "#6a2aa8"
+    ],
+    "morso": [
+      "#ffffff",
+      "#f4e6d0",
+      "#c9a27a"
+    ],
+    "legno": [
+      "#e0b880",
+      "#a87a48",
+      "#6a4a2a"
+    ],
+    "carta": [
+      "#fbf3dc",
+      "#e2d2aa",
+      "#b09a70"
+    ],
+    "scuro": [
+      "#1a1412",
+      "#2a201c",
+      "#3a2c26"
+    ],
+    "sigillo": [
+      "#ffd0c8",
+      "#ff5a4a",
+      "#c8283c",
+      "#7a1424"
+    ]
+  },
+  "tinte": {
+    "z24-e01": "metallo",
+    "z24-e02": "cera",
+    "z24-e03": "metallo",
+    "z24-e04": "caldo",
+    "z24-e05": "pietra",
+    "z24-e06": "scaglie",
+    "z24-e07": "luce",
+    "z24-e08": "metallo",
+    "z24-e09": "filo",
+    "z24-mb01": "ruggine",
+    "z24-mb02": "cera_calda",
+    "z24-mb03": "argento",
+    "_": "metallo"
+  },
+  "carica": {
+    "nota": "Preavviso in tre tempi, dallo stato della mossa (n.fase): CARICA durante 'avviso' (scintille che convergono sulla parte che colpisce, bagliore che cresce, polvere che si alza ai piedi, zona d'arrivo che si accende a terra); RILASCIO al passaggio ad 'attivo' (scia lungo la traiettoria della mossa + lampo); CODA all'uscita da 'attivo' (colpo a segno dall'evento, altrimenti 'mancato_terra' se la mossa arriva a terra). La durata segue fotogrammi_ms della mossa.",
+    "zona_parabile": "caldo",
+    "zona_non_parabile": "viola",
+    "grosso": {
+      "scintille": 8,
+      "giro_H": 1.1,
+      "bagliore_px": 7,
+      "polvere_s": 9,
+      "zona_px": 3,
+      "colonne": true
+    },
+    "miniboss": {
+      "nota": "(MBC3) preavviso dei mini boss: più deciso del grosso (più scintille che convergono, giro e bagliore più larghi)",
+      "scintille": 14,
+      "giro_H": 1.5,
+      "bagliore_px": 13,
+      "polvere_s": 12,
+      "zona_px": 3,
+      "colonne": true
+    },
+    "piccolo": {
+      "scintille": 3,
+      "giro_H": 0.5,
+      "bagliore_px": 3,
+      "polvere_s": 0,
+      "zona_px": 1,
+      "colonne": false
+    }
+  },
+  "rilascio": {
+    "z24-mb01": {
+      "_": {
+        "forma": "hitbox",
+        "nota": "(MBC3) archi dalla hitbox (miniboss) e lampo all'istante attivo; i tiri restano bocca"
+      }
+    },
+    "z24-mb02": {
+      "_": {
+        "forma": "hitbox",
+        "nota": "(MBC3) archi dalla hitbox (miniboss) e lampo all'istante attivo; i tiri restano bocca"
+      }
+    },
+    "z24-mb03": {
+      "_": {
+        "forma": "hitbox",
+        "nota": "(MBC3) archi dalla hitbox (miniboss) e lampo all'istante attivo; i tiri restano bocca"
+      }
+    },
+    "z24-e01": {
+      "_": {
+        "forma": "arco",
+        "a0": -80,
+        "a1": 50,
+        "w": 4
+      },
+      "carica": {
+        "forma": "carica"
+      },
+      "presa": {
+        "forma": "affondo",
+        "w": 3
+      },
+      "mulinello": {
+        "forma": "arco",
+        "a0": -200,
+        "a1": 150,
+        "w": 4
+      }
+    },
+    "z24-e02": {
+      "_": {
+        "forma": "bocca"
+      },
+      "ventaglio": {
+        "forma": "arco",
+        "a0": -50,
+        "a1": 30,
+        "w": 3
+      }
+    },
+    "z24-e03": {
+      "_": {
+        "forma": "affondo",
+        "w": 2
+      }
+    },
+    "z24-e04": {
+      "_": {
+        "forma": "arco",
+        "a0": -30,
+        "a1": 25,
+        "w": 5
+      },
+      "carica_placca": {
+        "forma": "carica"
+      },
+      "schiacciata": {
+        "forma": "pesta",
+        "w": 6
+      },
+      "placca_su": {
+        "forma": "arco",
+        "a0": 40,
+        "a1": -95,
+        "w": 5
+      }
+    },
+    "z24-e05": {
+      "_": {
+        "forma": "pesta",
+        "w": 6
+      },
+      "rotola": {
+        "forma": "carica"
+      },
+      "urto": {
+        "forma": "affondo",
+        "w": 5
+      }
+    },
+    "z24-e06": {
+      "_": {
+        "forma": "affondo",
+        "w": 2
+      },
+      "scaglie": {
+        "forma": "nessuna"
+      }
+    },
+    "z24-e07": {
+      "_": {
+        "forma": "bocca"
+      },
+      "raggio": {
+        "forma": "fascio",
+        "w": 6
+      }
+    },
+    "z24-e08": {
+      "_": {
+        "forma": "affondo",
+        "w": 3
+      },
+      "spazzata_bassa": {
+        "forma": "arco",
+        "a0": 20,
+        "a1": 85,
+        "w": 5
+      },
+      "schianto": {
+        "forma": "pesta",
+        "w": 7
+      }
+    },
+    "z24-e09": {
+      "_": {
+        "forma": "affondo",
+        "w": 2
+      },
+      "graffio": {
+        "forma": "arco",
+        "a0": -60,
+        "a1": 60,
+        "w": 2
+      }
+    },
+    "mini": {
+      "_": {
+        "forma": "arco",
+        "a0": -50,
+        "a1": 40,
+        "w": 2
+      }
+    }
+  },
+  "taglie": {
+    "piccola": {
+      "r": 0.72,
+      "n": 0.75,
+      "px": 0.72
+    },
+    "media": {
+      "r": 1.2,
+      "n": 1,
+      "px": 1.2
+    },
+    "grande": {
+      "r": 1.8,
+      "n": 1.25,
+      "px": 1.85
+    }
+  },
+  "materie": {
+    "fuoco": {},
+    "vapore": {
+      "sost": {
+        "fuoco": "vapore",
+        "pietra": "vetro"
+      },
+      "senza": [
+        "braci",
+        "macchia",
+        "fiamme"
+      ],
+      "fumo": "vapore",
+      "luce": [
+        210,
+        235,
+        255
+      ]
+    },
+    "cera": {
+      "sost": {
+        "fuoco": "cera",
+        "pietra": "cera"
+      },
+      "come": {
+        "schegge": "gocce"
+      },
+      "luce": [
+        255,
+        170,
+        110
+      ]
+    },
+    "scossa": {
+      "sost": {
+        "fuoco": "scossa",
+        "pietra": "metallo"
+      },
+      "come": {
+        "braci": "scintille"
+      },
+      "senza": [
+        "fiamme"
+      ],
+      "fumo": "chiaro",
+      "luce": [
+        170,
+        220,
+        255
+      ]
+    },
+    "macerie": {
+      "sost": {
+        "fuoco": "polvere"
+      },
+      "senza": [
+        "braci",
+        "fiamme",
+        "luce",
+        "macchia"
+      ],
+      "fumo": "chiaro"
+    }
+  },
+  "ricette": {
+    "colpo_mb": [
+      {
+        "s": "lampo",
+        "r": 0.22,
+        "ms": 50,
+        "pal": "bianco"
+      },
+      {
+        "s": "urto",
+        "r": 0.85,
+        "ms": 240,
+        "pal": "$"
+      },
+      {
+        "s": "raggi",
+        "r": 0.8,
+        "n": 8,
+        "w": 4,
+        "ms": 190,
+        "pal": "$",
+        "avanti": true
+      },
+      {
+        "s": "scintille",
+        "n": 16,
+        "v": 9,
+        "ang": "avanti",
+        "vita": 0.34,
+        "pal": "$"
+      },
+      {
+        "s": "scintille",
+        "n": 6,
+        "v": 6,
+        "ang": "tutto",
+        "vita": 0.26,
+        "pal": "bianco"
+      },
+      {
+        "s": "schegge",
+        "n": 8,
+        "v": 6,
+        "ang": "avanti",
+        "vita": 0.55,
+        "pal": "$",
+        "dim": [
+          1,
+          2
+        ],
+        "rimb": 0.3
+      }
+    ],
+    "colpo_mb_pesante": [
+      {
+        "s": "lampo",
+        "r": 0.22,
+        "ms": 50,
+        "pal": "bianco"
+      },
+      {
+        "s": "urto",
+        "r": 0.85,
+        "ms": 240,
+        "pal": "$"
+      },
+      {
+        "s": "raggi",
+        "r": 0.8,
+        "n": 8,
+        "w": 4,
+        "ms": 190,
+        "pal": "$",
+        "avanti": true
+      },
+      {
+        "s": "scintille",
+        "n": 16,
+        "v": 9,
+        "ang": "avanti",
+        "vita": 0.34,
+        "pal": "$"
+      },
+      {
+        "s": "scintille",
+        "n": 6,
+        "v": 6,
+        "ang": "tutto",
+        "vita": 0.26,
+        "pal": "bianco"
+      },
+      {
+        "s": "schegge",
+        "n": 8,
+        "v": 6,
+        "ang": "avanti",
+        "vita": 0.55,
+        "pal": "$",
+        "dim": [
+          1,
+          2
+        ],
+        "rimb": 0.3
+      },
+      {
+        "s": "schegge",
+        "n": 6,
+        "v": 5,
+        "ang": "su",
+        "vita": 0.7,
+        "pal": "pietra",
+        "dim": [
+          1,
+          2
+        ],
+        "dove": "suolo",
+        "rimb": 0.3
+      },
+      {
+        "s": "polvere",
+        "n": 4,
+        "forza": 0.7,
+        "dove": "suolo"
+      },
+      {
+        "s": "scossa",
+        "px": 4,
+        "ms": 200
+      }
+    ],
+    "parato_mb": [
+      {
+        "s": "lampo",
+        "r": 0.24,
+        "ms": 60,
+        "pal": "bianco"
+      },
+      {
+        "s": "luce",
+        "col": [
+          255,
+          255,
+          255
+        ],
+        "r": 2.2,
+        "ms": 90,
+        "forza": 1.2
+      },
+      {
+        "s": "urto",
+        "r": 0.6,
+        "ms": 200,
+        "pal": "bianco"
+      },
+      {
+        "s": "tratti",
+        "r": 1.0,
+        "n": 10,
+        "ms": 240,
+        "pal": "$"
+      },
+      {
+        "s": "raggi",
+        "r": 0.9,
+        "n": 9,
+        "w": 4,
+        "ms": 170,
+        "pal": "bianco"
+      },
+      {
+        "s": "scintille",
+        "n": 26,
+        "v": 11,
+        "ang": "tutto",
+        "vita": 0.38,
+        "pal": "$"
+      },
+      {
+        "s": "scintille",
+        "n": 10,
+        "v": 8,
+        "ang": "tutto",
+        "vita": 0.3,
+        "pal": "bianco"
+      },
+      {
+        "s": "schegge",
+        "n": 10,
+        "v": 7,
+        "ang": "su",
+        "vita": 0.6,
+        "pal": "$",
+        "dim": [
+          1,
+          2
+        ],
+        "rimb": 0.3
+      }
+    ],
+    "parato_mb_pesante": [
+      {
+        "s": "lampo",
+        "r": 0.24,
+        "ms": 60,
+        "pal": "bianco"
+      },
+      {
+        "s": "luce",
+        "col": [
+          255,
+          255,
+          255
+        ],
+        "r": 2.2,
+        "ms": 90,
+        "forza": 1.2
+      },
+      {
+        "s": "urto",
+        "r": 0.6,
+        "ms": 200,
+        "pal": "bianco"
+      },
+      {
+        "s": "tratti",
+        "r": 1.0,
+        "n": 10,
+        "ms": 240,
+        "pal": "$"
+      },
+      {
+        "s": "raggi",
+        "r": 0.9,
+        "n": 9,
+        "w": 4,
+        "ms": 170,
+        "pal": "bianco"
+      },
+      {
+        "s": "scintille",
+        "n": 26,
+        "v": 11,
+        "ang": "tutto",
+        "vita": 0.38,
+        "pal": "$"
+      },
+      {
+        "s": "scintille",
+        "n": 10,
+        "v": 8,
+        "ang": "tutto",
+        "vita": 0.3,
+        "pal": "bianco"
+      },
+      {
+        "s": "schegge",
+        "n": 10,
+        "v": 7,
+        "ang": "su",
+        "vita": 0.6,
+        "pal": "$",
+        "dim": [
+          1,
+          2
+        ],
+        "rimb": 0.3
+      },
+      {
+        "s": "scossa",
+        "px": 3,
+        "ms": 160
+      }
+    ],
+    "terra_mb": [
+      {
+        "s": "polvere",
+        "n": 5,
+        "forza": 0.6,
+        "dove": "portata"
+      },
+      {
+        "s": "schegge",
+        "n": 7,
+        "v": 5,
+        "ang": "su",
+        "vita": 0.7,
+        "pal": "pietra",
+        "dim": [
+          1,
+          2
+        ],
+        "dove": "portata",
+        "rimb": 0.3
+      },
+      {
+        "s": "scintille",
+        "n": 8,
+        "v": 6,
+        "ang": "su",
+        "vita": 0.3,
+        "pal": "$",
+        "dove": "portata"
+      },
+      {
+        "s": "crepe",
+        "n": 2,
+        "r": 0.6,
+        "ms": 1800,
+        "dove": "portata"
+      }
+    ],
+    "terra_mb_pesante": [
+      {
+        "s": "polvere",
+        "n": 8,
+        "forza": 0.9,
+        "dove": "portata"
+      },
+      {
+        "s": "schegge",
+        "n": 12,
+        "v": 5.5,
+        "ang": "su",
+        "vita": 0.75,
+        "pal": "pietra",
+        "dim": [
+          1,
+          2
+        ],
+        "dove": "portata",
+        "rimb": 0.3
+      },
+      {
+        "s": "scintille",
+        "n": 12,
+        "v": 6.5,
+        "ang": "su",
+        "vita": 0.32,
+        "pal": "$",
+        "dove": "portata"
+      },
+      {
+        "s": "urto",
+        "r": 0.7,
+        "ms": 200,
+        "pal": "$",
+        "dove": "portata"
+      },
+      {
+        "s": "crepe",
+        "n": 3,
+        "r": 0.7,
+        "ms": 1800,
+        "dove": "portata"
+      },
+      {
+        "s": "scossa",
+        "px": 5,
+        "ms": 220
+      }
+    ],
+    "esplosione": [
+      {
+        "s": "lampo",
+        "r": 1,
+        "ms": 34,
+        "pal": "bianco"
+      },
+      {
+        "s": "palla",
+        "r": 1,
+        "ms": 360,
+        "pal": "fuoco"
+      },
+      {
+        "s": "anello",
+        "r": 2.3,
+        "ms": 320,
+        "pal": "polvere",
+        "dove": "suolo"
+      },
+      {
+        "s": "schegge",
+        "n": 16,
+        "v": 7,
+        "g": 22,
+        "vita": 1.1,
+        "pal": "pietra",
+        "dim": [
+          1,
+          3
+        ],
+        "rimb": 0.35,
+        "ang": "tutto"
+      },
+      {
+        "s": "braci",
+        "n": 14,
+        "v": 4.5,
+        "vita": 1.6
+      },
+      {
+        "s": "fiamme",
+        "n": 6,
+        "r": 0.28,
+        "vita": 0.55,
+        "sale": 1.2,
+        "pal": "fuoco"
+      },
+      {
+        "s": "fumo",
+        "n": 7,
+        "r": 0.45,
+        "vita": 1.8,
+        "sale": 0.8,
+        "rit": 0.18,
+        "tono": "scuro"
+      },
+      {
+        "s": "polvere",
+        "n": 10,
+        "forza": 1,
+        "dove": "suolo"
+      },
+      {
+        "s": "macchia",
+        "r": 1.1,
+        "ms": 7000,
+        "pal": "scuro",
+        "dove": "suolo"
+      },
+      {
+        "s": "crepe",
+        "n": 4,
+        "r": 1,
+        "ms": 4000,
+        "dove": "suolo"
+      },
+      {
+        "s": "luce",
+        "r": 5,
+        "ms": 180,
+        "col": [
+          255,
+          190,
+          110
+        ],
+        "forza": 1.3
+      },
+      {
+        "s": "scossa",
+        "px": 5,
+        "ms": 280
+      },
+      {
+        "s": "spinta",
+        "r": 4
+      }
+    ],
+    "bocca": [
+      {
+        "s": "lampo",
+        "r": 0.3,
+        "ms": 50,
+        "pal": "$"
+      },
+      {
+        "s": "scintille",
+        "n": 5,
+        "v": 4,
+        "ang": "avanti",
+        "vita": 0.25,
+        "pal": "$"
+      },
+      {
+        "s": "fumo",
+        "n": 2,
+        "r": 0.14,
+        "vita": 0.5,
+        "sale": 0.4,
+        "tono": "chiaro"
+      }
+    ],
+    "colpo_a_segno": [
+      {
+        "s": "urto",
+        "r": 0.5,
+        "ms": 220,
+        "pal": "$"
+      },
+      {
+        "s": "scintille",
+        "n": 6,
+        "v": 7,
+        "ang": "avanti",
+        "vita": 0.22,
+        "pal": "$"
+      },
+      {
+        "s": "schegge",
+        "n": 5,
+        "v": 5,
+        "ang": "avanti",
+        "vita": 0.4,
+        "pal": "$",
+        "dim": [
+          1,
+          1
+        ]
+      }
+    ],
+    "morso": [
+      {
+        "s": "graffi",
+        "r": 0.22,
+        "ms": 160,
+        "pal": "morso",
+        "n": 2
+      },
+      {
+        "s": "schegge",
+        "n": 3,
+        "v": 3,
+        "ang": "su",
+        "vita": 0.3,
+        "pal": "morso",
+        "dim": [
+          1,
+          1
+        ]
+      }
+    ],
+    "parato": [
+      {
+        "s": "polvere",
+        "n": 2,
+        "forza": 0.4,
+        "dove": "suolo"
+      }
+    ],
+    "scudo_para": [
+      {
+        "s": "lampo",
+        "r": 0.35,
+        "ms": 45,
+        "pal": "metallo"
+      },
+      {
+        "s": "scintille",
+        "n": 10,
+        "v": 7,
+        "ang": "dietro",
+        "vita": 0.3,
+        "pal": "caldo"
+      },
+      {
+        "s": "anello",
+        "r": 0.5,
+        "ms": 140,
+        "pal": "metallo",
+        "aria": true
+      }
+    ],
+    "scudo_rotto": [
+      {
+        "s": "lampo",
+        "r": 0.8,
+        "ms": 60,
+        "pal": "bianco"
+      },
+      {
+        "s": "schegge",
+        "n": 14,
+        "v": 6,
+        "ang": "tutto",
+        "g": 20,
+        "vita": 1,
+        "pal": "metallo",
+        "dim": [
+          2,
+          4
+        ],
+        "rimb": 0.4
+      },
+      {
+        "s": "scintille",
+        "n": 12,
+        "v": 9,
+        "ang": "tutto",
+        "vita": 0.35,
+        "pal": "caldo"
+      },
+      {
+        "s": "anello",
+        "r": 1.4,
+        "ms": 260,
+        "pal": "caldo",
+        "aria": true
+      },
+      {
+        "s": "luce",
+        "r": 3,
+        "ms": 140,
+        "col": [
+          255,
+          220,
+          160
+        ],
+        "forza": 1
+      },
+      {
+        "s": "scossa",
+        "px": 3,
+        "ms": 160
+      }
+    ],
+    "mancato_terra": [
+      {
+        "s": "polvere",
+        "n": 4,
+        "forza": 0.55,
+        "dove": "portata"
+      },
+      {
+        "s": "crepe",
+        "n": 2,
+        "r": 0.5,
+        "ms": 1800,
+        "dove": "portata"
+      },
+      {
+        "s": "schegge",
+        "n": 5,
+        "v": 3.5,
+        "ang": "su",
+        "vita": 0.6,
+        "pal": "pietra",
+        "dim": [
+          1,
+          2
+        ],
+        "dove": "portata",
+        "rimb": 0.3
+      }
+    ],
+    "mancato_piccolo": [
+      {
+        "s": "polvere",
+        "n": 2,
+        "forza": 0.3,
+        "dove": "portata"
+      }
+    ],
+    "onda_nemico": [
+      {
+        "s": "onda",
+        "rE": "lunghezza",
+        "r": 2,
+        "ms": 220,
+        "pal": "polvere",
+        "verso": "avanti",
+        "dove": "suolo"
+      },
+      {
+        "s": "polvere",
+        "n": 6,
+        "forza": 0.8,
+        "verso": "avanti",
+        "dove": "suolo"
+      }
+    ],
+    "impatto_pesante": [
+      {
+        "s": "lampo",
+        "r": 0.6,
+        "ms": 40,
+        "pal": "bianco",
+        "dove": "portata"
+      },
+      {
+        "s": "crepe",
+        "n": 4,
+        "r": 0.9,
+        "ms": 3200,
+        "dove": "portata"
+      },
+      {
+        "s": "schegge",
+        "n": 10,
+        "v": 5,
+        "ang": "su",
+        "vita": 0.9,
+        "pal": "pietra",
+        "dim": [
+          1,
+          3
+        ],
+        "dove": "portata",
+        "rimb": 0.35
+      },
+      {
+        "s": "anello",
+        "r": 1.6,
+        "ms": 240,
+        "pal": "polvere",
+        "dove": "portata"
+      },
+      {
+        "s": "scossa",
+        "px": 3,
+        "ms": 150
+      },
+      {
+        "s": "spinta",
+        "r": 2.5
+      }
+    ],
+    "pestone": [
+      {
+        "s": "onda",
+        "r": 2.2,
+        "ms": 260,
+        "pal": "polvere",
+        "verso": "due",
+        "dove": "suolo"
+      },
+      {
+        "s": "crepe",
+        "n": 3,
+        "r": 0.8,
+        "ms": 2800,
+        "dove": "suolo"
+      },
+      {
+        "s": "polvere",
+        "n": 8,
+        "forza": 0.9,
+        "dove": "suolo"
+      },
+      {
+        "s": "schegge",
+        "n": 8,
+        "v": 4.5,
+        "ang": "su",
+        "vita": 0.8,
+        "pal": "pietra",
+        "dim": [
+          1,
+          3
+        ],
+        "rimb": 0.35,
+        "dove": "suolo"
+      },
+      {
+        "s": "spinta",
+        "r": 3
+      }
+    ],
+    "carica_parte": [
+      {
+        "s": "polvere",
+        "n": 6,
+        "forza": 0.8,
+        "verso": "dietro",
+        "dove": "suolo"
+      },
+      {
+        "s": "crepe",
+        "n": 1,
+        "r": 0.6,
+        "ms": 1500,
+        "dove": "suolo"
+      }
+    ],
+    "arresto": [
+      {
+        "s": "polvere",
+        "n": 8,
+        "forza": 1,
+        "verso": "avanti",
+        "dove": "suolo"
+      },
+      {
+        "s": "schegge",
+        "n": 6,
+        "v": 4,
+        "ang": "avanti",
+        "vita": 0.6,
+        "pal": "pietra",
+        "dim": [
+          1,
+          2
+        ],
+        "dove": "suolo",
+        "rimb": 0.3
+      },
+      {
+        "s": "crepe",
+        "n": 2,
+        "r": 0.7,
+        "ms": 2200,
+        "dove": "suolo"
+      }
+    ],
+    "catena_scintille": [
+      {
+        "s": "scintille",
+        "n": 6,
+        "v": 6,
+        "ang": "avanti",
+        "vita": 0.25,
+        "pal": "metallo",
+        "dove": "portata",
+        "dy": -0.7
+      }
+    ],
+    "bava_cera": [
+      {
+        "s": "gocce",
+        "n": 10,
+        "v": 5,
+        "ang": "ventaglio",
+        "vita": 0.9,
+        "pal": "cera"
+      },
+      {
+        "s": "fumo",
+        "n": 2,
+        "r": 0.15,
+        "vita": 0.6,
+        "sale": 0.5,
+        "tono": "chiaro"
+      }
+    ],
+    "cera_splat": [
+      {
+        "s": "gocce",
+        "n": 6,
+        "v": 3,
+        "ang": "su",
+        "vita": 0.6,
+        "pal": "cera"
+      },
+      {
+        "s": "macchia",
+        "r": 0.45,
+        "ms": 4000,
+        "pal": "cera"
+      },
+      {
+        "s": "fiamme",
+        "n": 2,
+        "r": 0.12,
+        "vita": 0.4,
+        "sale": 1,
+        "pal": "cera"
+      }
+    ],
+    "cera_brucia": [
+      {
+        "s": "fiamme",
+        "n": 4,
+        "r": 0.14,
+        "vita": 0.45,
+        "sale": 1.4,
+        "pal": "fuoco"
+      },
+      {
+        "s": "braci",
+        "n": 4,
+        "v": 1.5,
+        "vita": 0.7
+      }
+    ],
+    "goccia_rotta": [
+      {
+        "s": "gocce",
+        "n": 6,
+        "v": 3.5,
+        "ang": "tutto",
+        "vita": 0.5,
+        "pal": "$"
+      },
+      {
+        "s": "lampo",
+        "r": 0.2,
+        "ms": 34,
+        "pal": "$"
+      }
+    ],
+    "rimandato": [
+      {
+        "s": "lampo",
+        "r": 0.4,
+        "ms": 50,
+        "pal": "vetro"
+      },
+      {
+        "s": "anello",
+        "r": 0.6,
+        "ms": 160,
+        "pal": "vetro",
+        "aria": true
+      }
+    ],
+    "scaglie_nube": [
+      {
+        "s": "scaglie",
+        "n": 14,
+        "v": 1.5,
+        "vita": 1.4,
+        "pal": "scaglie"
+      }
+    ],
+    "falena_impatto": [
+      {
+        "s": "polvere",
+        "n": 6,
+        "forza": 0.7,
+        "dove": "suolo"
+      },
+      {
+        "s": "scaglie",
+        "n": 10,
+        "v": 2,
+        "vita": 1.2,
+        "pal": "scaglie"
+      },
+      {
+        "s": "anello",
+        "r": 1,
+        "ms": 200,
+        "pal": "polvere",
+        "dove": "suolo"
+      }
+    ],
+    "lampada_raggio": [
+      {
+        "s": "luce",
+        "r": 4,
+        "ms": 320,
+        "col": [
+          255,
+          236,
+          170
+        ],
+        "forza": 1
+      },
+      {
+        "s": "scintille",
+        "n": 6,
+        "v": 3,
+        "ang": "tutto",
+        "vita": 0.4,
+        "pal": "luce",
+        "dove": "portata",
+        "dy": -0.7
+      }
+    ],
+    "puntina_balzo": [
+      {
+        "s": "polvere",
+        "n": 3,
+        "forza": 0.5,
+        "dove": "suolo"
+      },
+      {
+        "s": "scintille",
+        "n": 4,
+        "v": 4,
+        "ang": "su",
+        "vita": 0.2,
+        "pal": "metallo",
+        "dove": "suolo"
+      }
+    ],
+    "puntina_incastrata": [
+      {
+        "s": "crepe",
+        "n": 3,
+        "r": 0.5,
+        "ms": 2500,
+        "dove": "suolo"
+      },
+      {
+        "s": "schegge",
+        "n": 6,
+        "v": 3,
+        "ang": "su",
+        "vita": 0.6,
+        "pal": "pietra",
+        "dim": [
+          1,
+          2
+        ],
+        "dove": "suolo",
+        "rimb": 0.3
+      },
+      {
+        "s": "lampo",
+        "r": 0.25,
+        "ms": 40,
+        "pal": "metallo",
+        "dove": "suolo"
+      }
+    ],
+    "anello_salto": [
+      {
+        "s": "polvere",
+        "n": 6,
+        "forza": 0.8,
+        "dove": "suolo"
+      },
+      {
+        "s": "anello",
+        "r": 1,
+        "ms": 200,
+        "pal": "polvere",
+        "dove": "suolo"
+      }
+    ],
+    "anello_urto": [
+      {
+        "s": "anello",
+        "r": 1.2,
+        "ms": 220,
+        "pal": "pietra",
+        "aria": true
+      },
+      {
+        "s": "schegge",
+        "n": 6,
+        "v": 4,
+        "ang": "avanti",
+        "vita": 0.6,
+        "pal": "pietra",
+        "dim": [
+          2,
+          3
+        ],
+        "rimb": 0.3
+      },
+      {
+        "s": "polvere",
+        "n": 4,
+        "forza": 0.6,
+        "dove": "suolo"
+      }
+    ],
+    "rotola": [
+      {
+        "s": "polvere",
+        "n": 3,
+        "forza": 0.4,
+        "verso": "dietro",
+        "dove": "suolo"
+      }
+    ],
+    "pinza": [
+      {
+        "s": "scintille",
+        "n": 8,
+        "v": 6,
+        "ang": "avanti",
+        "vita": 0.25,
+        "pal": "metallo",
+        "dove": "portata",
+        "dy": -0.5
+      },
+      {
+        "s": "lampo",
+        "r": 0.3,
+        "ms": 40,
+        "pal": "metallo",
+        "dove": "portata",
+        "dy": -0.5
+      }
+    ],
+    "filo_cuce": [
+      {
+        "s": "filo",
+        "r": 1.6,
+        "ms": 650,
+        "pal": "filo",
+        "dove": "suolo"
+      }
+    ],
+    "graffio": [
+      {
+        "s": "graffi",
+        "r": 0.45,
+        "ms": 200,
+        "pal": "filo",
+        "n": 3,
+        "dove": "portata",
+        "dy": -0.6
+      }
+    ],
+    "braccio_parete": [
+      {
+        "s": "polvere",
+        "n": 6,
+        "forza": 0.7
+      },
+      {
+        "s": "schegge",
+        "n": 8,
+        "v": 4,
+        "ang": "tutto",
+        "vita": 0.8,
+        "pal": "pietra",
+        "dim": [
+          1,
+          3
+        ],
+        "rimb": 0.3
+      },
+      {
+        "s": "crepe",
+        "n": 3,
+        "r": 0.6,
+        "ms": 2500
+      }
+    ],
+    "lancia_piccolo": [
+      {
+        "s": "polvere",
+        "n": 4,
+        "forza": 0.6,
+        "dove": "suolo"
+      },
+      {
+        "s": "anello",
+        "r": 0.7,
+        "ms": 160,
+        "pal": "polvere",
+        "aria": true,
+        "dy": -0.6
+      }
+    ],
+    "ordine": [
+      {
+        "s": "anello",
+        "r": 3,
+        "ms": 420,
+        "pal": "viola",
+        "dove": "suolo"
+      },
+      {
+        "s": "anello",
+        "r": 1.6,
+        "ms": 300,
+        "pal": "viola",
+        "aria": true
+      },
+      {
+        "s": "scintille",
+        "n": 10,
+        "v": 4,
+        "ang": "su",
+        "vita": 0.5,
+        "pal": "viola"
+      },
+      {
+        "s": "luce",
+        "r": 3,
+        "ms": 200,
+        "col": [
+          200,
+          140,
+          255
+        ],
+        "forza": 0.8
+      }
+    ],
+    "zona_avviso": [
+      {
+        "s": "zona",
+        "r": 0.9,
+        "pal": "caldo",
+        "dove": "suolo"
+      }
+    ],
+    "comparsa": [
+      {
+        "s": "tratti",
+        "r": 0.55,
+        "n": 8,
+        "ms": 380,
+        "pal": "sigillo",
+        "chiude": true,
+        "piatto": 0.25,
+        "w": 3
+      },
+      {
+        "s": "sorge",
+        "r": 0.7,
+        "n": 5,
+        "ms": 440,
+        "pal": "sigillo",
+        "largo": 0.25,
+        "rit": 0.08
+      },
+      {
+        "s": "fumo",
+        "n": 3,
+        "r": 0.3,
+        "vita": 0.9,
+        "sale": 0.6,
+        "tono": "scuro"
+      },
+      {
+        "s": "schegge",
+        "n": 6,
+        "v": 3.5,
+        "ang": "su",
+        "vita": 0.8,
+        "pal": "pietra",
+        "dim": [
+          1,
+          1
+        ],
+        "rimb": 0.3
+      },
+      {
+        "s": "polvere",
+        "n": 4,
+        "forza": 0.6,
+        "dove": "suolo"
+      }
+    ],
+    "birillo": [
+      {
+        "s": "lampo",
+        "r": 0.35,
+        "ms": 40,
+        "pal": "bianco"
+      },
+      {
+        "s": "scintille",
+        "n": 6,
+        "v": 6,
+        "ang": "tutto",
+        "vita": 0.25,
+        "pal": "caldo"
+      }
+    ],
+    "mucchio_crolla": [
+      {
+        "s": "polvere",
+        "n": 10,
+        "forza": 1,
+        "dove": "suolo"
+      },
+      {
+        "s": "anello",
+        "r": 1.6,
+        "ms": 240,
+        "pal": "polvere",
+        "dove": "suolo"
+      },
+      {
+        "s": "schegge",
+        "n": 6,
+        "v": 3,
+        "ang": "su",
+        "vita": 0.6,
+        "pal": "pietra",
+        "dim": [
+          1,
+          2
+        ],
+        "dove": "suolo",
+        "rimb": 0.3
+      },
+      {
+        "s": "scossa",
+        "px": 2,
+        "ms": 120
+      }
+    ],
+    "crollo": [
+      {
+        "s": "polvere",
+        "n": 14,
+        "forza": 1.2,
+        "dove": "suolo"
+      },
+      {
+        "s": "schegge",
+        "n": 18,
+        "v": 5,
+        "ang": "tutto",
+        "vita": 1.2,
+        "pal": "pietra",
+        "dim": [
+          2,
+          4
+        ],
+        "rimb": 0.3
+      },
+      {
+        "s": "fumo",
+        "n": 6,
+        "r": 0.5,
+        "vita": 1.6,
+        "sale": 0.4,
+        "tono": "chiaro"
+      },
+      {
+        "s": "anello",
+        "r": 2.5,
+        "ms": 320,
+        "pal": "polvere",
+        "dove": "suolo"
+      },
+      {
+        "s": "crepe",
+        "n": 4,
+        "r": 1,
+        "ms": 3500,
+        "dove": "suolo"
+      },
+      {
+        "s": "scossa",
+        "px": 4,
+        "ms": 260
+      },
+      {
+        "s": "spinta",
+        "r": 4
+      }
+    ],
+    "macerie": [
+      {
+        "s": "schegge",
+        "n": 12,
+        "v": 4,
+        "ang": "su",
+        "vita": 1,
+        "pal": "pietra",
+        "dim": [
+          2,
+          4
+        ],
+        "rimb": 0.3,
+        "dove": "suolo"
+      },
+      {
+        "s": "polvere",
+        "n": 10,
+        "forza": 1,
+        "dove": "suolo"
+      },
+      {
+        "s": "crepe",
+        "n": 3,
+        "r": 0.8,
+        "ms": 3000,
+        "dove": "suolo"
+      },
+      {
+        "s": "anello",
+        "r": 1.8,
+        "ms": 240,
+        "pal": "polvere",
+        "dove": "suolo"
+      },
+      {
+        "s": "scossa",
+        "px": 3,
+        "ms": 200
+      }
+    ],
+    "breccia": [
+      {
+        "s": "schegge",
+        "n": 18,
+        "v": 7,
+        "ang": "tutto",
+        "vita": 1.1,
+        "pal": "pietra",
+        "dim": [
+          2,
+          4
+        ],
+        "rimb": 0.3
+      },
+      {
+        "s": "polvere",
+        "n": 8,
+        "forza": 1
+      },
+      {
+        "s": "fumo",
+        "n": 4,
+        "r": 0.5,
+        "vita": 1.4,
+        "sale": 0.3,
+        "tono": "chiaro"
+      },
+      {
+        "s": "crepe",
+        "n": 4,
+        "r": 1,
+        "ms": 4000
+      },
+      {
+        "s": "scossa",
+        "px": 4,
+        "ms": 240
+      }
+    ],
+    "fossa": [
+      {
+        "s": "polvere",
+        "n": 12,
+        "forza": 1,
+        "dove": "suolo"
+      },
+      {
+        "s": "crepe",
+        "n": 5,
+        "r": 1.2,
+        "ms": 4000,
+        "dove": "suolo"
+      },
+      {
+        "s": "schegge",
+        "n": 8,
+        "v": 3,
+        "ang": "su",
+        "vita": 0.8,
+        "pal": "pietra",
+        "dim": [
+          1,
+          3
+        ],
+        "rimb": 0.3,
+        "dove": "suolo"
+      },
+      {
+        "s": "scossa",
+        "px": 3,
+        "ms": 220
+      }
+    ],
+    "colonna": [
+      {
+        "s": "onda",
+        "r": 3,
+        "ms": 320,
+        "pal": "polvere",
+        "verso": "due",
+        "dove": "suolo"
+      },
+      {
+        "s": "polvere",
+        "n": 14,
+        "forza": 1.2,
+        "dove": "suolo"
+      },
+      {
+        "s": "schegge",
+        "n": 14,
+        "v": 5,
+        "ang": "su",
+        "vita": 1.1,
+        "pal": "pietra",
+        "dim": [
+          2,
+          4
+        ],
+        "rimb": 0.3,
+        "dove": "suolo"
+      },
+      {
+        "s": "fumo",
+        "n": 4,
+        "r": 0.5,
+        "vita": 1.4,
+        "sale": 0.3,
+        "tono": "chiaro"
+      },
+      {
+        "s": "crepe",
+        "n": 4,
+        "r": 1.1,
+        "ms": 3500,
+        "dove": "suolo"
+      },
+      {
+        "s": "scossa",
+        "px": 5,
+        "ms": 280
+      }
+    ],
+    "tana": [
+      {
+        "s": "schegge",
+        "n": 10,
+        "v": 4,
+        "ang": "su",
+        "vita": 0.9,
+        "pal": "pietra",
+        "dim": [
+          1,
+          3
+        ],
+        "rimb": 0.3,
+        "dove": "suolo"
+      },
+      {
+        "s": "polvere",
+        "n": 8,
+        "forza": 0.9,
+        "dove": "suolo"
+      },
+      {
+        "s": "crepe",
+        "n": 3,
+        "r": 0.8,
+        "ms": 3000,
+        "dove": "suolo"
+      }
+    ],
+    "pozza": [
+      {
+        "s": "macchia",
+        "r": 1.2,
+        "ms": 8000,
+        "pal": "cera",
+        "dove": "suolo"
+      }
+    ],
+    "scintille_metallo": [
+      {
+        "s": "scintille",
+        "n": 8,
+        "v": 5,
+        "ang": "tutto",
+        "vita": 0.3,
+        "pal": "metallo"
+      },
+      {
+        "s": "lampo",
+        "r": 0.25,
+        "ms": 40,
+        "pal": "metallo"
+      }
+    ],
+    "polvere_piccola": [
+      {
+        "s": "polvere",
+        "n": 5,
+        "forza": 0.6,
+        "dove": "suolo"
+      }
+    ],
+    "lampadario": [
+      {
+        "s": "schegge",
+        "n": 14,
+        "v": 5,
+        "ang": "tutto",
+        "vita": 1,
+        "pal": "metallo",
+        "dim": [
+          1,
+          3
+        ],
+        "rimb": 0.4,
+        "dove": "suolo"
+      },
+      {
+        "s": "braci",
+        "n": 10,
+        "v": 3,
+        "vita": 1.4,
+        "dove": "suolo"
+      },
+      {
+        "s": "fiamme",
+        "n": 4,
+        "r": 0.2,
+        "vita": 0.5,
+        "sale": 1,
+        "pal": "fuoco",
+        "dove": "suolo"
+      },
+      {
+        "s": "onda",
+        "r": 2,
+        "ms": 240,
+        "pal": "polvere",
+        "verso": "due",
+        "dove": "suolo"
+      },
+      {
+        "s": "polvere",
+        "n": 10,
+        "forza": 1,
+        "dove": "suolo"
+      },
+      {
+        "s": "crepe",
+        "n": 3,
+        "r": 0.9,
+        "ms": 3000,
+        "dove": "suolo"
+      },
+      {
+        "s": "luce",
+        "r": 3,
+        "ms": 160,
+        "col": [
+          255,
+          200,
+          130
+        ],
+        "forza": 0.9
+      },
+      {
+        "s": "scossa",
+        "px": 5,
+        "ms": 240
+      }
+    ],
+    "carico_impatto": [
+      {
+        "s": "schegge",
+        "n": 10,
+        "v": 4.5,
+        "ang": "su",
+        "vita": 0.9,
+        "pal": "pietra",
+        "dim": [
+          2,
+          3
+        ],
+        "rimb": 0.35,
+        "dove": "suolo"
+      },
+      {
+        "s": "onda",
+        "r": 1.8,
+        "ms": 220,
+        "pal": "polvere",
+        "verso": "due",
+        "dove": "suolo"
+      },
+      {
+        "s": "polvere",
+        "n": 10,
+        "forza": 1,
+        "dove": "suolo"
+      },
+      {
+        "s": "crepe",
+        "n": 3,
+        "r": 0.8,
+        "ms": 2800,
+        "dove": "suolo"
+      },
+      {
+        "s": "scossa",
+        "px": 4,
+        "ms": 200
+      }
+    ],
+    "punte": [
+      {
+        "s": "schegge",
+        "n": 6,
+        "v": 4,
+        "ang": "su",
+        "vita": 0.5,
+        "pal": "metallo",
+        "dim": [
+          1,
+          2
+        ]
+      },
+      {
+        "s": "scintille",
+        "n": 6,
+        "v": 6,
+        "ang": "su",
+        "vita": 0.25,
+        "pal": "caldo"
+      },
+      {
+        "s": "polvere",
+        "n": 3,
+        "forza": 0.5,
+        "dove": "suolo"
+      }
+    ],
+    "balestra": [
+      {
+        "s": "lampo",
+        "r": 0.25,
+        "ms": 40,
+        "pal": "legno"
+      },
+      {
+        "s": "schegge",
+        "n": 4,
+        "v": 3,
+        "ang": "avanti",
+        "vita": 0.4,
+        "pal": "legno",
+        "dim": [
+          1,
+          2
+        ]
+      },
+      {
+        "s": "fumo",
+        "n": 1,
+        "r": 0.15,
+        "vita": 0.4,
+        "sale": 0.3,
+        "tono": "chiaro"
+      }
+    ],
+    "campana": [
+      {
+        "s": "anello",
+        "r": 1.2,
+        "ms": 260,
+        "pal": "metallo",
+        "aria": true
+      },
+      {
+        "s": "anello",
+        "r": 2,
+        "ms": 360,
+        "pal": "caldo",
+        "aria": true,
+        "rit": 0.12
+      },
+      {
+        "s": "scintille",
+        "n": 4,
+        "v": 2,
+        "ang": "tutto",
+        "vita": 0.4,
+        "pal": "caldo"
+      }
+    ],
+    "saracinesca": [
+      {
+        "s": "polvere",
+        "n": 10,
+        "forza": 1,
+        "dove": "suolo"
+      },
+      {
+        "s": "scintille",
+        "n": 8,
+        "v": 5,
+        "ang": "su",
+        "vita": 0.3,
+        "pal": "metallo",
+        "dove": "suolo"
+      },
+      {
+        "s": "onda",
+        "r": 1.2,
+        "ms": 200,
+        "pal": "polvere",
+        "verso": "due",
+        "dove": "suolo"
+      },
+      {
+        "s": "scossa",
+        "px": 4,
+        "ms": 200
+      }
+    ],
+    "molla": [
+      {
+        "s": "polvere",
+        "n": 4,
+        "forza": 0.6,
+        "dove": "suolo"
+      },
+      {
+        "s": "anello",
+        "r": 0.8,
+        "ms": 180,
+        "pal": "metallo",
+        "aria": true
+      }
+    ],
+    "cera_indurita": [
+      {
+        "s": "scaglie",
+        "n": 12,
+        "v": 1.2,
+        "vita": 1,
+        "pal": "vetro"
+      },
+      {
+        "s": "anello",
+        "r": 1.2,
+        "ms": 260,
+        "pal": "vetro",
+        "dove": "suolo"
+      }
+    ],
+    "fuoco_a_terra": [
+      {
+        "s": "fiamme",
+        "n": 1,
+        "r": 0.18,
+        "vita": 0.55,
+        "sale": 1.6,
+        "pal": "fuoco",
+        "dove": "suolo"
+      },
+      {
+        "s": "braci",
+        "n": 1,
+        "v": 1.2,
+        "vita": 0.9,
+        "dove": "suolo"
+      }
+    ],
+    "olio_acceso": [
+      {
+        "s": "lampo",
+        "r": 0.35,
+        "ms": 40,
+        "pal": "fuoco",
+        "dove": "suolo"
+      },
+      {
+        "s": "fiamme",
+        "n": 6,
+        "r": 0.22,
+        "vita": 0.6,
+        "sale": 1.6,
+        "pal": "fuoco",
+        "dove": "suolo"
+      },
+      {
+        "s": "luce",
+        "r": 4,
+        "ms": 260,
+        "col": [
+          255,
+          170,
+          90
+        ],
+        "forza": 1
+      },
+      {
+        "s": "macchia",
+        "r": 1.3,
+        "ms": 7000,
+        "pal": "scuro",
+        "dove": "suolo"
+      }
+    ],
+    "vapore_sbuffo": [
+      {
+        "s": "fumo",
+        "n": 1,
+        "r": 0.4,
+        "vita": 1.2,
+        "sale": 0.4,
+        "tono": "vapore"
+      }
+    ],
+    "getto_vapore": [
+      {
+        "s": "fumo",
+        "n": 1,
+        "r": 0.25,
+        "vita": 0.6,
+        "sale": 0.2,
+        "tono": "vapore",
+        "v": 5
+      }
+    ],
+    "getto_cera": [
+      {
+        "s": "gocce",
+        "n": 2,
+        "v": 5,
+        "ang": "avanti",
+        "vita": 0.6,
+        "pal": "cera"
+      }
+    ],
+    "pioggia_avvio": [
+      {
+        "s": "polvere",
+        "n": 2,
+        "forza": 0.4
+      },
+      {
+        "s": "schegge",
+        "n": 3,
+        "v": 0.8,
+        "ang": "giu",
+        "vita": 1,
+        "pal": "pietra",
+        "dim": [
+          1,
+          2
+        ],
+        "rimb": 0.2,
+        "g": 16
+      }
+    ],
+    "pioggia_detriti": [
+      {
+        "s": "schegge",
+        "n": 2,
+        "v": 0.5,
+        "ang": "giu",
+        "vita": 1.2,
+        "pal": "pietra",
+        "dim": [
+          1,
+          2
+        ],
+        "rimb": 0.15,
+        "g": 14
+      },
+      {
+        "s": "fumo",
+        "n": 1,
+        "r": 0.14,
+        "vita": 0.8,
+        "sale": -0.5,
+        "tono": "chiaro"
+      }
+    ],
+    "pioggia_apre": [
+      {
+        "s": "fumo",
+        "n": 4,
+        "r": 0.3,
+        "vita": 0.9,
+        "sale": -0.4,
+        "tono": "scuro"
+      },
+      {
+        "s": "schegge",
+        "n": 6,
+        "v": 1.6,
+        "ang": "giu",
+        "vita": 1.1,
+        "pal": "pietra",
+        "dim": [
+          1,
+          3
+        ],
+        "rimb": 0.3
+      },
+      {
+        "s": "anello",
+        "aria": true,
+        "r": 0.6,
+        "ms": 200,
+        "pal": "polvere"
+      }
+    ],
+    "atterra_sacco": [
+      {
+        "s": "polvere",
+        "n": 2,
+        "forza": 0.45,
+        "dove": "suolo"
+      },
+      {
+        "s": "schegge",
+        "n": 2,
+        "v": 1.2,
+        "ang": "su",
+        "vita": 0.4,
+        "pal": "pietra",
+        "dim": [
+          1,
+          1
+        ],
+        "rimb": 0
+      }
+    ],
+    "spazzata": [
+      {
+        "s": "falce",
+        "rE": "raggio",
+        "r": 2.4,
+        "ms": 260,
+        "pal": "vetro",
+        "dy": 0.4
+      },
+      {
+        "s": "scintille",
+        "n": 6,
+        "v": 6,
+        "ang": "basso",
+        "vita": 0.2,
+        "pal": "vetro",
+        "dy": 0.4
+      }
+    ],
+    "nemico_colpito": [
+      {
+        "s": "raggi",
+        "r": 0.5,
+        "n": 5,
+        "w": 4,
+        "ms": 150,
+        "pal": "bianco",
+        "avanti": true
+      }
+    ]
+  },
+  "eventi": {
+    "miniboss_entra": "comparsa",
+    "miniboss_fase": {
+      "r": "esplosione",
+      "taglia": "grande"
+    },
+    "miniboss_evoca": "comparsa",
+    "miniboss_svanisce": "comparsa",
+    "miniboss_appare": "comparsa",
+    "miniboss_morto": "crollo",
+    "miniboss_barcolla": "scintille_metallo",
+    "nota": "evento → ricetta. Forme: \"ricetta\" | {r, taglia, materia} | {per: campo o [campi], casi: {valore: voce, _: predefinita}} | {emetti: ricetta, ms o msE, ogni, larghezzaE}. Le morti (uccisione) e i colpi su A (nemico_colpisce) hanno codice proprio in fx_nemici.mjs.",
+    "esplosione": {
+      "r": "esplosione",
+      "taglia": "da_raggio"
+    },
+    "barile_scoppia": {
+      "per": "effetto",
+      "casi": {
+        "cera": {
+          "r": "esplosione",
+          "taglia": "piccola",
+          "materia": "cera"
+        },
+        "vapore": {
+          "r": "esplosione",
+          "taglia": "piccola",
+          "materia": "vapore"
+        },
+        "scossa": {
+          "r": "esplosione",
+          "taglia": "piccola",
+          "materia": "scossa"
+        }
+      }
+    },
+    "nemico_proiettile": {
+      "per": "nemico",
+      "casi": {
+        "_": "bocca"
+      }
+    },
+    "nemico_sputo": "bocca",
+    "nemico_salva": "bocca",
+    "goccia_terra": "cera_splat",
+    "cera_brucia": "cera_brucia",
+    "goccia_rotta": "goccia_rotta",
+    "proiettile_rimandato": "rimandato",
+    "parata": "parato",
+    "scudo_parata": "scudo_para",
+    "scudo_rotto": "scudo_rotto",
+    "onda_nemico": "onda_nemico",
+    "schiacciata": "impatto_pesante",
+    "braccio_schianto": "impatto_pesante",
+    "anello_schianto": "impatto_pesante",
+    "nemico_pesta": {
+      "per": "forza",
+      "casi": {
+        "1": {
+          "r": "pestone",
+          "taglia": "piccola"
+        },
+        "_": "pestone"
+      }
+    },
+    "nemico_carica": "carica_parte",
+    "vigile_carica_placca": "carica_parte",
+    "nemico_arresto": "arresto",
+    "catena": "catena_scintille",
+    "incatenato_presa": "catena_scintille",
+    "ceralacca_ventaglio": "bava_cera",
+    "falena_scaglie": "scaglie_nube",
+    "falena_impatto": "falena_impatto",
+    "lampada_raggio": "lampada_raggio",
+    "puntina_balzo": "puntina_balzo",
+    "puntina_incastrata": "puntina_incastrata",
+    "anello_salto": "anello_salto",
+    "anello_urto": "anello_urto",
+    "anello_rotola": "rotola",
+    "pinza": "pinza",
+    "rilegatore_cuce": "filo_cuce",
+    "a_cucito": "filo_cuce",
+    "graffio": "graffio",
+    "braccio_stacca": "braccio_parete",
+    "braccio_innesta": "braccio_parete",
+    "nemico_lancia_piccolo": "lancia_piccolo",
+    "nemico_ordine": "ordine",
+    "nemico_tattica_avviso": {
+      "r": "zona_avviso",
+      "msE": "ms"
+    },
+    "oggetto_avviso": {
+      "r": "zona_avviso",
+      "msE": "ms"
+    },
+    "nemico_comparsa": "comparsa",
+    "orda_comparsa": "comparsa",
+    "bocca_apre": "comparsa",
+    "nemico_birillo": "birillo",
+    "birillo": "birillo",
+    "birillo_grosso": "birillo",
+    "mucchio_crolla": "mucchio_crolla",
+    "carico_impatto": "carico_impatto",
+    "catena_tagliata": "scintille_metallo",
+    "balestra_tiro": "balestra",
+    "cera_indurita": "cera_indurita",
+    "oggetto_usato": {
+      "per": "oggetto",
+      "casi": {
+        "lampadario": "lampadario",
+        "punte": "punte",
+        "campana": "campana",
+        "saracinesca": "saracinesca",
+        "molla": "molla",
+        "nastro": "scintille_metallo"
+      }
+    },
+    "chiazza": {
+      "per": "fuoco",
+      "casi": {
+        "true": {
+          "emetti": "fuoco_a_terra",
+          "msE": "ms",
+          "ogni": 0.06,
+          "larghezzaE": "raggio",
+          "prima": "olio_acceso"
+        },
+        "_": "pozza"
+      }
+    },
+    "nube": {
+      "emetti": "vapore_sbuffo",
+      "msE": "ms",
+      "ogni": 0.2,
+      "larghezzaE": "raggio"
+    },
+    "getto": {
+      "per": "materia",
+      "casi": {
+        "cera": {
+          "emetti": "getto_cera",
+          "msE": "ms",
+          "ogni": 0.05
+        },
+        "_": {
+          "emetti": "getto_vapore",
+          "msE": "ms",
+          "ogni": 0.04
+        }
+      }
+    },
+    "mutazione": {
+      "per": [
+        "mutazione",
+        "fase"
+      ],
+      "casi": {
+        "crollo.effetto": "crollo",
+        "fragile.effetto": {
+          "r": "crollo",
+          "taglia": "piccola"
+        },
+        "macerie.colpo": "macerie",
+        "breccia.effetto": "breccia",
+        "fossa.effetto": "fossa",
+        "colonna.colpo": "colonna",
+        "grata.chiude": "scintille_metallo",
+        "passerella.effetto": "polvere_piccola",
+        "pozza.effetto": "pozza",
+        "tana.effetto": "tana"
+      }
+    },
+    "sciame_pioggia": {
+      "emetti": "pioggia_detriti",
+      "msE": "ms",
+      "ogni": 0.07,
+      "prima": "pioggia_avvio",
+      "dopo": "pioggia_apre",
+      "nota": "(FIN) preavviso della pioggia di piccoli (ZOM3): polvere e detriti che cadono dal soffitto per tutto il preavviso, sbuffo all'apertura",
+      "cade": true
+    },
+    "parata_spazzata": "spazzata"
+  },
+  "morti": {
+    "nota": "uccisione: frammenti per tipo di nemico + strato per modo. modo: tagliato (spada), schiacciato (pressa, lampadario, saracinesca, carico), bruciato (fuoco, olio), esploso (barili), colpo (il resto). Piccoli a taglia piccola. (FX5) Schegge di 1–2 px; colpo = raggi + anello a tratti che si apre; tagliato = arco sottile + raggi.",
+    "tipo": {
+      "z24-e01": [
+        {
+          "s": "schegge",
+          "n": 10,
+          "v": 4.5,
+          "ang": "tutto",
+          "vita": 1,
+          "pal": "metallo",
+          "dim": [
+            1,
+            2
+          ],
+          "rimb": 0.45
+        },
+        {
+          "s": "scintille",
+          "n": 6,
+          "v": 5,
+          "ang": "tutto",
+          "vita": 0.3,
+          "pal": "metallo"
+        }
+      ],
+      "z24-e02": [
+        {
+          "s": "gocce",
+          "n": 12,
+          "v": 4,
+          "ang": "tutto",
+          "vita": 1,
+          "pal": "cera"
+        },
+        {
+          "s": "macchia",
+          "r": 0.9,
+          "ms": 6000,
+          "pal": "cera",
+          "dove": "suolo"
+        },
+        {
+          "s": "fumo",
+          "n": 3,
+          "r": 0.3,
+          "vita": 1,
+          "sale": 0.6,
+          "tono": "chiaro"
+        }
+      ],
+      "z24-e03": [
+        {
+          "s": "scintille",
+          "n": 10,
+          "v": 6,
+          "ang": "tutto",
+          "vita": 0.35,
+          "pal": "metallo"
+        },
+        {
+          "s": "schegge",
+          "n": 4,
+          "v": 3,
+          "ang": "su",
+          "vita": 0.7,
+          "pal": "metallo",
+          "dim": [
+            1,
+            2
+          ],
+          "rimb": 0.5
+        }
+      ],
+      "z24-e04": [
+        {
+          "s": "schegge",
+          "n": 12,
+          "v": 5,
+          "ang": "tutto",
+          "vita": 1.1,
+          "pal": "caldo",
+          "dim": [
+            1,
+            2
+          ],
+          "rimb": 0.35
+        },
+        {
+          "s": "polvere",
+          "n": 6,
+          "forza": 0.8,
+          "dove": "suolo"
+        }
+      ],
+      "z24-e05": [
+        {
+          "s": "schegge",
+          "n": 14,
+          "v": 5,
+          "ang": "tutto",
+          "vita": 1.1,
+          "pal": "pietra",
+          "dim": [
+            1,
+            2
+          ],
+          "rimb": 0.3
+        },
+        {
+          "s": "polvere",
+          "n": 8,
+          "forza": 1,
+          "dove": "suolo"
+        },
+        {
+          "s": "crepe",
+          "n": 2,
+          "r": 0.7,
+          "ms": 2500,
+          "dove": "suolo"
+        }
+      ],
+      "z24-e06": [
+        {
+          "s": "scaglie",
+          "n": 18,
+          "v": 2,
+          "vita": 1.6,
+          "pal": "scaglie"
+        }
+      ],
+      "z24-e07": [
+        {
+          "s": "lampo",
+          "r": 0.7,
+          "ms": 50,
+          "pal": "luce"
+        },
+        {
+          "s": "schegge",
+          "n": 10,
+          "v": 4,
+          "ang": "tutto",
+          "vita": 0.9,
+          "pal": "vetro",
+          "dim": [
+            1,
+            2
+          ],
+          "rimb": 0.4
+        },
+        {
+          "s": "luce",
+          "r": 3,
+          "ms": 220,
+          "col": [
+            255,
+            236,
+            170
+          ],
+          "forza": 1
+        }
+      ],
+      "z24-e08": [
+        {
+          "s": "schegge",
+          "n": 10,
+          "v": 4.5,
+          "ang": "tutto",
+          "vita": 1,
+          "pal": "metallo",
+          "dim": [
+            1,
+            2
+          ],
+          "rimb": 0.4
+        },
+        {
+          "s": "scintille",
+          "n": 8,
+          "v": 6,
+          "ang": "tutto",
+          "vita": 0.3,
+          "pal": "caldo"
+        }
+      ],
+      "z24-e09": [
+        {
+          "s": "scaglie",
+          "n": 14,
+          "v": 2.5,
+          "vita": 1.4,
+          "pal": "carta"
+        },
+        {
+          "s": "filo",
+          "r": 1.2,
+          "ms": 500,
+          "pal": "filo",
+          "dove": "suolo"
+        }
+      ],
+      "_": [
+        {
+          "s": "schegge",
+          "n": 8,
+          "v": 4,
+          "ang": "tutto",
+          "vita": 0.9,
+          "pal": "$",
+          "dim": [
+            1,
+            2
+          ],
+          "rimb": 0.35
+        }
+      ]
+    },
+    "modo": {
+      "tagliato": [
+        {
+          "s": "nastro",
+          "r": 0.7,
+          "a0": -40,
+          "a1": 40,
+          "ms": 150,
+          "pal": "bianco",
+          "w": 2
+        },
+        {
+          "s": "raggi",
+          "r": 0.7,
+          "n": 5,
+          "w": 3,
+          "ms": 190,
+          "pal": "$"
+        }
+      ],
+      "schiacciato": [
+        {
+          "s": "schegge",
+          "n": 8,
+          "v": 4,
+          "ang": "basso",
+          "vita": 0.7,
+          "pal": "$",
+          "dim": [
+            1,
+            2
+          ],
+          "rimb": 0.2,
+          "dove": "suolo"
+        },
+        {
+          "s": "anello",
+          "r": 1.2,
+          "ms": 220,
+          "pal": "polvere",
+          "dove": "suolo"
+        },
+        {
+          "s": "polvere",
+          "n": 6,
+          "forza": 1,
+          "dove": "suolo"
+        }
+      ],
+      "bruciato": [
+        {
+          "s": "fiamme",
+          "n": 6,
+          "r": 0.25,
+          "vita": 0.7,
+          "sale": 1.4,
+          "pal": "fuoco"
+        },
+        {
+          "s": "braci",
+          "n": 10,
+          "v": 2,
+          "vita": 1.4
+        },
+        {
+          "s": "fumo",
+          "n": 4,
+          "r": 0.35,
+          "vita": 1.6,
+          "sale": 0.8,
+          "tono": "scuro",
+          "rit": 0.2
+        },
+        {
+          "s": "macchia",
+          "r": 0.7,
+          "ms": 5000,
+          "pal": "scuro",
+          "dove": "suolo"
+        }
+      ],
+      "esploso": [
+        {
+          "s": "lampo",
+          "r": 0.6,
+          "ms": 34,
+          "pal": "bianco"
+        },
+        {
+          "s": "schegge",
+          "n": 8,
+          "v": 8,
+          "ang": "tutto",
+          "vita": 1,
+          "pal": "$",
+          "dim": [
+            1,
+            2
+          ],
+          "rimb": 0.35
+        },
+        {
+          "s": "braci",
+          "n": 6,
+          "v": 4,
+          "vita": 1.2
+        },
+        {
+          "s": "fumo",
+          "n": 3,
+          "r": 0.35,
+          "vita": 1.4,
+          "sale": 0.8,
+          "tono": "scuro"
+        }
+      ],
+      "colpo": [
+        {
+          "s": "raggi",
+          "r": 0.8,
+          "n": 5,
+          "w": 4,
+          "ms": 200,
+          "pal": "$"
+        },
+        {
+          "s": "tratti",
+          "r": 0.8,
+          "n": 7,
+          "w": 3,
+          "ms": 240,
+          "pal": "$"
+        }
+      ]
+    },
+    "oggetto": {
+      "barile_esplosivo": "esploso",
+      "esplosivo": "esploso",
+      "barile": "esploso",
+      "olio": "bruciato",
+      "lampadario": "schiacciato",
+      "saracinesca": "schiacciato",
+      "pressa": "schiacciato",
+      "carico_sospeso": "schiacciato",
+      "spingibile": "schiacciato",
+      "punte": "tagliato",
+      "balestra": "tagliato",
+      "nastro": "tagliato",
+      "_": "schiacciato"
+    },
+    "fonte": {
+      "spada": "tagliato",
+      "pressa": "schiacciato",
+      "terreno": "schiacciato",
+      "elemento": "schiacciato",
+      "fuoco": "bruciato"
+    }
+  },
+  "atterra_sacco": {
+    "nota": "(FIN) sbuffo all'atterraggio a sacco di un piccolo (dallo stato n.sacco: aria → terra), con tetto per finestra",
+    "finestra_s": 0.25,
+    "max": 4,
+    "taglia": "piccola"
+  },
+  "tetto_globale": {
+    "nota": "(FIN) tetto delle chiamate di disegno per fotogramma condiviso fra fx_nemici e fx_abilita (tetto_fx.mjs); riserva per legami ed esplosioni grandi",
+    "chiamate": 1450,
+    "riserva_min": 60,
+    "riserva_max": 320
+  },
+  "nota_fx5": "(FX5, 15/11/2026) Forme fini: strati tratti (anello a tratti; chiude, piatto, w), raggi (avanti), urto (colpo a segno su A, nel verso del colpo), falce (spazzata della parata, rE: raggio), sorge (fili che salgono alla comparsa). Tavolozza sigillo (cremisi) per le comparse.",
+  "miniboss": {
+    "nota": "(MBC3, MBC4 · Carlo 17/11: «che si capisca bene quanto è il raggio delle mosse con dei begli archi … belle scintille, come se fossero un personaggio») Colpi dei mini boss dalla hitbox di mosse.json (fx_nemici.mjs → geometriaArco, statoArco, disegnaArco, disegnaPreavviso, _archiMb, _archiPasso): per ogni hitbox un colpo pieno (falce, affondo, radente, due_lati, anello, espande; la forma nasce dal rettangolo) che nella sua finestra arriva al bordo della hitbox. pal = colore proprio; spessore = px della testa a H 48 per [leggero, normale, pesante] (forza: elenco pesanti, poi danno ≥ danno_pesante o ≤ danno_leggero); min_ms = durata minima; coda_ms = consumo dopo la finestra; giro_ms = un giro dell'anello; passi_max = timbri massimi per mezzaluna; fine_ms = lampo «fin qui» a fine corsa; lampo_H/lampo_ms = lampo all'istante attivo; tetto_chiamate = fillRect massimi per colpo; preavviso = puntini sul bordo durante l'avviso (attivo false lo spegne); particelle = dal fronte mentre corre e a fine corsa; ricette = a segno, parata riuscita, colpo a terra per forza [leggero, normale, pesante] con le taglie. mosse.<nome>.tipo forza la forma.",
+    "min_ms": 110,
+    "coda_ms": 160,
+    "giro_ms": 360,
+    "lampo_H": 0.16,
+    "lampo_ms": 50,
+    "passi_max": 150,
+    "fine_ms": 90,
+    "tetto_chiamate": 520,
+    "danno_pesante": 12,
+    "danno_leggero": 5,
+    "spessore_min": {
+      "normale": 4,
+      "pesante": 6
+    },
+    "preavviso": {
+      "attivo": true,
+      "allarga": 0.22,
+      "passo": 5,
+      "passo_guizzo": 3,
+      "corre": 24,
+      "guizzo_ms": 110,
+      "alfa": [
+        0.3,
+        0.6
+      ],
+      "alfa_guizzo": 0.85,
+      "stima": 60
+    },
+    "particelle": {
+      "ogni_ms": 45,
+      "scintille": 2,
+      "schegge": 2,
+      "scintille_fine": 7,
+      "schegge_fine": 5,
+      "lampo_fine_H": 0.14
+    },
+    "ricette": {
+      "taglie": [
+        "piccola",
+        "media",
+        "grande"
+      ],
+      "colpo": [
+        "colpo_mb",
+        "colpo_mb",
+        "colpo_mb_pesante"
+      ],
+      "parata": [
+        "parato_mb",
+        "parato_mb",
+        "parato_mb_pesante"
+      ],
+      "terra": [
+        "terra_mb",
+        "terra_mb",
+        "terra_mb_pesante"
+      ]
+    },
+    "z24-mb01": {
+      "pal": "ruggine",
+      "spessore": [
+        7,
+        9,
+        12
+      ],
+      "pesanti": [
+        "carica",
+        "frustata_terra",
+        "mulinello_rotto",
+        "frustata_alta"
+      ]
+    },
+    "z24-mb02": {
+      "pal": "cera_calda",
+      "spessore": [
+        8,
+        11,
+        14
+      ],
+      "pesanti": [
+        "martellata",
+        "atterraggio",
+        "balzo_onda"
+      ]
+    },
+    "z24-mb03": {
+      "pal": "argento",
+      "spessore": [
+        6,
+        8,
+        11
+      ],
+      "pesanti": [
+        "spazzata"
+      ]
+    }
+  },
+  "morte_boss": {
+    "nota": "(MBC1, Carlo 17/11: «invece dei tanti pezzettini, un po' di scoppi di pixel») Morte dei mini-boss (tutti e tre, ogni modo di resa): durante la clip 'morte' il corpo trema (tremito_px) e partono gli scoppi (u = frazione della clip, n = pixel), uno per piano di profondità dal fondo al primo piano, coi colori della parte da cui partono, gravità (px/s² dello sprite), scia breve (scia_s); alla fine della clip lo scoppio grande (finale) e la polvere che ricade (durata_finale_s). tetto_pixel = pixel al più per fotogramma. attiva false = morte a pezzi di prima (nemici/disegno.mjs). Codice: prova/nemici/morte_boss.mjs. (MBC2) Più grande e leggibile alla taglia di gioco: più pixel e più veloci, pixel grandi più a lungo (px_grande, px_grandi_u), lampo di ogni scoppio più largo (lampo_r [base, per piano], lampo_s), sobbalzo del corpo a ogni scoppio (scossa_px, scossa_ms), scoppio grande con lampo più largo (finale.lampo_r) e anello che si allarga (finale.anello), polvere più larga (polvere.larga). 'mbc1' = i numeri di prima (copiarli sopra per tornare indietro).",
+    "attiva": true,
+    "scoppi": [
+      {
+        "u": 0.14,
+        "n": 44
+      },
+      {
+        "u": 0.32,
+        "n": 48
+      },
+      {
+        "u": 0.5,
+        "n": 52
+      },
+      {
+        "u": 0.68,
+        "n": 60
+      }
+    ],
+    "finale": {
+      "n": 300,
+      "v": [
+        70,
+        210
+      ],
+      "lampo_ms": 150,
+      "lampo_r": [
+        8,
+        26
+      ],
+      "anello": {
+        "r": 34,
+        "ms": 240
+      }
+    },
+    "polvere": {
+      "n": 64,
+      "s": 1.6,
+      "larga": 56
+    },
+    "gravita": 300,
+    "v": [
+      55,
+      160
+    ],
+    "vita": [
+      0.6,
+      1.05
+    ],
+    "scia_s": 0.035,
+    "tremito_px": 3,
+    "tetto_pixel": 720,
+    "durata_finale_s": 1.5,
+    "lampo": [
+      255,
+      246,
+      228
+    ],
+    "polvere_col": [
+      176,
+      162,
+      140
+    ],
+    "px_grande": 3,
+    "px_grandi_u": 0.5,
+    "lampo_r": [
+      6,
+      2
+    ],
+    "lampo_s": 0.09,
+    "scossa_px": 3,
+    "scossa_ms": 110,
+    "mbc1": {
+      "attiva": true,
+      "scoppi": [
+        {
+          "u": 0.16,
+          "n": 30
+        },
+        {
+          "u": 0.36,
+          "n": 32
+        },
+        {
+          "u": 0.56,
+          "n": 34
+        },
+        {
+          "u": 0.76,
+          "n": 40
+        }
+      ],
+      "finale": {
+        "n": 170,
+        "v": [
+          45,
+          135
+        ],
+        "lampo_ms": 130,
+        "lampo_r": [
+          6,
+          16
+        ],
+        "anello": null
+      },
+      "polvere": {
+        "n": 48,
+        "s": 1.4,
+        "larga": 40
+      },
+      "gravita": 320,
+      "v": [
+        35,
+        100
+      ],
+      "vita": [
+        0.5,
+        0.95
+      ],
+      "scia_s": 0.03,
+      "tremito_px": 2,
+      "tetto_pixel": 480,
+      "durata_finale_s": 1.5,
+      "lampo": [
+        255,
+        246,
+        228
+      ],
+      "polvere_col": [
+        176,
+        162,
+        140
+      ],
+      "px_grande": 2,
+      "px_grandi_u": 0.45,
+      "lampo_r": [
+        3,
+        1
+      ],
+      "lampo_s": 0.07,
+      "scossa_px": 0,
+      "scossa_ms": 90
+    }
+  }
+}

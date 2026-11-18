@@ -1,0 +1,537 @@
+/* Roccia Games — stile del sito (legato a RocciaMusic.com) */
+
+:root {
+  --nero: #000;
+  --testo: #f8f9fa;
+  --tenue: #b8bcc0;
+  --verde: #5cb85c;
+  --verde-testo: #0b1a0b;
+  --rosso: #e3000f;
+  --rosso-chiaro: #ff2a36;
+  --vetro: rgba(255, 255, 255, .08);
+  --vetro-bordo: rgba(255, 255, 255, .25);
+  --linea: rgba(255, 255, 255, .08);
+  --quasi-nero: #050505;
+
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-gioco: Impact, "Haettenschweiler", "Arial Narrow", "Arial Narrow Bold", sans-serif;
+
+  --barra-h: 52px;
+  --margine: clamp(16px, 4vw, 48px);
+  --larghezza: 1200px;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: var(--barra-h); }
+
+body {
+  margin: 0;
+  background: var(--nero);
+  color: var(--testo);
+  font: 400 17px/1.5 var(--font);
+  overflow-x: hidden;
+}
+
+img,
+video { display: block; max-width: 100%; }
+
+[hidden] { display: none !important; }
+
+/* Nascosto alla vista, letto dai lettori di schermo */
+.solo-lettore {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--testo);
+  outline-offset: 3px;
+}
+
+h1, h2, p { margin: 0; }
+
+/* Etichette piccole in monospace */
+.etichetta {
+  font: 700 12px/1.4 var(--font-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--tenue);
+}
+
+.riga { font-size: clamp(17px, 2.2vw, 22px); font-weight: 600; }
+
+/* ---------- Barra in alto ---------- */
+.barra {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 10;
+  height: var(--barra-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 var(--margine);
+  background: var(--verde);
+  color: var(--verde-testo);
+}
+
+.barra a { text-decoration: none; }
+.barra :focus-visible { outline-color: var(--verde-testo); }
+
+.barra__nome { font-weight: 900; font-size: 18px; letter-spacing: -.01em; white-space: nowrap; }
+
+.barra__link { display: flex; align-items: center; gap: 16px; font-weight: 700; font-size: 15px; }
+.barra__link a { display: flex; align-items: center; min-height: 44px; }
+.barra__link a:hover { text-decoration: underline; }
+.barra__roccia { font-size: 22px; line-height: 1; margin-left: -6px; }
+.barra__roccia:hover { text-decoration: none; }
+
+/* ---------- Bottoni ---------- */
+.bottone {
+  display: inline-block;
+  padding: 14px 28px;
+  background: var(--rosso);
+  border: 2px solid var(--rosso);
+  border-radius: 2px;
+  color: #fff;
+  font: 900 18px/1 var(--font);
+  letter-spacing: .06em;
+  text-decoration: none;
+  transition: background-color .15s, color .15s;
+}
+.bottone:hover { background: var(--nero); color: var(--testo); }
+
+.link-secondario {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+.link-secondario:hover { color: var(--rosso-chiaro); }
+
+/* ---------- 1. Apertura ---------- */
+.apertura {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--barra-h);
+  background: var(--quasi-nero);
+  overflow: hidden;
+}
+
+/* Quattro linee da 1 px: due verticali ai margini, due orizzontali */
+.apertura__griglia {
+  position: absolute;
+  inset: var(--barra-h) 0 0 0;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--linea), var(--linea)) left var(--margine) top 0 / 1px 100% no-repeat,
+    linear-gradient(var(--linea), var(--linea)) right var(--margine) top 0 / 1px 100% no-repeat,
+    linear-gradient(var(--linea), var(--linea)) left 0 top 18% / 100% 1px no-repeat;
+}
+
+.apertura__testo {
+  position: relative;
+  flex: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 18px;
+  padding: 48px var(--margine) 40px;
+  text-align: center;
+}
+
+.titolo-gioco {
+  font-family: var(--font-gioco);
+  font-weight: 400;
+  font-stretch: condensed;
+  font-size: clamp(44px, 13.5vw, 240px);
+  line-height: .9;
+  letter-spacing: .01em;
+  color: var(--rosso);
+  overflow-wrap: anywhere;
+}
+
+/* Colatura ASCII dietro il titolo (scena.js): il testo resta sopra, e sta sopra anche la scena (che non prende clic) */
+.apertura__testo > .apertura__ascii { position: absolute; top: 0; left: 0; z-index: 0; pointer-events: none; }
+.apertura__testo > :not(.apertura__ascii) { position: relative; z-index: 1; }
+.apertura__testo { z-index: 1; }
+
+.azioni { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px 28px; margin-top: 8px; }
+
+/* Scena viva su canvas (scena.js): sale dalla riga dei tasti fino alla base del titolo, dietro il testo;
+   sopra di lei la tela delle catene (stesse coordinate) */
+.apertura__scena { position: relative; z-index: 0; }
+/* Fascia libera sotto il bottone: terra, corsa, colpi e salto semplice stanno qui, col loro spazio;
+   la tela sale comunque fino al titolo per doppio salto, schianto e volanti. L'apertura può superare lo schermo. */
+.apertura__fascia { flex: none; height: clamp(230px, 32vh, 340px); pointer-events: none; }
+.con-vetrina .apertura__fascia { display: none; }
+.apertura__scena canvas {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  display: block;
+  image-rendering: pixelated;
+  pointer-events: none;   /* la scena va da sola: clic, tocchi e scorrimento passano */
+}
+.apertura__scena .apertura__catene,
+.apertura__scena .apertura__lettere { image-rendering: auto; }
+
+.scena__guida {
+  display: flex;
+  justify-content: flex-end;   /* resta solo il contatore, a destra */
+  gap: 12px;
+  padding: 10px var(--margine) 14px;
+  font: 700 11px/1.4 var(--font-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--tenue);
+}
+
+/* ---------- 2. Clip ---------- */
+.clip {
+  max-width: calc(var(--larghezza) + 2 * var(--margine));
+  margin: 0 auto;
+  padding: clamp(56px, 10vw, 112px) var(--margine);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2.5vw, 28px);
+}
+
+/* (Carlo 18/11) video demo in uno schermo sopra il sito, con la X in alto a destra */
+.schermo-video { position: fixed; inset: 0; width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: clamp(48px, 6vw, 72px) clamp(12px, 4vw, 48px) clamp(16px, 4vw, 48px); border: 0; background: rgba(0, 0, 0, .94); }
+.schermo-video[open] { display: grid; place-items: center; }
+.schermo-video::backdrop { background: rgba(0, 0, 0, .8); }
+.schermo-video video { display: block; width: min(100%, calc((100dvh - 130px) * 1.6)); height: auto; aspect-ratio: 16 / 10; background: #000; border: 1px solid var(--vetro-bordo); }
+.schermo-video__chiudi { position: absolute; top: 10px; right: 14px; width: 44px; height: 44px; border: 1px solid var(--vetro-bordo); background: #000; color: #fff; font: 400 30px/1 var(--font); cursor: pointer; }
+.schermo-video__chiudi:hover, .schermo-video__chiudi:focus-visible { background: #d6262a; border-color: #d6262a; }
+
+.clip__voce video {
+  width: 100%;
+  aspect-ratio: 768 / 480;
+  object-fit: cover;
+  background: #111;
+  border: 1px solid var(--vetro-bordo);
+}
+
+.clip__voce h2 {
+  margin-top: 14px;
+  font-family: var(--font-gioco);
+  font-weight: 400;
+  font-stretch: condensed;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: .02em;
+  color: var(--rosso-chiaro);
+}
+
+.clip__voce p { margin-top: 6px; color: var(--tenue); }
+
+/* Gioco vero nell'apertura (schermo largo): iframe a tutto campo dietro il titolo */
+.apertura__vetrina {
+  position: absolute;
+  inset: var(--barra-h) 0 0 0;
+  width: 100%;
+  height: calc(100% - var(--barra-h));
+  border: 0;
+  background: var(--quasi-nero);
+  opacity: 0;
+  transition: opacity .6s;
+}
+.vetrina-pronta .apertura__vetrina { opacity: 1; }
+.vetrina__guida { display: none; }
+.con-vetrina .apertura__scena,
+.con-vetrina .apertura__griglia { display: none; }
+/* Il titolo sta in alto, sopra il buio della stanza; i clic passano al gioco tranne che sui link */
+.con-vetrina .apertura__testo { place-content: start center; padding-top: clamp(24px, 6vh, 72px); pointer-events: none; }
+.con-vetrina .apertura__testo a { pointer-events: auto; }
+.con-vetrina .titolo-gioco { font-size: clamp(44px, 11vw, 200px); text-shadow: 0 0 40px rgba(0, 0, 0, .8); }
+.con-vetrina .vetrina__guida {
+  position: absolute;
+  left: var(--margine);
+  right: var(--margine);
+  bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--tenue);
+  pointer-events: none;
+}
+
+/* ---------- Divisorio ASCII fra apertura e clip ---------- */
+.divisore {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  padding: 18px 0 0;
+  line-height: 0;
+}
+.divisore canvas { display: block; }
+
+/* ---------- Mostri: mini boss e nemici animati, sagome ASCII dietro ---------- */
+.mostri {
+  position: relative;
+  overflow: hidden;
+  max-width: calc(var(--larghezza) + 2 * var(--margine));
+  margin: 0 auto;
+  padding: 0 var(--margine) clamp(56px, 10vw, 112px);
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  text-align: center;
+}
+.mostri > :not(.mostri__fondo) { position: relative; z-index: 1; }
+
+.mostri__fondo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  pointer-events: none;
+}
+.mostri__fondo > div { display: grid; place-items: center; min-width: 0; overflow: hidden; }
+.mostri__fondo canvas { display: block; }
+
+.mostri__boss,
+.mostri__fila {
+  width: 100%;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 16px;
+}
+.mostri__boss { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mostri__fila { grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 10px; }
+
+.boss,
+.comune {
+  display: grid;
+  justify-items: center;
+  align-content: end;
+  gap: 6px;
+  min-width: 0;
+  background: rgba(0, 0, 0, .45);
+}
+.boss { padding: 20px 12px 14px; border: 1px solid var(--vetro-bordo); }
+.comune { padding: 10px 6px 8px; border: 1px solid var(--linea); }
+.boss canvas,
+.comune canvas { display: block; max-width: 100%; image-rendering: pixelated; }
+.boss__nome { margin-top: 6px; font: 700 14px/1.3 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+.comune p { font: 700 10px/1.3 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--tenue); }
+/* Mini boss in ASCII (scena.js): tutto dentro il riquadro; il tremolio del colpo è una trasformazione */
+.boss, .comune { overflow: hidden; }
+/* Nemico comune: sprite fermo davanti alla sua ombra ASCII che respira */
+.comune__figura { position: relative; display: grid; place-items: center; }
+.comune__figura > canvas:not(.comune__ombra) { position: relative; z-index: 1; }
+.comune .comune__ombra {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  max-width: none;
+  transform: translate(calc(-50% + 4px), calc(-50% + 3px));
+  image-rendering: auto;
+  animation: respiro-ombra 5s ease-in-out infinite;
+}
+@keyframes respiro-ombra { 0%, 100% { opacity: .5; } 50% { opacity: .95; } }
+@media (prefers-reduced-motion: reduce) { .comune .comune__ombra { animation: none; opacity: .8; } }
+
+/* ---------- 3. Album 24/24/24 ---------- */
+.album {
+  position: relative;
+  overflow: hidden;
+  border-block: 1px solid var(--vetro-bordo);
+  background: var(--vetro);
+  padding: clamp(48px, 8vw, 96px) var(--margine);
+  display: grid;
+  grid-template-columns: 1fr minmax(180px, 320px);
+  align-items: center;
+  gap: clamp(24px, 5vw, 64px);
+}
+
+.album > :not(.album__fondo) { position: relative; z-index: 1; }
+.album__testo { display: grid; gap: 20px; justify-items: start; max-width: 760px; justify-self: start; }
+
+/* Copertina in ASCII, tenue, dietro i numeri; il velo tiene leggibile il testo */
+.album__fondo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: .85;
+}
+.album__fondo canvas { display: block; }
+.album__fondo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, .55), rgba(0, 0, 0, .2) 55%, rgba(0, 0, 0, .45));
+}
+
+.numeri {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--tenue);
+}
+.numeri span { display: grid; }
+.numeri b {
+  font-family: var(--font);
+  font-size: clamp(56px, 10vw, 120px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.04em;
+  color: var(--testo);
+}
+
+.album__copertina {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center 15%;
+  border: 1px solid var(--vetro-bordo);
+}
+
+/* ---------- 4. Gioca ---------- */
+.gioca {
+  padding: clamp(64px, 12vw, 128px) var(--margine);
+  display: grid;
+  justify-items: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.titolo-sezione {
+  font-family: var(--font-gioco);
+  font-weight: 400;
+  font-stretch: condensed;
+  font-size: clamp(44px, 9vw, 96px);
+  line-height: 1;
+  color: var(--rosso);
+}
+
+.comandi {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 220px));
+  gap: 12px;
+}
+.comandi div {
+  padding: 14px 16px;
+  background: var(--vetro);
+  border: 1px solid var(--vetro-bordo);
+}
+.comandi dt { font: 700 11px/1.4 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--tenue); }
+.comandi dd { margin: 4px 0 0; font-weight: 700; }
+
+.nota-touch { display: none; font-weight: 700; color: var(--rosso-chiaro); }
+
+/* Sfondo a pixel (sfondo.js) dietro il contenuto di Gioca */
+.gioca { position: relative; overflow: hidden; isolation: isolate; }
+.gioca > :not(.gioca__sfondo) { position: relative; z-index: 1; }
+.gioca__sfondo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ---------- Chiusura: link, logo gigante, fasce rosse ---------- */
+.chiusura {
+  padding-top: clamp(56px, 10vw, 112px);
+  border-top: 1px solid var(--vetro-bordo);
+  background: var(--nero);
+  overflow: hidden;
+}
+
+.chiusura__testa {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: 0 var(--margine) clamp(40px, 6vw, 72px);
+}
+.chiusura__testa nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; font-weight: 700; }
+.chiusura__testa nav a { text-decoration: none; }
+.chiusura__testa nav a:hover { color: var(--verde); }
+
+/* Il logo si appoggia sul bordo alto delle fasce */
+.chiusura__palco {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0 var(--margine);
+}
+.chiusura__logo img { width: min(560px, 86vw); height: auto; }
+
+.ascii { line-height: 0; }
+.ascii canvas { display: block; }
+
+.chiusura__scena {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.fasce span { display: block; height: clamp(70px, 7vw, 90px); }
+.fasce span:nth-child(1) { background: var(--rosso); }
+.fasce span:nth-child(2) { background: #b0000c; }
+.fasce span:nth-child(3) { background: #7a0009; }
+.fasce span:nth-child(4) { background: #430006; }
+
+/* ---------- Schermi stretti ---------- */
+@media (max-width: 760px) {
+  .barra__nome { font-size: 16px; }
+  .barra__link { gap: 12px; font-size: 14px; }
+
+  .clip { grid-template-columns: 1fr; }
+
+  .album { grid-template-columns: 1fr; }
+  .album__copertina { max-width: 320px; }
+
+  .mostri__boss,
+  .mostri__fondo { grid-template-columns: 1fr; }
+  .mostri__fila { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Touch o schermo stretto: comandi nascosti, nota visibile */
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  .comandi { display: none; }
+  .nota-touch { display: block; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .bottone { transition: none; }
+}
+
+/* (Carlo 18/11) Demo non ancora giocabile: sui bottoni della demo il cursore diventa «e volevi» */
+[data-demo] { cursor: url("media/cursore-volevi.png") 45 78, not-allowed; }

@@ -1,0 +1,2 @@
+Copie di strumenti/pennino/ (stessi percorsi relativi), fatte da sito/strumenti/copia_sprite.py.
+Non modificare qui: si riscrivono a ogni lancio dello script.

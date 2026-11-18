@@ -1,0 +1,1109 @@
+{
+ "_nota": "(ASC2) Colpi dei nemici e dei mini boss in caratteri (prova/ascii_colpi.mjs). Misure in H (altezza del protagonista), tempi in s. Proposta, nessun numero provato da Carlo. Studio: design/effetti-ascii-2026-11-17/STUDIO-COLPI-NEMICI.md.",
+ "raccomandata": {
+  "_nota": "variante per famiglia: mista = nucleo a pixel (come il raggio del sito) + materia in caratteri dove il colpo tocca; ascii = anche il nucleo in caratteri",
+  "falce_mb": "mista",
+  "falce": "ascii",
+  "schianto": "ascii",
+  "raggio": "mista",
+  "catena": "mista",
+  "filo": "ascii",
+  "cera": "mista",
+  "ago": "ascii"
+ },
+ "tetti": {
+  "segni": 192,
+  "_segni": "glifi fissi a terra o sul muro (bruciato, graffio, crepa, cucitura, piantato): coda circolare, il più vecchio sparisce",
+  "corse": 8,
+  "_corse": "onde e strisciate in corsa insieme",
+  "raggi": 4,
+  "nuclei": 24,
+  "_nuclei": "nuclei a pixel per fotogramma (raggio, grumo, ago della variante mista)",
+  "nemici": 16,
+  "_nemici": "nemici seguiti insieme per i contatti delle hitbox",
+  "campioni_falce": 44,
+  "_campioni_falce": "caratteri al più sul filo della falce in caratteri"
+ },
+ "pacchetto": {
+  "glifi": {
+   "^": "010 101 000 000 000",
+   "x": "000 101 010 101 000"
+  },
+  "tavolozze": {
+   "raggio": [
+    "#ffffff",
+    "#ffd8d0",
+    "#ff8a7a",
+    "#ff5a4a",
+    "#e3000f",
+    "#8a0a10",
+    "#3a0810"
+   ],
+   "_raggio": "dal raggio del sito: nucleo #ffffff, alone #ff8a7a, bordo #e3000f, scintilla #ff5a4a",
+   "scintille": [
+    "#ffffff",
+    "#fff2c0",
+    "#ffd36b",
+    "#ffb347",
+    "#d0702a",
+    "#6e3418"
+   ],
+   "ruggine": [
+    "#ffffff",
+    "#f6e6cc",
+    "#d89a5a",
+    "#a85c34",
+    "#6c3626",
+    "#3a2420"
+   ],
+   "cera_calda": [
+    "#ffffff",
+    "#fff4d6",
+    "#ffc878",
+    "#e8843c",
+    "#a8482a",
+    "#5c2a1e"
+   ],
+   "argento": [
+    "#ffffff",
+    "#e2eaf2",
+    "#aab8c8",
+    "#6c7c92",
+    "#3a4458",
+    "#1e2430"
+   ],
+   "filo": [
+    "#ffffff",
+    "#efe6ff",
+    "#c8b4ec",
+    "#8a74b8",
+    "#4a3a6a",
+    "#2a2040"
+   ],
+   "pietra": [
+    "#e2d6be",
+    "#a89c88",
+    "#7a7064",
+    "#4e4640",
+    "#2b2826"
+   ],
+   "brace": [
+    "#fff6d8",
+    "#ffd36b",
+    "#ff9a3a",
+    "#e8661c",
+    "#a83224",
+    "#5e1c16",
+    "#2a1210"
+   ],
+   "ambra": [
+    "#fff0c0",
+    "#ffc878",
+    "#e8a040",
+    "#c87428",
+    "#8a4a1e",
+    "#5c2e16",
+    "#3a1c10"
+   ],
+   "fumo": [
+    "#9a9098",
+    "#6a6270",
+    "#45404c",
+    "#2a2630"
+   ]
+  },
+  "volo": {
+   "tipi": [
+    {
+     "nome": "scintilla",
+     "g_H_s2": 8.75,
+     "att_s": 1.4,
+     "glifo": "",
+     "rimbalzi": 1,
+     "rimbalzo_k": 0.35,
+     "rimbalzo_att": 0.6,
+     "scia": [
+      0.025,
+      2
+     ],
+     "energia": 0.9,
+     "classe_max": "T",
+     "nucleo": false
+    },
+    {
+     "nome": "zolla",
+     "g_H_s2": 20,
+     "att_s": 0.9,
+     "glifo": "",
+     "rimbalzi": 0,
+     "rimbalzo_k": 0,
+     "scia": [
+      0,
+      0
+     ],
+     "energia": 0.7,
+     "classe_max": "L",
+     "nucleo": false
+    },
+    {
+     "nome": "detrito",
+     "g_H_s2": 26,
+     "att_s": 0.3,
+     "glifo": "o",
+     "rimbalzi": 2,
+     "rimbalzo_k": 0.42,
+     "rimbalzo_att": 0.7,
+     "scia": [
+      0,
+      0
+     ],
+     "energia": 0.8,
+     "classe_max": "L",
+     "nucleo": false
+    },
+    {
+     "nome": "goccia_cera",
+     "g_H_s2": 18,
+     "att_s": 0.6,
+     "glifo": "",
+     "rimbalzi": 0,
+     "rimbalzo_k": 0,
+     "scia": [
+      0,
+      0
+     ],
+     "energia": 1,
+     "classe_max": "T",
+     "nucleo": false,
+     "testa": "pesante"
+    },
+    {
+     "nome": "rimbalzo_ago",
+     "g_H_s2": 18,
+     "att_s": 1.5,
+     "glifo": "",
+     "rimbalzi": 1,
+     "rimbalzo_k": 0.2,
+     "rimbalzo_att": 0.4,
+     "scia": [
+      0.02,
+      1
+     ],
+     "energia": 0.8,
+     "classe_max": "T",
+     "nucleo": false
+    },
+    { "_spa1": "(SPA1) scintilla che rimbalza due volte: impatti della pistola, contatto del laser, scoppi di brace", "nome": "scintilla_rimbalzo", "g_H_s2": 10, "att_s": 1.1, "glifo": "", "rimbalzi": 2, "rimbalzo_k": 0.45, "rimbalzo_att": 0.6, "scia": [0.025, 2], "energia": 0.95, "classe_max": "T", "nucleo": false },
+    { "_spa1": "(SPA1) lettera che si stacca da un raggio o da uno sparo in volo: quasi senza peso, si spegne presto", "nome": "stacco", "g_H_s2": 3, "att_s": 2.2, "glifo": "", "rimbalzi": 0, "rimbalzo_k": 0, "scia": [0.02, 1], "energia": 0.7, "classe_max": "T", "nucleo": false }
+   ]
+  },
+  "materie": {
+   "scintilla": {
+    "tipo": "gas",
+    "tavolozza": "scintille",
+    "toni": {
+     "base": [
+      [
+       0,
+       0.04
+      ],
+      [
+       1,
+       0.09
+      ],
+      [
+       2,
+       0.15
+      ],
+      [
+       3,
+       0.22
+      ],
+      [
+       4,
+       99
+      ]
+     ]
+    },
+    "lascia": {},
+    "lettere": {
+     "pesanti": "*",
+     "tratti": [
+      "-",
+      "/",
+      "|",
+      "\\"
+     ],
+     "leggeri": "'.,*",
+     "colori": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "_lettere": "(ASC2, lettere) scintille: tratti orientati e punti, mai lettere pesanti (classe_max T nel tipo)"
+   },
+   "scintilla_raggio": {
+    "tipo": "gas",
+    "tavolozza": "raggio",
+    "toni": {
+     "base": [
+      [
+       0,
+       0.04
+      ],
+      [
+       2,
+       0.1
+      ],
+      [
+       3,
+       0.17
+      ],
+      [
+       4,
+       0.24
+      ],
+      [
+       5,
+       99
+      ]
+     ]
+    },
+    "lascia": {},
+    "lettere": {
+     "pesanti": "*",
+     "tratti": [
+      "-",
+      "/",
+      "|",
+      "\\"
+     ],
+     "leggeri": "'.,*",
+     "colori": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "_lettere": "(ASC2, lettere) scintille: tratti orientati e punti, mai lettere pesanti (classe_max T nel tipo)"
+   },
+   "scintilla_ruggine": {
+    "tipo": "gas",
+    "tavolozza": "ruggine",
+    "toni": {
+     "base": [
+      [
+       0,
+       0.04
+      ],
+      [
+       1,
+       0.09
+      ],
+      [
+       2,
+       0.16
+      ],
+      [
+       3,
+       0.24
+      ],
+      [
+       4,
+       99
+      ]
+     ]
+    },
+    "lascia": {},
+    "lettere": {
+     "pesanti": "*",
+     "tratti": [
+      "-",
+      "/",
+      "|",
+      "\\"
+     ],
+     "leggeri": "'.,*",
+     "colori": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "_lettere": "(ASC2, lettere) scintille: tratti orientati e punti, mai lettere pesanti (classe_max T nel tipo)"
+   },
+   "scintilla_cera_calda": {
+    "tipo": "gas",
+    "tavolozza": "cera_calda",
+    "toni": {
+     "base": [
+      [
+       0,
+       0.04
+      ],
+      [
+       1,
+       0.09
+      ],
+      [
+       2,
+       0.16
+      ],
+      [
+       3,
+       0.24
+      ],
+      [
+       4,
+       99
+      ]
+     ]
+    },
+    "lascia": {},
+    "lettere": {
+     "pesanti": "*",
+     "tratti": [
+      "-",
+      "/",
+      "|",
+      "\\"
+     ],
+     "leggeri": "'.,*",
+     "colori": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "_lettere": "(ASC2, lettere) scintille: tratti orientati e punti, mai lettere pesanti (classe_max T nel tipo)"
+   },
+   "scintilla_argento": {
+    "tipo": "gas",
+    "tavolozza": "argento",
+    "toni": {
+     "base": [
+      [
+       0,
+       0.04
+      ],
+      [
+       1,
+       0.1
+      ],
+      [
+       2,
+       0.18
+      ],
+      [
+       3,
+       0.26
+      ],
+      [
+       4,
+       99
+      ]
+     ]
+    },
+    "lascia": {},
+    "lettere": {
+     "pesanti": "*",
+     "tratti": [
+      "-",
+      "/",
+      "|",
+      "\\"
+     ],
+     "leggeri": "'.,*",
+     "colori": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "_lettere": "(ASC2, lettere) scintille: tratti orientati e punti, mai lettere pesanti (classe_max T nel tipo)"
+   },
+   "scintilla_brace": { "_spa1": "(SPA1) scintille di fuoco (Lampada, bombe): tratti e punti nella tavolozza brace", "tipo": "gas", "tavolozza": "brace", "toni": { "base": [[0, 0.05], [1, 0.1], [2, 0.17], [3, 0.25], [4, 0.34], [5, 99]] }, "lascia": {}, "lettere": { "pesanti": "*", "tratti": ["-", "/", "|", "\\"], "leggeri": "'.,*", "colori": [0, 1, 2, 3, 4] } },
+   "scintilla_filo": {
+    "tipo": "gas",
+    "tavolozza": "filo",
+    "toni": {
+     "base": [
+      [
+       0,
+       0.05
+      ],
+      [
+       1,
+       0.12
+      ],
+      [
+       2,
+       0.2
+      ],
+      [
+       3,
+       99
+      ]
+     ]
+    },
+    "lascia": {},
+    "lettere": {
+     "pesanti": "*",
+     "tratti": [
+      "-",
+      "/",
+      "|",
+      "\\"
+     ],
+     "leggeri": "'.,*",
+     "colori": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "_lettere": "(ASC2, lettere) scintille: tratti orientati e punti, mai lettere pesanti (classe_max T nel tipo)"
+   },
+   "polvere": {
+    "tipo": "polvere",
+    "tavolozza": "pietra",
+    "toni": {
+     "base": [
+      [
+       0,
+       0.12
+      ],
+      [
+       1,
+       0.4
+      ],
+      [
+       2,
+       99
+      ]
+     ]
+    },
+    "lascia": {
+     "zolla": 1,
+     "detrito": 1
+    },
+    "svanisce_s": 4.5,
+    "colori": {
+     "cade": 1,
+     "fermo": 2
+    },
+    "glifi_cella": {
+     "cade": ".",
+     "filo": ":",
+     "fermo": "_",
+     "pozza": "_",
+     "fondo": "=",
+     "fondo2": "%",
+     "macchia": "."
+    },
+    "lettere": {
+     "pesanti": "%",
+     "tratti": [
+      "-",
+      "/",
+      "|",
+      "\\"
+     ],
+     "leggeri": "'.:;",
+     "colori": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    "_glifi_cella": "(lettere) mucchio: _ in cima, = e % sotto: si vede la pila che si posa"
+   },
+   "fumo": {
+    "tipo": "gas",
+    "tavolozza": "fumo",
+    "vita_s": 1.2,
+    "sale_passi": 3,
+    "_sale_passi": "una cella ogni 3 passi di griglia: 60 px/s (con 1 saliva a 180 px/s, troppo svelto per un fumo)",
+    "allarga": 0.35,
+    "glifi_eta": "~:'.",
+    "colori_eta": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "lascia": {}
+   },
+   "cera": {
+    "tipo": "liquido",
+    "tavolozza": "ambra",
+    "toni": {
+     "base": [
+      [
+       0,
+       0.06
+      ],
+      [
+       1,
+       0.2
+      ],
+      [
+       2,
+       99
+      ]
+     ]
+    },
+    "lascia": {
+     "goccia_cera": 1,
+     "goccia": 1,
+     "pesante": 1,
+     "striscia": 0.4
+    },
+    "slancio": 2,
+    "pendenza_passi": 3,
+    "colatura_passi": 5,
+    "caduta_veloce_passi": 4,
+    "secca_s": 2.2,
+    "_secca_s": "si rapprende (da liquido a crosta): prima 3,4–4,2 s, la crosta non si vedeva mai nella tavola; la cera si raffredda prima del sangue",
+    "macchia": true,
+    "macchia_scura_s": 3,
+    "macchia_vita_s": 8,
+    "_macchia_vita_s_prima": "(Carlo 18/11: macchie e liquidi spariscono in 5-10 s, niente velo a terra) prima 18",
+    "colori": {
+     "cade": 1,
+     "fermo": 2,
+     "aderente": 2,
+     "macchia": 3,
+     "macchia_vecchia": 4
+    },
+    "glifi_cella": {
+     "cade": "'",
+     "filo": "|",
+     "fermo": "~",
+     "pozza": "~",
+     "fondo": "=",
+     "fondo2": "#",
+     "aderente": ":",
+     "macchia": "=_-"
+    },
+    "lettere": {
+     "pesanti": "@0O",
+     "tratti": [
+      "-",
+      "/",
+      "|",
+      "\\"
+     ],
+     "leggeri": "'.,o",
+     "colori": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "livella_passi": 10,
+    "_livella_passi": "(lettere) cera densa: si spande poco sopra sé stessa"
+   }
+  }
+ },
+ "segni": {
+  "_nota": "glifi fissi: glifi per età (? = il glifo dato da chi chiama), colori per età [indici nella tavolozza], strato 0 prima della luce (prende il buio), 1 dopo (brilla)",
+  "bruciato": {
+   "tavolozza": "brace",
+   "glifi": "=-_..",
+   "colori": [
+    0,
+    1,
+    2,
+    3,
+    5
+   ],
+   "vita_s": 1.4,
+   "strato": 1
+  },
+  "graffio": {
+   "tavolozza": "pietra",
+   "glifi": "?-_.",
+   "colori": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "vita_s": 0.7,
+   "strato": 0
+  },
+  "crepa": {
+   "tavolozza": "pietra",
+   "glifi": "?__..",
+   "colori": [
+    0,
+    2,
+    3,
+    3,
+    4
+   ],
+   "vita_s": 1.8,
+   "strato": 0
+  },
+  "cucitura": {
+   "tavolozza": "filo",
+   "glifi": "x++..",
+   "colori": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "vita_s": 2.0,
+   "strato": 1
+  },
+  "piantato": {
+   "tavolozza": "argento",
+   "glifi": "???.",
+   "colori": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "vita_s": 0.6,
+   "strato": 1
+  },
+  "lampo": {
+   "tavolozza": "scintille",
+   "glifi": "*+.",
+   "colori": [
+    0,
+    0,
+    2
+   ],
+   "vita_s": 0.09,
+   "strato": 1
+  },
+  "cresta": {
+   "tavolozza": "scintille",
+   "glifi": "^~-.",
+   "colori": [
+    0,
+    1,
+    2,
+    4
+   ],
+   "vita_s": 0.22,
+   "strato": 1
+  },
+  "brucia_raggio": { "_spa1": "(SPA1) traccia bruciata del laser: resta accesa e si spegne a gradini (bianco, giallo, arancio, rosso, cenere)", "tavolozza": "brace", "glifi": "#==--__..", "colori": [0, 1, 2, 2, 3, 4, 5, 5, 6], "vita_s": 3.2, "strato": 1 },
+  "brucia_sparo": { "_spa1": "(SPA1) segno corto dove un colpo di fuoco o della pistola tocca", "tavolozza": "brace", "glifi": "*=-_.", "colori": [0, 2, 3, 5, 6], "vita_s": 1.1, "strato": 1 },
+  "bocca": { "_spa1": "(SPA1) lampo alla bocca della pistola: due fotogrammi", "tavolozza": "scintille", "glifi": "*+'", "colori": [0, 1, 3], "vita_s": 0.07, "strato": 1 }
+ },
+ "nemici": {
+  "_nota": "tavolozza e scintille per nemico (base senza -elite/-mini); _ = tutti gli altri",
+  "z24-mb01": {
+   "tavolozza": "ruggine",
+   "scintilla": "scintilla_ruggine"
+  },
+  "z24-mb02": {
+   "tavolozza": "cera_calda",
+   "scintilla": "scintilla_cera_calda"
+  },
+  "z24-mb03": {
+   "tavolozza": "argento",
+   "scintilla": "scintilla_argento"
+  },
+  "z24-e09": {
+   "tavolozza": "filo",
+   "scintilla": "scintilla_filo"
+  },
+  "_": {
+   "tavolozza": "scintille",
+   "scintilla": "scintilla"
+  }
+ },
+ "mosse": {
+  "_nota": "famiglia per mossa con hitbox; senza voce: dalla forma (falce, anello → falce; radente, due_lati, espande → schianto; affondo → catena)",
+  "z24-mb01": {
+   "frustata_terra": "catena",
+   "presa": "catena",
+   "strattone": "catena",
+   "frustata_catena": "catena"
+  },
+  "z24-mb03": {
+   "fili": "filo",
+   "spazzata": "falce"
+  },
+  "z24-e01": {
+   "catena": "falce",
+   "frustata": "falce",
+   "presa": "catena"
+  },
+  "z24-e09": {
+   "cuci": "filo",
+   "cuci_alto": "filo"
+  }
+ },
+ "falce": {
+  "passo_px": 3.5,
+  "_passo_px": "un carattere ogni tanti px lungo il filo",
+  "righe": [
+   2,
+   3,
+   4
+  ],
+  "_righe": "righe di caratteri per forza (leggero, normale, pesante): la prima sul filo, le altre verso l'interno, più rade e scure",
+  "rientro_px": 3.5,
+  "colori": [
+   [
+    0.88,
+    0
+   ],
+   [
+    0.6,
+    1
+   ],
+   [
+    0.3,
+    2
+   ],
+   [
+    0,
+    3
+   ]
+  ],
+  "_colori": "[da frazione dalla coda, indice nella tavolozza]: testa bianca, poi chiaro, poi corpo",
+  "contatto": {
+   "scintille": 6,
+   "v_H_s": [
+    2,
+    4.5
+   ],
+   "apertura_gradi": 80,
+   "vita_s": [
+    0.2,
+    0.4
+   ],
+   "graffi": 1,
+   "tocca_px": 4
+  }
+ },
+ "schianto": {
+  "polvere": 2,
+  "_polvere": "caratteri di polvere alzati per cella di fronte (× forza); prima 1 con celle 4 × 6",
+  "polvere_vy_H_s": [
+   1.6,
+   3.2
+  ],
+  "polvere_vx_H_s": [
+   0.2,
+   1.2
+  ],
+  "polvere_vita_s": [
+   0.6,
+   1.1
+  ],
+  "detriti_ogni": 3,
+  "_detriti_ogni": "un detrito che rimbalza ogni tante celle",
+  "detrito_vy_H_s": [
+   2.6,
+   4.2
+  ],
+  "detrito_vx_H_s": [
+   0.6,
+   1.8
+  ],
+  "detrito_vita_s": 1.4,
+  "crepa_ogni": 2,
+  "cresta_dietro": 3,
+  "colpo": {
+   "detriti": 4,
+   "polvere": 10,
+   "scintille": 5,
+   "v_H_s": [
+    2.5,
+    5
+   ]
+  },
+  "muro": {
+   "scintille": 6,
+   "polvere": 4,
+   "v_H_s": [
+    2,
+    4.5
+   ],
+   "vita_s": [
+    0.15,
+    0.3
+   ]
+  },
+  "forza": [
+   0.6,
+   1,
+   1.4
+  ],
+  "_forza": "moltiplicatore dei caratteri per forza del colpo"
+ },
+ "raggio": {
+  "scintille_ogni_s": 0.04,
+  "scintille": 3,
+  "v_H_s": [
+   1.6,
+   3.2
+  ],
+  "apertura_gradi": 120,
+  "vita_s": [
+   0.2,
+   0.4
+  ],
+  "fumo_ogni_s": 0.16,
+  "terra": { "_nota": "(SPA1) contatto del laser più presente (vale per ogni raggio acceso: Braccio, Lampada); attivo false = come ASC2", "attivo": true, "segno": "brucia_raggio", "riempi_celle": 6, "_riempi_celle": "il raggio spazza: le celle saltate fra due fotogrammi si bruciano anche loro (al più tante)", "scintille_tipo": "scintilla_rimbalzo", "scintille_piu": 2, "fumo_ogni_s": 0.08, "fumo_celle": 2, "stacca": { "ogni_s": 0.04, "scarto_px": 3, "da": 0.15, "a": 0.95, "v_H_s": [0.35, 1.0], "vita_s": [0.18, 0.4] }, "_stacca": "lettere che si staccano lungo il raggio, di lato (scarto dal filo) e mai sopra: si allontanano e si spengono" },
+  "passo_px": 3,
+  "pixel": {
+   "colori": [
+    "#ffffff",
+    "#ff8a7a",
+    "#e3000f"
+   ],
+   "largo": [
+    2,
+    3
+   ],
+   "pulsa_ms": 70,
+   "punta": 3,
+   "mira_alfa": [
+    0.55,
+    0.9
+   ],
+   "mira_fissa_s": 0.15,
+   "tratto": [
+    3,
+    6
+   ]
+  },
+  "ascii": {
+   "nucleo": [
+    0,
+    1
+   ],
+   "bordo": 4,
+   "punta": "*",
+   "mira": "."
+  },
+  "_scintille": "(lettere) prima 2 a 1,2–2,6 H/s per 0,14–0,26 s: in lettere erano tacche minuscole; ora fanno l'arco e rimbalzano"
+ },
+ "catena": {
+  "passo_px": 6,
+  "_passo_px": "una scintilla bassa ogni tanti px di corsa",
+  "scintille": 2,
+  "v_H_s": [
+   1.2,
+   3.2
+  ],
+  "vy_H_s": [
+   0.6,
+   1.6
+  ],
+  "vita_s": [
+   0.16,
+   0.3
+  ],
+  "graffio_ogni": 2,
+  "muro": {
+   "scintille": 7,
+   "v_H_s": [
+    2,
+    5
+   ],
+   "vita_s": [
+    0.15,
+    0.3
+   ]
+  },
+  "anello_px": 3,
+  "_anello_px": "variante ascii: un anello della catena (o, -) ogni tanti px fra la mano e la testa",
+  "pancia": 0.12,
+  "_pancia": "frazione della lunghezza di cui la catena pende a metà"
+ },
+ "filo": {
+  "passo_px": 3,
+  "cucitura_ogni_px": 10,
+  "vibra_px": 1,
+  "vibra_hz": 18,
+  "colori": [
+   0,
+   1,
+   2
+  ]
+ },
+ "cera": {
+  "gocce": 16,
+  "v_H_s": [
+   0.8,
+   2.4
+  ],
+  "apertura_gradi": 110,
+  "vita_s": 1.6,
+  "celle": 12,
+  "fumo": 3,
+  "muro_k": 0.35,
+  "_muro_k": "frazione della velocità verso il muro: le gocce restano aderenti e colano",
+  "grumo": {
+   "raggio_H": 0.08,
+   "_raggio_H": "prima 0,12: il quadrato copriva più del proiettile di oggi",
+   "colori": [
+    "#fff0c0",
+    "#e8a040",
+    "#5c2e16"
+   ],
+   "scia": 2
+  },
+  "_quante": "prima 6 gocce e 2 celle (celle 4 × 6): con le lettere la cella è un terzo, la cera era poca"
+ },
+ "ago": {
+  "scia": 2,
+  "lungo_px": 9,
+  "_lungo_px": "prima 5: si perdeva accanto ai proiettili di oggi (8 × 6)",
+  "muro": {
+   "schegge": 3,
+   "v_H_s": [
+    1.2,
+    2.6
+   ],
+   "vita_s": [
+    0.12,
+    0.22
+   ]
+  },
+  "terra": {
+   "k": 0.35,
+   "vita_s": 0.3
+  },
+  "pixel": {
+   "colori": [
+    "#ffffff",
+    "#aab8c8"
+   ]
+  }
+ },
+ "eventi": {
+  "_nota": "eventi di g.fx tradotti da notaColpo: famiglia e numeri (lunghezza dell'onda dall'evento se c'è: raggio o lunghezza)",
+  "onda_nemico": {
+   "famiglia": "schianto",
+   "lunghezza_H": 2.2,
+   "durata_s": 0.24,
+   "forza": 1,
+   "versi": 1
+  },
+  "schiacciata": {
+   "famiglia": "schianto",
+   "lunghezza_H": 1.6,
+   "durata_s": 0.2,
+   "forza": 2,
+   "versi": 2
+  },
+  "braccio_schianto": {
+   "famiglia": "schianto",
+   "lunghezza_H": 3.5,
+   "durata_s": 0.5,
+   "forza": 2,
+   "versi": 1
+  },
+  "anello_schianto": {
+   "famiglia": "schianto",
+   "lunghezza_H": 2.2,
+   "durata_s": 0.22,
+   "forza": 2,
+   "versi": 2
+  },
+  "nemico_pesta": {
+   "famiglia": "schianto",
+   "lunghezza_H": 1.2,
+   "durata_s": 0.16,
+   "forza": 0,
+   "versi": 2
+  },
+  "falena_impatto": {
+   "famiglia": "schianto",
+   "lunghezza_H": 0.8,
+   "durata_s": 0.14,
+   "forza": 0,
+   "versi": 2
+  },
+  "catena": {
+   "famiglia": "catena",
+   "lunghezza_H": 0.6,
+   "durata_s": 0.1
+  },
+  "incatenato_presa": {
+   "famiglia": "catena",
+   "lunghezza_H": 1.2,
+   "durata_s": 0.16
+  },
+  "rilegatore_cuce": {
+   "famiglia": "filo",
+   "lunghezza_H": 3,
+   "durata_s": 0.16
+  },
+  "goccia_terra": {
+   "famiglia": "cera",
+   "forza": 1
+  },
+  "chiazza": {
+   "famiglia": "cera",
+   "forza": 1.5
+  }
+ },
+ "_nota_lettere": "(ASC2, 18/11) resa a lettere vere (CONTRATTO-LETTERE.md): ogni materia ha il suo alfabeto; le celle sono 2 × 3,5 px di mondo (prima 4 × 6), quindi le quantità di materia sono cresciute (cera, polvere).",
+ "onda_passo_px": 4,
+ "_onda_passo_px": "passo del fronte d'onda e della strisciata in px di mondo (non dipende dalla cella)",
+ "terza": {
+  "_nota": "(SPA1) terza fase dei mini boss e stretta in lettere (prova/ascii_terza.mjs), mista: il pixel di oggi resta. Proposta, non provata da Carlo.",
+  "tetto_timbri": 220, "_tetto_timbri": "lettere fisse al più per fotogramma (catena, fili, stretta, nodo); scintille e scoppi passano dal motore",
+  "catena": { "anello_px": 3, "anelli_max": 70, "pancia": 0.6, "_pancia": "in H, come la catena a pixel (molle: pende di 0,6 H a metà)", "striscia_hz": 14, "striscia_p": 0.06, "strattone_scintille": 7, "spezzata_anelli": 14 },
+  "pressa": { "colpo_avanti_H": 0.8, "lampo_lettere": 10, "lampo_r_H": 0.35, "lampo_scintille": 8, "cola_gocce": 12, "nasce_polvere": 4, "cristallo_cera": 0.5, "cristallo_polvere": 0.7 },
+  "telaio": { "passo_px": 3, "lettere_max": 48, "vibra_hz": 7, "vibra_px": 1.2, "luce_hz": 1.4, "capo_lettere": 5, "sfilaccia": 14 },
+  "stretta": { "lettere": 18, "rx_H": 0.42, "ry_H": 0.6, "stringe": 0.18, "stringe_hz": 2.2, "barra_k": 0.25, "giro_hz": 0.35 }
+ },
+ "spari": {
+  "_nota": "(SPA1) proiettili in lettere (corpoSparo, scoppioSparo, pistola*): nucleo di lettere pesanti della materia [di, dj in celle (di in avanti), lettera, colore], coda di tratti orientati lungo la strada fatta, poi punti; materia che si stacca con la fisica (perde_s al secondo). Proposta, non provata da Carlo.",
+  "tetto_timbri": 420, "_tetto_timbri": "timbri al più per tutti gli spari dei nemici in un fotogramma: oltre, coda più corta e nucleo ridotto (mai sotto nucleo_min)",
+  "perdite_fotogramma": 14, "_perdite_fotogramma": "lettere che si staccano dagli spari, al più per fotogramma (orde)",
+  "nucleo_min": 2, "raggio_pieno_H": 0.17, "_raggio_pieno_H": "a questo raggio (o più) il nucleo ha tutte le lettere; sotto, in proporzione",
+  "cera": { "tavolozza": "ambra", "lettere": "@0Oo", "nucleo": [[0, 0, 0, 0], [1, 0, 0, 0], [-1, 0, 1, 1], [0, -1, 2, 1], [0, 1, 2, 1], [-2, 0, 1, 2], [1, -1, 3, 2], [1, 1, 3, 2], [-1, -1, 3, 2], [-1, 1, 3, 2]], "_nucleo": "a rombo, la punta davanti più chiara; quante lettere secondo il raggio (raggio_pieno_H) e il tetto", "colori": [0, 1, 2], "ondeggia_hz": 9, "_ondeggia_hz": "le lettere del nucleo si scambiano: la goccia trema come un liquido", "coda_px": 14, "passo_px": 2.5, "tratti": 0.5, "leggeri": ":'.", "coda_colori": [1, 2, 3, 4, 5], "perde_s": 4, "perde": { "materia": "cera", "tipo": "goccia", "trascina": 0.15, "v_H_s": [0.05, 0.4], "vita_s": [0.5, 0.9] }, "scoppio": "cera", "forza": 0.6 },
+  "sasso": { "tavolozza": "pietra", "lettere": "#%8o", "nucleo": [[0, 0, 0, 0], [1, 0, 1, 0], [-1, 0, 1, 1], [0, -1, 2, 1], [0, 1, 1, 1], [-2, 0, 3, 2], [1, -1, 3, 2], [1, 1, 3, 2], [-1, -1, 3, 2], [-1, 1, 3, 2]], "colori": [0, 1, 2], "ondeggia_hz": 5, "_ondeggia_hz": "il sasso rotola: le lettere girano piano", "coda_px": 9, "passo_px": 2.5, "tratti": 0.3, "leggeri": "'..", "coda_colori": [1, 2, 3, 4], "perde_s": 10, "perde": { "materia": "polvere", "tipo": "zolla", "trascina": 0.1, "v_H_s": [0.1, 0.5], "vita_s": [0.4, 0.8] }, "scoppio": "sasso", "forza": 1 },
+  "brace": { "tavolozza": "brace", "lettere": "*@o+", "nucleo": [[1, 0, 0, 0], [0, 0, 1, 0], [-1, 0, 1, 1], [0, -1, 3, 2], [0, 1, 3, 2], [-2, 0, 2, 2]], "colori": [0, 1, 3], "ondeggia_hz": 14, "coda_px": 15, "passo_px": 2.5, "tratti": 0.6, "leggeri": "'.", "coda_colori": [1, 2, 3, 4, 5, 6], "perde_s": 14, "perde": { "materia": "scintilla_brace", "tipo": "stacco", "trascina": 0.15, "v_H_s": [0.3, 0.9], "vita_s": [0.15, 0.35] }, "scoppio": "brace", "forza": 1 },
+  "bomba": { "tavolozza": "brace", "lettere": "@O*o", "nucleo": [[0, 0, 0, 0], [1, 0, 0, 0], [-1, 0, 1, 1], [0, -1, 1, 1], [0, 1, 1, 1], [0, -2, 2, 0], [-2, 0, 3, 2], [1, -1, 3, 2], [1, 1, 3, 2], [-1, -1, 3, 2], [-1, 1, 3, 2]], "_nucleo": "la bomba: un rombo pieno di O con la miccia * sopra", "colori": [0, 1, 3], "ondeggia_hz": 12, "coda_px": 12, "passo_px": 2.5, "tratti": 0.45, "leggeri": "'.", "coda_colori": [2, 3, 4, 5, 6], "perde_s": 18, "perde": { "materia": "scintilla_brace", "tipo": "stacco", "trascina": 0.1, "v_H_s": [0.3, 1.0], "vita_s": [0.2, 0.4] }, "scoppio": "brace", "forza": 2 },
+  "ago": { "tavolozza": null, "_tavolozza": "null: quella del nemico (nemici.*: argento per il mini boss degli aghi, oro per gli altri)", "ago_celle": 3, "punta": ">", "colori": [0, 1, 2], "coda_px": 8, "passo_px": 2.5, "tratti": 0.55, "leggeri": "'.", "coda_colori": [1, 2, 3, 4], "perde_s": 6, "perde": { "materia": null, "tipo": "stacco", "trascina": 0.3, "v_H_s": [0.2, 0.6], "vita_s": [0.12, 0.25] }, "scoppio": "ago", "forza": 1 },
+  "dardo": { "tavolozza": "argento", "_nota": "dardi della balestra: tre tratti e la punta", "ago_celle": 4, "punta": ">", "colori": [0, 1, 2], "coda_px": 6, "passo_px": 2.5, "tratti": 1, "leggeri": "'", "coda_colori": [2, 3], "perde_s": 0, "scoppio": "ago", "forza": 1 },
+  "scoppi": {
+   "sasso": { "detriti": 5, "zolle": 9, "celle": 6, "v_H_s": [0.8, 2.2], "su_H_s": [1.6, 3.2], "vita_s": [0.6, 1.1], "crepa": true },
+   "brace": { "scintille": 9, "v_H_s": [1.6, 3.6], "apertura_gradi": 130, "vita_s": [0.25, 0.5], "segni": 3, "fumo": 4, "stacchi": 4 },
+   "rimando": { "scintille": 5, "v_H_s": [1.4, 3], "vita_s": [0.12, 0.26] }
+  },
+  "pistola": {
+   "_nota": "(SPA1) la pistola del protagonista, «un po'»: il proiettile a pixel resta com'è (si deve seguire), le lettere si aggiungono: scia corta, lampo alla bocca, scintille all'urto. Meno materia degli spari dei nemici.",
+   "tavolozza": "scintille", "materia": "scintilla", "tipo": "scintilla_rimbalzo",
+   "scia": { "n": 4, "da_px": 11, "passo_px": 2.2, "glifi": "--'.", "_glifi": "le prime due orientate col moto, poi punti (dietro al corpo a pixel, che resta)", "colori": [0, 1, 2, 4], "perde_s": 10, "v_H_s": [0.2, 0.5], "vita_s": [0.12, 0.24] },
+   "bocca": { "scintille": 4, "v_H_s": [1.8, 3.2], "apertura_gradi": 40, "vita_s": [0.06, 0.13], "fumo": 1 },
+   "urto": { "scintille": 7, "v_H_s": [1.6, 3.4], "apertura_gradi": 120, "vita_s": [0.18, 0.36], "zolle": 3, "segno": "brucia_sparo" },
+   "nemico": { "scintille": 2, "v_H_s": [1.2, 2.4], "apertura_gradi": 70, "vita_s": [0.08, 0.16] },
+   "dono": { "lettere": "*o", "colore": 1, "_nota": "colpi dei doni: testa in lettere nei colori dell'elemento (tavolozza el_<elemento> registrata dagli agganci)" }
+  }
+ }
+}

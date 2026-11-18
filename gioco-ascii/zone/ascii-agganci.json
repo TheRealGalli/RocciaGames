@@ -1,0 +1,56 @@
+{
+  "_nota": "(ASC8) Interruttori degli agganci dello strato in lettere (prova/ascii_agganci.mjs). Valgono solo con ?ascii=1: senza, nulla di qui si legge. Decisioni di Carlo: PAROLE-DI-CARLO.md §10–12.",
+  "buchi": { "attivo": true, "_attivo": "le sagome di protagonista e nemici bucano lo strato di dietro (macchie, nebbia, catene di fondo restano dietro ai corpi)" },
+  "ambiente": {
+    "attivo": true,
+    "liana_in_lettere": true, "_liana_in_lettere": "true: la catena-liana la disegnano le lettere e il disegno a pixel di liane.mjs si spegne",
+    "ventole_in_lettere": true, "_ventole_in_lettere": "true: le strisce d'aria a pixel delle ventole si spengono (resta la cassa), le correnti sono in lettere",
+    "riserva_timbri": 250, "_riserva_timbri": "timbri del motore lasciati liberi dopo colpi e mini boss: l'ambiente prende solo il resto (si taglia per primo)"
+  },
+  "colpi": {
+    "attivo": true,
+    "varianti": { "falce_mb": "mista", "falce": "mista", "schianto": "mista", "raggio": "mista", "catena": "mista", "filo": "mista", "cera": "mista", "ago": "mista" },
+    "_varianti": "«resta tutto quello che c'è oggi, le lettere si aggiungono come materia»: mista per boss, mini boss e nemici base (graffi, scintille, polvere, celle bruciate); 'ascii' mette anche il nucleo in lettere",
+    "nuclei_pixel": false, "_nuclei_pixel": "false: i nuclei a pixel di ascii_colpi (raggio, grumo, ago) non si disegnano: raggi e laser di oggi li disegnano già i loro moduli"
+  },
+  "spari": {
+    "attivo": true,
+    "_nota": "per tipo di nemico: traiettoria → resa in lettere (cera = grumo @ e schizzo che cola, ago = carattere orientato e rimbalzo); solo: true = il proiettile e il suo scoppio solo in lettere (il disegno a pixel di oggi si spegne); false = resta il pixel e si aggiunge la materia all'urto. Non elencati (sassi di e01/e04): come oggi.",
+    "tipi": {
+      "z24-e01": { "sasso": "sasso", "arco": "sasso", "solo": true, "_spa1": "(SPA1) Incatenato: il sasso era una palla a pixel" },
+      "z24-e02": { "arco": "cera", "dritto": "cera", "solo": true },
+      "z24-e04": { "sasso": "sasso", "arco": "sasso", "solo": true, "_spa1": "(SPA1) Vigile: il sasso era una palla a pixel" },
+      "z24-e06": { "dritto": "ago", "solo": true },
+      "z24-e07": { "dritto": "brace", "arco": "bomba", "solo": true, "_spa1": "(SPA1) Lampada: la salva e la bomba sono fuoco (prima ago e cera, colori sbagliati)" },
+      "z24-mb02": { "arco": "cera", "solo": true, "forza": 1, "_spa1": "(SPA1) era solo false: il grumo restava una palla a pixel; ora in lettere col suo scoppio (la chiazza a terra resta)" },
+      "z24-mb03": { "dritto": "ago", "solo": true, "_spa1": "(SPA1) era solo false: l'ago restava una palla a pixel" },
+      "_": { "sasso": "sasso", "arco": "cera", "dritto": "ago", "solo": true, "_spa1": "(SPA1) tutti gli altri che sparano (anche nella Centrifuga): niente più palle a pixel" }
+    },
+    "forza_cera": 0.6, "_forza_cera": "quantità di cera per goccia (1 = la ricetta di ASC2, pensata per un grumo grande)",
+    "vicino_px": 8, "_vicino_px": "un evento goccia_terra/goccia_rotta entro questo scarto da un proiettile appena sparito è suo (il suo scoppio a pixel si salta)",
+    "corpo": { "raggio_px48": { "cera": 2.4, "ago": 2.4, "sasso": 3.5, "brace": 3.5, "bomba": 3.5 }, "q_max": 0.5,
+      "_nota": "(TAR) corpo in volo piccolo e leggibile (Carlo, apertura del sito): raggio per tipo in px a H 48 (mai più del raggio del proiettile), qualità al più q_max → nucleo 2 lettere (cera, ago) o 3 (sasso, bomba; brace 2: ha 6 lettere), coda ×0,75 di coda_px. Senza «corpo»: come prima" }
+  },
+  "miniboss": {
+    "attivo": true,
+    "strisce": "../../../sito/media/gioco/", "_strisce": "strisce cotte del sito (gioco.json, alla scala del gioco): da qui forma, fasi, occhi e punti d'arrivo",
+    "morte": true, "_morte": "la morte in lettere si AGGIUNGE agli scoppi di oggi",
+    "morte_sola": false, "_morte_sola": "true: la morte in lettere da sola (lo sprite e gli scoppi a pixel si spengono quando parte), per provarla",
+    "morte_filtro": true, "_morte_filtro": "sagoma della morte dal filtro di forma (2–5 ms, una volta, alla morte); false = dalla campionatura propria, gratis",
+    "precarica": ["z24-mb01", "z24-mb02", "z24-mb03"], "_precarica": "mini boss campionati fin dall'avvio, nei tempi morti, una striscia per volta (circa 17 MB di campionati e 0,5–0,9 s di calcolo ciascuno); [] = solo quando il mini boss entra in stanza",
+    "fetta_ms": 3, "_fetta_ms": "pre-campionatura: tempo al più per fotogramma di gioco, solo nei tempi morti (nessun nemico in avviso o attivo)", "fetta_caldo_ms": 1, "_fetta_caldo_ms": "(SPA1) pre-campionatura anche in combattimento, al più tanti ms per fotogramma (0 = solo nei tempi morti, come ASC8)",
+    "colpo_terra": ["onda_nemico", "schiacciata", "anello_schianto", "braccio_schianto"],
+    "atterra": ["nemico_atterra"],
+    "passo_H": 0.55, "_passo_H": "un passo (granelli ai piedi) ogni tanti H percorsi a terra",
+    "urto_v_H_s": 3, "_urto_v_H_s": "urto contro il muro: si ferma di colpo da questa velocità con un solido davanti"
+  },
+  "pistola": {
+    "_nota": "(SPA1) pistola del protagonista, «un po'»: il proiettile a pixel resta, le lettere si aggiungono (numeri in zone/ascii-colpi.json → spari.pistola)",
+    "attivo": true, "scia": true, "bocca": true, "urto": true, "nemico": true,
+    "doni": true, "_doni": "colpi dei doni: testa in lettere nei colori dell'elemento, il quadretto a pixel di abilita.mjs si spegne"
+  },
+  "tetto": { "lettere_minime": 700, "_lettere_minime": "(SPA1) chiamate di disegno sempre lasciate alle lettere nel tetto globale degli effetti (anche con la qualità adattiva bassa); 0 = come prima" },
+  "terza": { "attivo": true, "_attivo": "(SPA1) terza fase dei mini boss (guinzaglio, pressa, telaio) e stretta in lettere, mista; numeri in ascii-colpi.json → terza" },
+  "balestra": { "attivo": true, "_attivo": "(SPA1) dardi della balestra in lettere (- - >), il disegno a pixel dei dardi si spegne; all'urto si piantano" },
+  "misure": { "_nota": "solo node con ASC8_MISURE=1: costo dello strato per fotogramma, stampato all'uscita" }
+}

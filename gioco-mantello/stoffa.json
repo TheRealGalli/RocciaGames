@@ -1,0 +1,1876 @@
+{
+ "_origine": "copia di strumenti/pennino/personaggi/a/stoffa.json (copia_sprite.py)",
+ "formato": "pennino-stoffa/1",
+ "id": "a",
+ "stato": "proposta",
+ "autore": "esecutore M2 (mantello rosso), 13/11/2026",
+ "unita": "misure in H (altezza in piedi); dietro_H = verso il dorso, giu_H = verso il basso; colori css",
+ "note": [
+  "Telo generico (prova/mantello.mjs): maglia di colonne × righe appesa a una spezzata di punti nominati (agganci_px, poi giunti_px della clip).",
+  "La colonna 0 pende dal primo punto (dietro/in alto), l'ultima dal punto vicino (spalla_n): l'ultima parte delle colonne è il lembo che può passare davanti.",
+  "Copertura per pixel con l'atlas -parti.png: il lembo copre solo le parti in 'copre' e mai quelle in 'mai_coprire'; il lampo e le particelle si disegnano dopo.",
+  "livello: parametro esterno (doni dei boss); ogni voce di 'livelli' sovrascrive i valori di base."
+ ],
+ "mantello": {
+  "agganci": [
+   {
+    "punto": "nuca",
+    "dietro_H": 0.0,
+    "giu_H": 0.05
+   },
+   {
+    "punto": "spalla_f",
+    "dietro_H": 0.02,
+    "giu_H": 0.02
+   },
+   {
+    "punto": "spalla_n",
+    "dietro_H": 0.0,
+    "giu_H": 0.03
+   }
+  ],
+  "capsule": [
+   [
+    "collo",
+    "vita",
+    0.09,
+    "dietro"
+   ],
+   [
+    "vita",
+    "anca",
+    0.13,
+    "dietro"
+   ],
+   [
+    "anca_n",
+    "ginocchio_n",
+    0.065
+   ],
+   [
+    "anca_f",
+    "ginocchio_f",
+    0.065
+   ]
+  ],
+  "colonne": 5,
+  "righe": 8,
+  "lunghezza_H": 0.62,
+  "accorcia_davanti_H": 0.06,
+  "larghezza_H": 0.14,
+  "allarga": 2.2,
+  "rigidita": 0.5,
+  "peso": 1,
+  "aria": 1,
+  "gravita_H": 17,
+  "smorzamento": 0.986,
+  "sventolio": 0.7,
+  "strappi": {
+   "denti": 2,
+   "profondita": 0.55,
+   "seme": 7
+  },
+  "lembi": 1,
+  "taglio": 0.4,
+  "copertura": {
+   "quanto": 0.3,
+   "copre": [
+    "braccio_n",
+    "avambraccio_n",
+    "mano_n",
+    "pistola"
+   ],
+   "mai_coprire": [
+    "cappuccio_testa",
+    "visore"
+   ],
+   "nota": "il mantello sta DIETRO il busto (collare sottile, striscia aderente dietro la schiena); davanti solo a sedere/cosce posteriori (dietro l'asse collo→anca), alla spada portata dietro fuori dagli attacchi e, come lembo, al braccio della pistola",
+   "corpo": [
+    "orlo_giacca",
+    "bacino",
+    "coscia_n",
+    "coscia_f",
+    "stinco_n",
+    "stinco_f",
+    "stivale_n",
+    "stivale_f",
+    "spada",
+    "fodero",
+    "fondina"
+   ],
+   "mai_in_attacco": [
+    "spada"
+   ]
+  },
+  "colore": "cremisi",
+  "colori": {
+   "cremisi": {
+    "luce": "#d8423e",
+    "base": "#a0202e",
+    "ombra": "#62122a",
+    "rovescio": "#7c1a2e",
+    "rovescio_ombra": "#561224",
+    "contorno": "#2a0a14"
+   },
+   "vinaccia": {
+    "luce": "#a83a58",
+    "base": "#6e1d3c",
+    "ombra": "#43122c",
+    "rovescio": "#5a1a38",
+    "rovescio_ombra": "#3e1228",
+    "contorno": "#1e0a16"
+   },
+   "ruggine": {
+    "luce": "#e0693a",
+    "base": "#a8392a",
+    "ombra": "#68201f",
+    "rovescio": "#7a2a1e",
+    "rovescio_ombra": "#551b16",
+    "contorno": "#2a0a14"
+   }
+  },
+  "livello": 1,
+  "livelli": [
+   {
+    "nome": "0 · straccio",
+    "lunghezza_H": 0.46,
+    "larghezza_H": 0.14,
+    "allarga": 1.4,
+    "strappi": {
+     "denti": 3,
+     "profondita": 0.9,
+     "seme": 3
+    },
+    "lembi": 2,
+    "taglio": 0.45,
+    "aria": 0.9
+   },
+   {
+    "nome": "1 · mantello",
+    "nota": "valori di base"
+   },
+   {
+    "nome": "2 · orlo dorato",
+    "lunghezza_H": 0.6,
+    "orlo": "#e8b450",
+    "strappi": {
+     "denti": 2,
+     "profondita": 0.45,
+     "seme": 7
+    }
+   },
+   {
+    "nome": "3 · fodera e ricamo",
+    "lunghezza_H": 0.62,
+    "larghezza_H": 0.17,
+    "orlo": "#e8b450",
+    "ricamo": {
+     "colore": "#e8b450",
+     "riga": 0.7
+    },
+    "fodera": {
+     "rovescio": "#c8963c",
+     "rovescio_ombra": "#8a5e24"
+    },
+    "aria": 1.1,
+    "filo_neon": 0.25
+   },
+   {
+    "nome": "4 · regale",
+    "lunghezza_H": 0.68,
+    "larghezza_H": 0.18,
+    "allarga": 1.9,
+    "lembi": 3,
+    "taglio": 0.35,
+    "strappi": {
+     "denti": 2,
+     "profondita": 0.4,
+     "seme": 11
+    },
+    "orlo": "#ffd36b",
+    "bagliore": "#fff0b0",
+    "ricamo": {
+     "colore": "#ffd36b",
+     "riga": 0.55
+    },
+    "fodera": {
+     "rovescio": "#d8a040",
+     "rovescio_ombra": "#94622a"
+    },
+    "particelle": 6,
+    "aria": 1.2,
+    "filo_neon": 0.4
+   }
+  ],
+  "moduli": {
+   "nota": "punti dei doni da scheda.json → moduli_potenziamento.agganci (stimati), qui tradotti in giunti di gioco. Un modulo presente: 'apre' (buco nel telo + sfera che lo spinge), 'accorcia' (telo più corto), 'dietro' (il telo passa dietro al modulo). cornice: bordo di 1 px del colore del dono attorno al buco; riprende: 'fodera' | 'orlo' | null.",
+   "agganci": {
+    "back_shoulders": {
+     "giunto": "collo",
+     "dietro_H": 0.11,
+     "giu_H": 0.07
+    },
+    "cape_inner": {
+     "giunto": "collo",
+     "dietro_H": 0.07,
+     "giu_H": 0.12
+    },
+    "lower_back": {
+     "giunto": "vita",
+     "dietro_H": 0.1,
+     "giu_H": 0.0
+    },
+    "shoulder_near": {
+     "giunto": "spalla_n",
+     "dietro_H": 0.0,
+     "giu_H": 0.0
+    },
+    "shoulder_far": {
+     "giunto": "spalla_f",
+     "dietro_H": 0.02,
+     "giu_H": 0.0
+    },
+    "helmet_rear": {
+     "giunto": "nuca",
+     "dietro_H": 0.03,
+     "giu_H": -0.04
+    },
+    "arms_channels": {
+     "giunto": "gomito_n",
+     "dietro_H": 0.0,
+     "giu_H": 0.0
+    },
+    "wrist_near": {
+     "giunto": "polso_n",
+     "dietro_H": 0.0,
+     "giu_H": 0.0
+    }
+   },
+   "finto": {
+    "nome": "dono di prova (ali/nucleo)",
+    "aggancio": "back_shoulders",
+    "larghezza_H": 0.12,
+    "altezza_H": 0.2,
+    "raggio_H": 0.13,
+    "colore": "#38c8ff",
+    "luce": "#c8f4ff",
+    "spazio": "apre",
+    "cornice": true,
+    "riprende": "fodera",
+    "davanti": false
+   }
+  },
+  "scia_neon": {
+   "nota": "scia dello scatto (8 direzioni: g.scattoVet) e, più tenue, dello slancio; nasce dal centro dell'orlo; si disegna dietro al personaggio",
+   "attiva": true,
+   "vita_s": 0.26,
+   "larghezza_H": 0.11,
+   "intensita": 1,
+   "immagini": 3,
+   "scintille": 1,
+   "slancio": 0.55,
+   "toni": {
+    "alone": "#9c0a2c",
+    "corpo": "#ff2648",
+    "nucleo": "#ffe2ea"
+   },
+   "luce": [
+    255,
+    40,
+    72
+   ]
+  },
+  "forma": 0.4,
+  "forme": {
+   "nota": "angoli in gradi lungo il telo (collo, metà, orlo): 0 giù, 90 dietro, 180 su, negativi davanti; apertura = ventaglio fra le colonne; davanti = può passare sul corpo e sul braccio vicino",
+   "appoggiato": {
+    "angoli": [
+     2,
+     4,
+     7
+    ],
+    "apertura": 4
+   },
+   "bandiera": {
+    "angoli": [
+     72,
+     86,
+     94
+    ],
+    "apertura": 8
+   },
+   "bandiera_bassa": {
+    "angoli": [
+     45,
+     58,
+     66
+    ],
+    "apertura": 6
+   },
+   "bandiera_alta": {
+    "angoli": [
+     102,
+     114,
+     124
+    ],
+    "apertura": 8
+   },
+   "campana": {
+    "angoli": [
+     22,
+     40,
+     56
+    ],
+    "apertura": 22
+   },
+   "ala": {
+    "angoli": [
+     148,
+     164,
+     172
+    ],
+    "apertura": 14
+   },
+   "frusta_su": {
+    "angoli": [
+     55,
+     118,
+     165
+    ],
+    "apertura": 6
+   },
+   "frusta_giu": {
+    "angoli": [
+     118,
+     70,
+     22
+    ],
+    "apertura": 6
+   },
+   "spirale": {
+    "angoli": [
+     -35,
+     -100,
+     -155
+    ],
+    "apertura": 12,
+    "davanti": true
+   },
+   "tenda": {
+    "angoli": [
+     8,
+     22,
+     45
+    ],
+    "apertura": 16
+   },
+   "sipario": {
+    "angoli": [
+     -8,
+     -14,
+     -18
+    ],
+    "apertura": 4,
+    "davanti": true
+   },
+   "giu": {
+    "angoli": [
+     8,
+     4,
+     0
+    ],
+    "apertura": 2
+   },
+   "raccolto": {
+    "angoli": [
+     10,
+     30,
+     60
+    ],
+    "apertura": 4
+   },
+   "cerchio_basso": {
+    "angoli": [
+     60,
+     -20,
+     -110
+    ],
+    "apertura": 10,
+    "davanti": true
+   },
+   "v": {
+    "angoli": [
+     60,
+     100,
+     120
+    ],
+    "apertura": 30
+   },
+   "arco": {
+    "angoli": [
+     -10,
+     60,
+     140
+    ],
+    "apertura": 10,
+    "davanti": true
+   },
+   "palla": {
+    "angoli": [
+     70,
+     170,
+     260
+    ],
+    "apertura": 6,
+    "davanti": true
+   },
+   "ala_aperta": {
+    "angoli": [
+     125,
+     150,
+     165
+    ],
+    "apertura": 26
+   },
+   "spazzato": {
+    "angoli": [
+     80,
+     92,
+     100
+    ],
+    "apertura": 20
+   },
+   "spirale_corta": {
+    "angoli": [
+     -15,
+     -45,
+     -70
+    ],
+    "apertura": 8,
+    "davanti": true
+   }
+  },
+  "coreografie": {
+   "stato": "proposta",
+   "nota": "passi {fase: inizio|colpo|gira|fine, ritardo_ms, forma, forza 0..1, durata_ms (<0 = per tutto lo stato), verso: opposto|stesso|libero (libero = opposto alla velocità/allo scatto), onda, spinta [dietro, giù] H/s, copre}; mosse senza voce: mappa per prefisso → classe; altrimenti classe movimento (sola fisica); guida 0..0.5 = porta cinematica il telo sulla forma (giri), copre = quota del lembo davanti per quel passo",
+   "classi": {
+    "movimento": [],
+    "fermo": [
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.25,
+      "durata_ms": -1
+     }
+    ],
+    "attacco_orizzontale": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera_alta",
+      "forza": 0.6,
+      "durata_ms": 200
+     },
+     {
+      "fase": "colpo",
+      "forma": "frusta_giu",
+      "forza": 0.85,
+      "durata_ms": 220,
+      "ritardo_ms": -30
+     },
+     {
+      "fase": "colpo",
+      "forma": "bandiera",
+      "forza": 0.4,
+      "durata_ms": 160,
+      "ritardo_ms": 170
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 420,
+      "ritardo_ms": -60,
+      "onda": 0.8
+     }
+    ],
+    "attacco_verticale": [
+     {
+      "fase": "inizio",
+      "forma": "tenda",
+      "forza": 0.6,
+      "durata_ms": 180
+     },
+     {
+      "fase": "colpo",
+      "forma": "frusta_su",
+      "forza": 0.9,
+      "durata_ms": 240,
+      "ritardo_ms": -30
+     },
+     {
+      "fase": "colpo",
+      "forma": "ala",
+      "forza": 0.4,
+      "durata_ms": 200,
+      "ritardo_ms": 190
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 420,
+      "ritardo_ms": -60,
+      "onda": 0.8
+     }
+    ],
+    "giro": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera",
+      "forza": 0.35,
+      "durata_ms": 120
+     },
+     {
+      "fase": "gira",
+      "forma": "spirale",
+      "forza": 0.9,
+      "durata_ms": 260,
+      "ritardo_ms": -90
+     },
+     {
+      "fase": "gira",
+      "forma": "bandiera",
+      "forza": 0.6,
+      "durata_ms": 220,
+      "ritardo_ms": 150
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 420,
+      "ritardo_ms": -60,
+      "onda": 0.9
+     }
+    ],
+    "sparo": [
+     {
+      "fase": "colpo",
+      "forma": "bandiera",
+      "forza": 0.75,
+      "durata_ms": 110
+     },
+     {
+      "fase": "colpo",
+      "forma": "appoggiato",
+      "forza": 0.35,
+      "durata_ms": 380,
+      "ritardo_ms": 120,
+      "onda": 0.6
+     }
+    ],
+    "aria": [
+     {
+      "fase": "inizio",
+      "forma": "campana",
+      "forza": 0.5,
+      "durata_ms": 140
+     },
+     {
+      "fase": "colpo",
+      "forma": "spirale",
+      "forza": 0.7,
+      "durata_ms": 180,
+      "ritardo_ms": -40
+     },
+     {
+      "fase": "colpo",
+      "forma": "ala",
+      "forza": 0.5,
+      "durata_ms": 240,
+      "ritardo_ms": 140
+     }
+    ],
+    "carica": [
+     {
+      "fase": "inizio",
+      "forma": "campana",
+      "forza": 0.35,
+      "durata_ms": -1
+     }
+    ],
+    "caricato": [
+     {
+      "fase": "colpo",
+      "forma": "bandiera",
+      "forza": 0.95,
+      "durata_ms": 220,
+      "ritardo_ms": -20
+     },
+     {
+      "fase": "colpo",
+      "forma": "sipario",
+      "forza": 0.5,
+      "durata_ms": 220,
+      "ritardo_ms": 200
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 500,
+      "ritardo_ms": -60,
+      "onda": 1
+     }
+    ],
+    "fermo_basso": [
+     {
+      "fase": "inizio",
+      "forma": "tenda",
+      "forza": 0.45,
+      "durata_ms": -1
+     }
+    ]
+   },
+   "mosse": {
+    "fendente_1": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera_alta",
+      "forza": 0.6,
+      "durata_ms": 200
+     },
+     {
+      "fase": "colpo",
+      "forma": "frusta_giu",
+      "forza": 0.85,
+      "durata_ms": 220,
+      "ritardo_ms": -30
+     },
+     {
+      "fase": "colpo",
+      "forma": "bandiera_bassa",
+      "forza": 0.45,
+      "durata_ms": 180,
+      "ritardo_ms": 170
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 420,
+      "ritardo_ms": -60,
+      "onda": 0.8
+     }
+    ],
+    "fendente_2": [
+     {
+      "fase": "inizio",
+      "forma": "sipario",
+      "forza": 0.45,
+      "durata_ms": 170
+     },
+     {
+      "fase": "colpo",
+      "forma": "frusta_su",
+      "forza": 0.85,
+      "durata_ms": 220,
+      "ritardo_ms": -30
+     },
+     {
+      "fase": "colpo",
+      "forma": "bandiera_alta",
+      "forza": 0.45,
+      "durata_ms": 200,
+      "ritardo_ms": 170
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 420,
+      "ritardo_ms": -60,
+      "onda": 0.8
+     }
+    ],
+    "fendente_3": [
+     {
+      "fase": "inizio",
+      "forma": "ala",
+      "forza": 0.75,
+      "durata_ms": 240
+     },
+     {
+      "fase": "colpo",
+      "forma": "tenda",
+      "forza": 1.0,
+      "durata_ms": 200,
+      "ritardo_ms": -20,
+      "spinta": [
+       0,
+       6
+      ]
+     },
+     {
+      "fase": "colpo",
+      "forma": "campana",
+      "forza": 0.4,
+      "durata_ms": 180,
+      "ritardo_ms": 180
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.5,
+      "durata_ms": 520,
+      "ritardo_ms": -60,
+      "onda": 1
+     }
+    ],
+    "montante": [
+     {
+      "fase": "inizio",
+      "forma": "raccolto",
+      "forza": 0.6,
+      "durata_ms": 160
+     },
+     {
+      "fase": "colpo",
+      "forma": "frusta_su",
+      "forza": 1.0,
+      "durata_ms": 240,
+      "ritardo_ms": -30,
+      "guida": 0.15
+     },
+     {
+      "fase": "colpo",
+      "forma": "ala",
+      "forza": 0.55,
+      "durata_ms": 300,
+      "ritardo_ms": 200
+     }
+    ],
+    "spazzata": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera_alta",
+      "forza": 0.6,
+      "durata_ms": 180
+     },
+     {
+      "fase": "colpo",
+      "forma": "cerchio_basso",
+      "forza": 0.85,
+      "durata_ms": 260,
+      "ritardo_ms": 40
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 420,
+      "ritardo_ms": -60,
+      "onda": 0.8
+     }
+    ],
+    "ritorno": [
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 140
+     },
+     {
+      "fase": "gira",
+      "forma": "spirale",
+      "forza": 1.0,
+      "durata_ms": 170,
+      "ritardo_ms": -110,
+      "guida": 0.8,
+      "copre": 0.9
+     },
+     {
+      "fase": "gira",
+      "forma": "arco",
+      "forza": 1.0,
+      "durata_ms": 160,
+      "ritardo_ms": 50,
+      "guida": 0.6,
+      "copre": 0.9
+     },
+     {
+      "fase": "gira",
+      "forma": "bandiera",
+      "forza": 0.7,
+      "durata_ms": 200,
+      "ritardo_ms": 200,
+      "guida": 0.1
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 420,
+      "ritardo_ms": -60,
+      "onda": 0.9
+     }
+    ],
+    "fendente_indietro": [
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 140
+     },
+     {
+      "fase": "gira",
+      "forma": "spirale",
+      "forza": 1.0,
+      "durata_ms": 170,
+      "ritardo_ms": -110,
+      "guida": 0.8,
+      "copre": 0.9
+     },
+     {
+      "fase": "gira",
+      "forma": "arco",
+      "forza": 1.0,
+      "durata_ms": 160,
+      "ritardo_ms": 50,
+      "guida": 0.6,
+      "copre": 0.9
+     },
+     {
+      "fase": "gira",
+      "forma": "bandiera",
+      "forza": 0.7,
+      "durata_ms": 200,
+      "ritardo_ms": 200,
+      "guida": 0.1
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 420,
+      "ritardo_ms": -60,
+      "onda": 0.9
+     }
+    ],
+    "sparo_giravolta": [
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 140
+     },
+     {
+      "fase": "gira",
+      "forma": "spirale",
+      "forza": 1.0,
+      "durata_ms": 170,
+      "ritardo_ms": -110,
+      "guida": 0.8,
+      "copre": 0.9
+     },
+     {
+      "fase": "gira",
+      "forma": "arco",
+      "forza": 1.0,
+      "durata_ms": 160,
+      "ritardo_ms": 50,
+      "guida": 0.6,
+      "copre": 0.9
+     },
+     {
+      "fase": "gira",
+      "forma": "bandiera_alta",
+      "forza": 0.7,
+      "durata_ms": 200,
+      "ritardo_ms": 200,
+      "guida": 0.1
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 420,
+      "ritardo_ms": -60,
+      "onda": 0.9
+     }
+    ],
+    "sparo_indietro": [
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 140
+     },
+     {
+      "fase": "gira",
+      "forma": "spirale",
+      "forza": 1.0,
+      "durata_ms": 170,
+      "ritardo_ms": -110,
+      "guida": 0.8,
+      "copre": 0.9
+     },
+     {
+      "fase": "gira",
+      "forma": "arco",
+      "forza": 1.0,
+      "durata_ms": 160,
+      "ritardo_ms": 50,
+      "guida": 0.6,
+      "copre": 0.9
+     },
+     {
+      "fase": "gira",
+      "forma": "bandiera",
+      "forza": 0.7,
+      "durata_ms": 200,
+      "ritardo_ms": 200,
+      "guida": 0.1
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 420,
+      "ritardo_ms": -60,
+      "onda": 0.9
+     }
+    ],
+    "aria_indietro": [
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 140
+     },
+     {
+      "fase": "gira",
+      "forma": "spirale",
+      "forza": 1.0,
+      "durata_ms": 170,
+      "ritardo_ms": -110,
+      "guida": 0.8,
+      "copre": 0.9
+     },
+     {
+      "fase": "gira",
+      "forma": "arco",
+      "forza": 1.0,
+      "durata_ms": 160,
+      "ritardo_ms": 50,
+      "guida": 0.6,
+      "copre": 0.9
+     },
+     {
+      "fase": "gira",
+      "forma": "bandiera",
+      "forza": 0.7,
+      "durata_ms": 200,
+      "ritardo_ms": 200,
+      "guida": 0.1
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 420,
+      "ritardo_ms": -60,
+      "onda": 0.9
+     }
+    ],
+    "inversione": [
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.3,
+      "durata_ms": 80
+     },
+     {
+      "fase": "gira",
+      "forma": "spirale",
+      "forza": 0.8,
+      "durata_ms": 140,
+      "ritardo_ms": -60,
+      "guida": 0.25,
+      "copre": 0.6
+     },
+     {
+      "fase": "gira",
+      "forma": "bandiera_bassa",
+      "forza": 0.5,
+      "durata_ms": 200,
+      "ritardo_ms": 80,
+      "guida": 0.1
+     }
+    ],
+    "aria_schianto": [
+     {
+      "fase": "inizio",
+      "forma": "ala",
+      "forza": 0.9,
+      "durata_ms": -1
+     }
+    ],
+    "picchiata": [
+     {
+      "fase": "inizio",
+      "forma": "ala",
+      "forza": 1.0,
+      "durata_ms": -1
+     }
+    ],
+    "picchiata_atterra": [
+     {
+      "fase": "inizio",
+      "forma": "tenda",
+      "forza": 0.9,
+      "durata_ms": 220,
+      "onda": 1.2
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 380,
+      "ritardo_ms": 200
+     }
+    ],
+    "schianto_atterra": [
+     {
+      "fase": "inizio",
+      "forma": "tenda",
+      "forza": 1.0,
+      "durata_ms": 260,
+      "onda": 1.4
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 520,
+      "ritardo_ms": 240
+     }
+    ],
+    "fendente_basso": [
+     {
+      "fase": "inizio",
+      "forma": "ala",
+      "forza": 0.7,
+      "durata_ms": -1
+     }
+    ],
+    "affondo_scatto": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera",
+      "forza": 0.85,
+      "durata_ms": 260
+     },
+     {
+      "fase": "fine",
+      "forma": "sipario",
+      "forza": 0.4,
+      "durata_ms": 160,
+      "ritardo_ms": -120
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 380,
+      "ritardo_ms": 40,
+      "onda": 0.8
+     }
+    ],
+    "slancio": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera",
+      "forza": 0.8,
+      "durata_ms": -1,
+      "verso": "libero"
+     }
+    ],
+    "carica": [
+     {
+      "fase": "inizio",
+      "forma": "campana",
+      "forza": 0.35,
+      "durata_ms": -1
+     }
+    ],
+    "caricato": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera_bassa",
+      "forza": 0.4,
+      "durata_ms": 120
+     },
+     {
+      "fase": "colpo",
+      "forma": "spazzato",
+      "forza": 1.0,
+      "durata_ms": 200,
+      "ritardo_ms": -20,
+      "guida": 0.2,
+      "spinta": [
+       8,
+       -1
+      ]
+     },
+     {
+      "fase": "colpo",
+      "forma": "sipario",
+      "forza": 0.35,
+      "durata_ms": 200,
+      "ritardo_ms": 220
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 520,
+      "ritardo_ms": -60,
+      "onda": 1
+     }
+    ],
+    "caricato_su": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera_bassa",
+      "forza": 0.4,
+      "durata_ms": 120
+     },
+     {
+      "fase": "colpo",
+      "forma": "frusta_giu",
+      "forza": 1.0,
+      "durata_ms": 200,
+      "ritardo_ms": -20,
+      "guida": 0.2,
+      "spinta": [
+       8,
+       -1
+      ]
+     },
+     {
+      "fase": "colpo",
+      "forma": "sipario",
+      "forza": 0.35,
+      "durata_ms": 200,
+      "ritardo_ms": 220
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 520,
+      "ritardo_ms": -60,
+      "onda": 1
+     }
+    ],
+    "caricato_giu": [
+     {
+      "fase": "inizio",
+      "forma": "ala_aperta",
+      "forza": 0.8,
+      "durata_ms": 200
+     },
+     {
+      "fase": "colpo",
+      "forma": "spazzato",
+      "forza": 1.0,
+      "durata_ms": 220,
+      "ritardo_ms": -10,
+      "guida": 0.25,
+      "spinta": [
+       6,
+       -4
+      ]
+     },
+     {
+      "fase": "colpo",
+      "forma": "campana",
+      "forza": 0.45,
+      "durata_ms": 500,
+      "ritardo_ms": 220
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 600,
+      "ritardo_ms": -60,
+      "onda": 1.2
+     }
+    ],
+    "pistola_estrai_giro": [
+     {
+      "fase": "inizio",
+      "forma": "sipario",
+      "forza": 0.4,
+      "durata_ms": 200
+     },
+     {
+      "fase": "gira",
+      "forma": "bandiera_bassa",
+      "forza": 0.4,
+      "durata_ms": 220
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 380,
+      "ritardo_ms": -60,
+      "onda": 0.6
+     }
+    ],
+    "ventaglio": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera",
+      "forza": 0.6,
+      "durata_ms": 100
+     },
+     {
+      "fase": "inizio",
+      "forma": "bandiera_bassa",
+      "forza": 0.5,
+      "durata_ms": 100,
+      "ritardo_ms": 140
+     },
+     {
+      "fase": "inizio",
+      "forma": "bandiera",
+      "forza": 0.6,
+      "durata_ms": 100,
+      "ritardo_ms": 280
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 500,
+      "ritardo_ms": -40,
+      "onda": 1
+     }
+    ],
+    "bruciapelo": [
+     {
+      "fase": "inizio",
+      "forma": "raccolto",
+      "forza": 0.5,
+      "durata_ms": 160
+     },
+     {
+      "fase": "colpo",
+      "forma": "v",
+      "forza": 0.8,
+      "durata_ms": 220,
+      "ritardo_ms": -20
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 400,
+      "ritardo_ms": -60,
+      "onda": 0.7
+     }
+    ],
+    "doppia": [
+     {
+      "fase": "inizio",
+      "forma": "raccolto",
+      "forza": 0.5,
+      "durata_ms": 160
+     },
+     {
+      "fase": "colpo",
+      "forma": "v",
+      "forza": 0.8,
+      "durata_ms": 220,
+      "ritardo_ms": -20
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 400,
+      "ritardo_ms": -60,
+      "onda": 0.7
+     }
+    ],
+    "respiro": {
+     "classe": "fermo"
+    },
+    "attesa": {
+     "classe": "fermo"
+    },
+    "armato_fermo": {
+     "classe": "fermo"
+    },
+    "respiro_basso": {
+     "classe": "fermo"
+    },
+    "corsa": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera_bassa",
+      "forza": 0.12,
+      "durata_ms": -1
+     }
+    ],
+    "frenata": [
+     {
+      "fase": "inizio",
+      "forma": "sipario",
+      "forza": 0.3,
+      "durata_ms": 160,
+      "ritardo_ms": 60,
+      "copre": 0.3
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 400,
+      "ritardo_ms": 220,
+      "onda": 0.8
+     }
+    ],
+    "salto_stacco": [
+     {
+      "fase": "inizio",
+      "forma": "raccolto",
+      "forza": 0.5,
+      "durata_ms": -1
+     }
+    ],
+    "salto_sale": [
+     {
+      "fase": "inizio",
+      "forma": "giu",
+      "forza": 0.35,
+      "durata_ms": -1
+     }
+    ],
+    "salto_apice": [
+     {
+      "fase": "inizio",
+      "forma": "campana",
+      "forza": 0.45,
+      "durata_ms": -1
+     }
+    ],
+    "salto_cade": [
+     {
+      "fase": "inizio",
+      "forma": "ala",
+      "forza": 0.45,
+      "durata_ms": -1
+     }
+    ],
+    "atterraggio": [
+     {
+      "fase": "inizio",
+      "forma": "tenda",
+      "forza": 0.9,
+      "durata_ms": 160,
+      "guida": 0.25,
+      "spinta": [
+       0.4,
+       6
+      ]
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.5,
+      "durata_ms": 380,
+      "ritardo_ms": 140,
+      "onda": 0.8
+     }
+    ],
+    "atterraggio_pesante": [
+     {
+      "fase": "inizio",
+      "forma": "tenda",
+      "forza": 1.0,
+      "durata_ms": 200,
+      "guida": 0.3,
+      "spinta": [
+       0.6,
+       8
+      ],
+      "onda": 1.0
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.5,
+      "durata_ms": 440,
+      "ritardo_ms": 180
+     }
+    ],
+    "scatto": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera",
+      "forza": 0.85,
+      "durata_ms": -1,
+      "verso": "libero"
+     }
+    ],
+    "accovacciato": [
+     {
+      "fase": "inizio",
+      "forma": "tenda",
+      "forza": 0.55,
+      "durata_ms": -1
+     }
+    ],
+    "abbassarsi": [
+     {
+      "fase": "inizio",
+      "forma": "tenda",
+      "forza": 0.5,
+      "durata_ms": -1
+     }
+    ],
+    "bassa_furtivo": [
+     {
+      "fase": "inizio",
+      "forma": "tenda",
+      "forza": 0.4,
+      "durata_ms": -1
+     }
+    ],
+    "furtivo": [
+     {
+      "fase": "inizio",
+      "forma": "tenda",
+      "forza": 0.4,
+      "durata_ms": -1
+     }
+    ],
+    "parete_scivola": [
+     {
+      "fase": "inizio",
+      "forma": "ala",
+      "forza": 0.35,
+      "durata_ms": -1
+     }
+    ],
+    "danno": [
+     {
+      "fase": "inizio",
+      "forma": "sipario",
+      "forza": 0.6,
+      "durata_ms": 140,
+      "copre": 0.3
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 380,
+      "ritardo_ms": 140
+     }
+    ],
+    "morte": [
+     {
+      "fase": "inizio",
+      "forma": "ala",
+      "forza": 0.5,
+      "durata_ms": 260
+     },
+     {
+      "fase": "inizio",
+      "forma": "tenda",
+      "forza": 0.7,
+      "durata_ms": 600,
+      "ritardo_ms": 300
+     }
+    ],
+    "aria_1": [
+     {
+      "fase": "inizio",
+      "forma": "campana",
+      "forza": 0.55,
+      "durata_ms": 140
+     },
+     {
+      "fase": "colpo",
+      "forma": "spirale",
+      "forza": 0.85,
+      "durata_ms": 170,
+      "ritardo_ms": -40,
+      "guida": 0.2,
+      "copre": 0.5
+     },
+     {
+      "fase": "colpo",
+      "forma": "ala",
+      "forza": 0.5,
+      "durata_ms": 240,
+      "ritardo_ms": 130
+     }
+    ],
+    "aria_2": [
+     {
+      "fase": "inizio",
+      "forma": "ala",
+      "forza": 0.5,
+      "durata_ms": 140
+     },
+     {
+      "fase": "colpo",
+      "forma": "frusta_giu",
+      "forza": 0.85,
+      "durata_ms": 180,
+      "ritardo_ms": -30
+     },
+     {
+      "fase": "colpo",
+      "forma": "campana",
+      "forza": 0.5,
+      "durata_ms": 240,
+      "ritardo_ms": 150
+     }
+    ],
+    "carica_giu": [
+     {
+      "fase": "inizio",
+      "forma": "ala_aperta",
+      "forza": 0.65,
+      "durata_ms": -1
+     }
+    ],
+    "carica_giu_inizio": [
+     {
+      "fase": "inizio",
+      "forma": "ala_aperta",
+      "forza": 0.6,
+      "durata_ms": -1
+     }
+    ],
+    "sparo": [
+     {
+      "fase": "colpo",
+      "forma": "bandiera",
+      "forza": 0.8,
+      "durata_ms": 100,
+      "spinta": [
+       4,
+       0
+      ]
+     },
+     {
+      "fase": "colpo",
+      "forma": "appoggiato",
+      "forza": 0.35,
+      "durata_ms": 380,
+      "ritardo_ms": 110,
+      "onda": 0.6
+     }
+    ],
+    "sparo_basso": [
+     {
+      "fase": "colpo",
+      "forma": "spazzato",
+      "forza": 0.9,
+      "durata_ms": 160,
+      "spinta": [
+       6,
+       1
+      ]
+     },
+     {
+      "fase": "colpo",
+      "forma": "tenda",
+      "forza": 0.4,
+      "durata_ms": 380,
+      "ritardo_ms": 160,
+      "onda": 0.6
+     }
+    ],
+    "raffica_giu": [
+     {
+      "fase": "inizio",
+      "forma": "ala",
+      "forza": 0.6,
+      "durata_ms": -1
+     }
+    ],
+    "capriola": [
+     {
+      "fase": "inizio",
+      "forma": "raccolto",
+      "forza": 0.6,
+      "durata_ms": 80
+     },
+     {
+      "fase": "inizio",
+      "forma": "palla",
+      "forza": 1.0,
+      "durata_ms": 280,
+      "ritardo_ms": 60,
+      "guida": 0.35
+     },
+     {
+      "fase": "fine",
+      "forma": "bandiera_bassa",
+      "forza": 0.6,
+      "durata_ms": 200,
+      "ritardo_ms": -140,
+      "guida": 0.1
+     },
+     {
+      "fase": "fine",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 400,
+      "ritardo_ms": 40,
+      "onda": 0.8
+     }
+    ]
+   },
+   "mappa": [
+    [
+     "fendente_alto",
+     "attacco_verticale"
+    ],
+    [
+     "fendente",
+     "attacco_orizzontale"
+    ],
+    [
+     "affondo",
+     "attacco_orizzontale"
+    ],
+    [
+     "taglio",
+     "attacco_orizzontale"
+    ],
+    [
+     "aria_",
+     "aria"
+    ],
+    [
+     "volo_",
+     "aria"
+    ],
+    [
+     "sparo",
+     "sparo"
+    ],
+    [
+     "doppia",
+     "sparo"
+    ],
+    [
+     "caricato",
+     "caricato"
+    ],
+    [
+     "carica",
+     "carica"
+    ],
+    [
+     "respiro",
+     "fermo"
+    ],
+    [
+     "armato_fermo",
+     "fermo"
+    ],
+    [
+     "pistola_fermo",
+     "fermo"
+    ],
+    [
+     "accovacciato",
+     "fermo_basso"
+    ],
+    [
+     "raffica",
+     "sparo"
+    ]
+   ],
+   "eventi": {
+    "sparo": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera",
+      "forza": 0.7,
+      "durata_ms": 110
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.3,
+      "durata_ms": 320,
+      "ritardo_ms": 110,
+      "onda": 0.5
+     }
+    ],
+    "atterraggio": [
+     {
+      "fase": "inizio",
+      "forma": "tenda",
+      "forza": 0.9,
+      "durata_ms": 160,
+      "guida": 0.25,
+      "spinta": [
+       0.4,
+       6
+      ]
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.5,
+      "durata_ms": 380,
+      "ritardo_ms": 140,
+      "onda": 0.8
+     }
+    ],
+    "danno": [
+     {
+      "fase": "inizio",
+      "forma": "sipario",
+      "forza": 0.8,
+      "durata_ms": 160
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 380,
+      "ritardo_ms": 160
+     }
+    ],
+    "onda_aria": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera",
+      "forza": 0.95,
+      "durata_ms": 200
+     },
+     {
+      "fase": "inizio",
+      "forma": "sipario",
+      "forza": 0.45,
+      "durata_ms": 220,
+      "ritardo_ms": 200
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 420,
+      "ritardo_ms": 420,
+      "onda": 1
+     }
+    ],
+    "onda_aria_bassa": [
+     {
+      "fase": "inizio",
+      "forma": "spazzato",
+      "forza": 0.95,
+      "durata_ms": 220,
+      "guida": 0.15
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 420,
+      "ritardo_ms": 220,
+      "onda": 1
+     }
+    ],
+    "onda_aria_radiale": [
+     {
+      "fase": "inizio",
+      "forma": "ala_aperta",
+      "forza": 0.9,
+      "durata_ms": 140
+     },
+     {
+      "fase": "inizio",
+      "forma": "campana",
+      "forza": 0.6,
+      "durata_ms": 300,
+      "ritardo_ms": 140
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 500,
+      "ritardo_ms": 440,
+      "onda": 1.2
+     }
+    ],
+    "raffica_colpo": [
+     {
+      "fase": "inizio",
+      "forma": "ala_aperta",
+      "forza": 0.8,
+      "durata_ms": 80
+     },
+     {
+      "fase": "inizio",
+      "forma": "ala",
+      "forza": 0.5,
+      "durata_ms": 120,
+      "ritardo_ms": 80
+     }
+    ],
+    "cambio_verso": [
+     {
+      "fase": "inizio",
+      "forma": "bandiera_bassa",
+      "forza": 0.45,
+      "durata_ms": 110
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.4,
+      "durata_ms": 320,
+      "ritardo_ms": 110,
+      "onda": 0.4
+     }
+    ],
+    "fine_capriola": [
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 1.0,
+      "durata_ms": 200,
+      "guida": 0.35,
+      "onda": 0.8
+     },
+     {
+      "fase": "inizio",
+      "forma": "appoggiato",
+      "forza": 0.45,
+      "durata_ms": 300,
+      "ritardo_ms": 190
+     }
+    ]
+   }
+  },
+  "aderenza": 0.95,
+  "righe_rigide": 1
+ }
+}

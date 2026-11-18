@@ -1,0 +1,123 @@
+{
+  "formato": "pennino-segnali/1",
+  "stato": "proposta",
+  "fonte": "richiesta di Carlo 2026-11-14 (niente linea colorata sul mostro: effetti diffusi, stellina, ombre); numeri proposta di UI",
+  "nota": "Segnali di lettura dei nemici a ritagli (prova/segnali.mjs). Il tipo (parabile / non parabile) viene da mosse.json → parabile: qui solo il punto e l'aspetto. parte = nome della parte dell'atlante; al = punto dentro il rettangolo della parte (0..1, [1, 0.5] = estremo lontano dal perno); senza parte: centro alto del corpo. debole = parte del punto debole segnato nella finestra scoperta. I tempi di gioco restano in nemici/parry.json e nei mosse.json: qui solo come si vedono.",
+  "opzioni": {
+    "contorno_pieno": false,
+    "nota_contorno": "true = torna il contorno colorato su tutto lo sprite (rosso avviso, viola non parabile, oro scoperto) com'era prima",
+    "esclamativo_visto": true,
+    "alone": true,
+    "bagliore": true,
+    "schiarisci_scoperto": 0.14
+  },
+  "palette": {
+    "bianco": "#ffffff",
+    "freddo": "#cfe6f6",
+    "acciaio": "#8fa6bf",
+    "acciaio_scuro": "#4c5d72",
+    "rosso": "#c8283c",
+    "rosso_cupo": "#7a1424",
+    "viola": "#6b3a8c",
+    "viola_cupo": "#3a1d52",
+    "oro": "#c9a24a",
+    "oro_luce": "#ead08a",
+    "grigio": "#8a8690",
+    "grigio_scuro": "#55525c"
+  },
+  "tempi": {
+    "accensione_ms": 120,
+    "guizzo_ms": 120,
+    "guizzo_prima_ms": 100,
+    "visto_ms": 650,
+    "nota": "il guizzo dei parabili è il lampo già esistente (lampo_ms di parry.json, 120 ms di durata); per i non parabili cade negli ultimi guizzo_ms dell'avviso"
+  },
+  "misure_px": {
+    "stella_avviso": 3,
+    "stella_guizzo": 7,
+    "anello_avviso": 4,
+    "anello_guizzo": 3,
+    "alone": 5,
+    "esclamativo": [2, 5]
+  },
+  "nemici": {
+    "z24-e01": { "debole": "testa", "mosse": {
+      "sasso": {"parte": "catena_b", "al": [0.8, 0.5], "nota": "(ORD9) lancio del sasso"},
+      "presa": {"parte": "catena_b", "al": [0.8, 0.5], "nota": "(MOS)"},
+      "mulinello": {"parte": "catena_b", "al": [0.8, 0.5], "nota": "(MOS)"},
+      "carica": { "parte": "catena_b", "al": [0.8, 0.5] },
+      "morso": { "parte": "catena_b", "al": [0.8, 0.5], "nota": "(MOS) minion z24-e01-mini" },
+      "catena": { "parte": "catena_b", "al": [0.8, 0.5] },
+      "frustata": { "parte": "catena_b", "al": [0.8, 0.5] } } },
+    "z24-e02": { "debole": "serbatoio", "mosse": {
+      "ventaglio": {"parte": "testa", "al": [0.85, 0.55], "nota": "(MOS)"},
+      "sputo": { "parte": "testa", "al": [0.85, 0.55] } } },
+    "z24-e03": { "debole": "testa", "mosse": {
+      "balzo_alto": {"parte": "punta", "al": [0.9, 0.5], "nota": "(MOS)"},
+      "zigzag": {"parte": "punta", "al": [0.9, 0.5], "nota": "(MOS)"},
+      "puntura": { "parte": "punta", "al": [0.9, 0.5] },
+      "morso": { "parte": "punta", "al": [0.9, 0.5], "nota": "(MOS) minion z24-e03-mini" } } },
+    "z24-e04": { "debole": "testa", "mosse": {
+      "sasso": {"parte": "placca", "al": [0.5, 0.2], "nota": "(ORD9) lancio del sasso"},
+      "carica_placca": {"parte": "placca", "al": [0.5, 0.5], "nota": "(MOS)"},
+      "placca_su": {"parte": "placca", "al": [0.5, 0.2], "nota": "(MOS)"},
+      "schiacciata": { "parte": "placca", "al": [0.5, 0.2] },
+      "spinta": { "parte": "placca", "al": [0.5, 0.5] },
+      "spazzata": { "parte": "placca", "al": [0.5, 0.8] } } },
+    "z24-e05": { "debole": "testa", "mosse": {
+      "schianto": {"parte": "anello", "al": [0.5, 0.5], "nota": "(MOS)"},
+      "schianto_su": {"parte": "anello", "al": [0.5, 0.5], "nota": "(MOS)"},
+      "rotola": { "parte": "anello", "al": [0.5, 0.5] },
+      "urto": { "parte": "braccio_destro", "al": [0.85, 0.5] } } },
+    "z24-e06": { "debole": "busto", "mosse": {
+      "scaglie": {"parte": "braccio_avanti", "al": [0.85, 0.5], "nota": "(MOS)"},
+      "picchiata": { "parte": "braccio_avanti", "al": [0.85, 0.5] } } },
+    "z24-e07": { "debole": "testa", "mosse": {
+      "raggio": {"parte": "collare", "al": [0.5, 0.5], "nota": "(MOS)"},
+      "salva": { "parte": "collare", "al": [0.5, 0.5] },
+      "bomba": {"parte": "collare", "al": [0.5, 0.5], "nota": "(NEM)"},
+      "fascio": {"parte": "collare", "al": [0.5, 0.5], "nota": "(NEM)"} } },
+    "z24-e08": { "debole": "testa", "mosse": {
+      "spazzata_bassa": {"parte": "mano", "al": [0.8, 0.5], "nota": "(MOS)"},
+      "schianto": {"parte": "mano", "al": [0.8, 0.5], "nota": "(MOS)"},
+      "pinza": { "parte": "mano", "al": [0.8, 0.5] },
+      "raggio": {"parte": "mano", "al": [0.9, 0.5], "nota": "(BRA16) il palmo che si accende"} } },
+    "z24-e09": { "debole": "testa", "mosse": {
+      "cuci_alto": {"parte": "mano_filo", "al": [0.7, 0.5], "nota": "(MOS)"},
+      "cuci": {"parte": "mano_filo", "al": [0.7, 0.5], "nota": "(MOS)"},
+      "lega": { "parte": "mano_filo", "al": [0.7, 0.5] },
+      "graffio": { "parte": "braccio_incisore", "al": [0.85, 0.5] } } }
+  },
+  "parata": {
+    "nota": "effetto della parata riuscita di A (evento 'parata') e degli esiti mancati (evento 'parry_esito'). (FX5) Parata riuscita in quattro segni fini: taglio di luce diagonale (pendenza 2:1, la cima piegata nel verso del colpo respinto: entra in ~35 ms, si ritira piano fino a taglio_ms), anello a 8 tratti che si apre (anello_px, anello_ms), schegge di luce nel verso del colpo respinto, freccia d'oro verso il nemico da risposta_da_ms a risposta_ms (= ora si può rispondere). Prima: stella_px 12, stella_ms 170, anello_ms 150, anello pieno.",
+    "stella_px": 5,
+    "stella_ms": 110,
+    "anello_px": [4, 15],
+    "anello_ms": 230,
+    "taglio_px": 14,
+    "taglio_ms": 210,
+    "schegge": 4,
+    "schegge_px": 20,
+    "schegge_ms": 190,
+    "risposta_da_ms": 110,
+    "risposta_ms": 420,
+    "risposta_px": 9,
+    "bagliore_ms": 170,
+    "luce_colore": [222, 236, 255],
+    "luce_raggio_H": 2.4,
+    "luce_ms": 150,
+    "luce_forza": 1.4,
+    "bagliore_H": 0.7,
+    "smorzata_ms": 140,
+    "scintille_particelle": 6
+  },
+  "ombre": {
+    "bande": [[1.0, 0.16], [0.72, 0.16], [0.42, 0.18]],
+    "alto_px": 0.075,
+    "quota_max_H": 3,
+    "quota_max_volo_H": 6,
+    "minimo": 0.35,
+    "allunga_luce": 0.22,
+    "sposta_luce": 0.12
+  }
+}

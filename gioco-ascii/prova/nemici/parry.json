@@ -1,0 +1,30 @@
+{
+  "formato": "pennino-parry-nemici/1",
+  "stato": "proposta",
+  "nota": "Parata di A (tasto L / LB, azione 'parry' di logica.mjs, 360 ms) contro i colpi dei nemici. Riuscita se il colpo arriva entro finestra_ms dalla pressione; dopo = 'presto' (colpo pieno); premuta entro tardi_ms dopo un colpo preso = 'tardi'. Le mosse nemiche dicono se sono parabili e che cosa fa la parata (personaggi/<id>/mosse.json → mosse.<nome>.parabile, effetto_parry, lampo_parte).",
+  "finestra_ms": 200,
+  "tardi_ms": 220,
+  "lampo_ms": 100,
+  "fermo_A_ms": 90,
+  "fermo_nemico_ms": 140,
+  "rallentamento": {
+    "fattore": 0.35,
+    "ms": 240,
+    "nota": "solo i nemici: il passo di A resta suo"
+  },
+  "risposta": {
+    "entro_ms": 600,
+    "danno_molt": 1.5,
+    "nota": "nessun nodo 'risposta' nel grafo di A: è il primo fendente dopo la parata, con danno maggiorato"
+  },
+  "fonte": "richiesta di Carlo 2026-11-13 (studio della parata); numeri proposta di N",
+  "presto_ms": 1200,
+  "nota_presto": "colpo preso entro presto_ms dall'inizio di una parata già finita = 'presto'",
+  "libera_dopo_ms": 60,
+  "nota_libera": "dopo una parata riuscita A è libero entro libera_dopo_ms (per la risposta)",
+  "nota_orch": "(ORCH 15/11) La parata si giudica sul tasto: riuscita se L è premuto entro finestra_ms prima che il colpo arrivi, in qualunque stato sia A (fendente, scatto, aria). finestra 180 → 200 ms.",
+  "guardia": {
+    "nota": "(ORCH 16/11, Carlo: «deve essere proprio una parata: se facciamo il parry bene, sennò deve comunque parare almeno il 70 % dei danni per tutto l'arco della parata») per tutta la durata della mossa di parata, fuori dalla finestra perfetta, il danno ricevuto si riduce di questa frazione",
+    "riduce": 0.7
+  }
+}
