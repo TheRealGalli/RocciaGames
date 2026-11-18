@@ -538,4 +538,4 @@ h1, h2, p { margin: 0; }
 
 /* Logo accanto al nome nella barra (gli angoli dell'immagine sono tagliati dal raggio) */
 .barra__nome { display: inline-flex; align-items: center; gap: 10px; }
-.barra__logo { display: block; width: auto; height: 30px; }
+.barra__logo { display: block; width: auto; height: 32px; }
