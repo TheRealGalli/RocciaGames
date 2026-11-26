@@ -440,19 +440,8 @@ h1, h2, p { margin: 0; }
   color: var(--rosso);
 }
 
-.comandi {
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 220px));
-  gap: 12px;
-}
-.comandi div {
-  padding: 14px 16px;
-  background: var(--vetro);
-  border: 1px solid var(--vetro-bordo);
-}
-.comandi dt { font: 700 11px/1.4 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--tenue); }
-.comandi dd { margin: 4px 0 0; font-weight: 700; }
+/* (Carlo 26/11) una riga sola sotto «Avvia la demo» */
+.comandi { margin: -8px 0 0; font: 700 12px/1.4 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--tenue); }
 
 .nota-touch { display: none; font-weight: 700; color: var(--rosso-chiaro); }
 
