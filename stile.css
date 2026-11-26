@@ -563,8 +563,6 @@ h1, h2, p { margin: 0; }
   .bottone { transition: none; }
 }
 
-/* (Carlo 18/11) Demo non ancora giocabile: sui bottoni della demo il cursore diventa «e volevi» */
-[data-demo] { cursor: url("media/cursore-volevi.png") 45 78, not-allowed; }
 
 /* Logo accanto al nome nella barra (gli angoli dell'immagine sono tagliati dal raggio) */
 .barra__nome { display: inline-flex; align-items: center; gap: 10px; }

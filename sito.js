@@ -1,15 +1,10 @@
 // Roccia Games — piccoli comportamenti del sito
 
-// (Carlo 18/11) La demo non è ancora giocabile: i bottoni non portano da nessuna parte
-// (il cursore «e volevi» è in stile.css). Quando la demo sarà in linea: mettere qui
-// l'indirizzo e togliere il blocco del clic.
-const DEMO_URL = null;
+// (Carlo 26/11) La demo è su itch.io: i due bottoni «Gioca la demo» portano alla sua pagina, in una scheda nuova.
+const DEMO_URL = 'https://therealgallo.itch.io/superpersona';
 
 document.querySelectorAll('[data-demo]').forEach((a) => {
-  if (DEMO_URL) { a.href = DEMO_URL; return; }
-  a.setAttribute('href', '#');
-  a.setAttribute('aria-disabled', 'true');
-  a.addEventListener('click', (e) => { e.preventDefault(); });
+  a.href = DEMO_URL; a.target = '_blank'; a.rel = 'noopener';
 });
 
 const fermo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

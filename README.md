@@ -23,7 +23,7 @@ L'album si ascolta su [RocciaMusic.com](https://www.rocciamusic.com).
 
 ## La demo
 
-La demo è in arrivo. Nel frattempo, sul sito c'è il video di gameplay.
+La demo si gioca nel browser, da computer, su [itch.io](https://therealgallo.itch.io/superpersona). Sul sito c'è anche il video di gameplay.
 
 ## Roccia Games
 
