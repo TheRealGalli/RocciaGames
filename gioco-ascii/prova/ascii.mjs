@@ -69,6 +69,8 @@ export const VUOTO = 0, PIATTA = 254, SOLIDO = 255;
 export const TIPO = Object.freeze({ STRISCIA: 0, GOCCIA: 1, PESANTE: 2, SCHIZZO: 3, URTO: 4 });
 const LIQUIDO = 0, POLVERE = 1, GAS = 2, GENERI = { liquido: LIQUIDO, polvere: POLVERE, gas: GAS };
 
+const STRATO_RIMOSSO = 2;  // lsec: 0 vivo, 1 seccato naturalmente, 2 cancellato dal fondo della pila
+
 const ora = () => (globalThis.performance ? performance.now() : Date.now());
 const rgb = (s) => { const h = s.replace('#', ''); const n = parseInt(h.length === 3 ? h.replace(/./g, '$&$&') : h, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
 const voce = (k) => k[0] !== '_';
@@ -109,7 +111,7 @@ export class Ascii {
     this.la = new Uint8Array(NC); this.lk = new Uint8Array(NC); this.lq = new Uint8Array(NC); this.lcad = new Uint8Array(NC); this.lsec = new Uint8Array(NC);
     this.le = new Uint16Array(NC); this.ord = new Uint16Array(NC); this.nCel = 0; this.nSu = 0;
     this.lvy = new Float32Array(NC); this.lac = new Float32Array(NC); this.lliv = new Uint8Array(NC);   // caduta accelerata, livellamento
-    this.lt = new Float32Array(NC); this.viaFuori = 0;   // (TAR) età al deposito; strati oltre tetti.strati da togliere anche senza altre secche
+    this.viaFuori = 0;   // strati in attesa di compattazione
     const NM = this.NM = T.macchie;
     this.mc = new Int32Array(NM); this.mq = new Uint8Array(NM); this.mm = new Uint8Array(NM); this.mt = new Float32Array(NM); this.mTesta = 0; this.nMac = 0;
     const NT = this.NT = T.timbri;   // due code di timbri: [0] prima della luce, [1] dopo
@@ -390,26 +392,38 @@ export class Ascii {
       this.mat[c] = materia; this.quale[c] = n + 1;
       this.lc[n] = c; this.lm[n] = materia; this.ls[n] = M.slancio; this.ld[n] = dir < 0 ? -1 : 1; this.lf[n] = 0;
       this.la[n] = aderente; this.lk[n] = 0; this.lq[n] = seme & 255; this.lcad[n] = 0; this.lsec[n] = 0; this.le[n] = 0;
-      this.lvy[n] = 0; this.lac[n] = 0; this.lliv[n] = M.livella; this.lt[n] = this.t;
-      if (this.T.strati > 0) this._strati(c);   // (TAR) al più tetti.strati lettere impilate nella colonna
+      this.lvy[n] = 0; this.lac[n] = 0; this.lliv[n] = M.livella;
+      if (this.T.strati > 0 && M.genere !== GAS) this._strati(c);
       return true;
     }
     return false;
   }
-  // (TAR) la pila sotto la cella c appena depositata (solo questa colonna, celle contigue): oltre tetti.strati la più vecchia
-  // comincia a seccarsi subito (lsec), anche se non sono passati i suoi secondi; la toglie il prossimo _passoGriglia
+  // Solo la colonna toccata. I gas e i getti ancora in aria non formano una pila a terra.
   _strati(c) {
-    const W = this.gw, fine = W * this.gh, quale = this.quale, sec = this.lsec, lt = this.lt;
-    let n = 0, vk = -1;
-    for (let d = c; d < fine; d += W) {
-      const q = quale[d];
-      if (!q) break;
-      const k = q - 1;
-      if (sec[k]) continue;
-      n++;
-      if (vk < 0 || lt[k] < lt[vk]) vk = k;
+    const W = this.gw, mat = this.mat, limite = this.T.strati;
+    const ultimaRiga = W * (this.gh - 1);
+    let fondo = c, sotto = fondo < ultimaRiga ? mat[fondo + W] : SOLIDO;
+    if (sotto === VUOTO) return;
+    while (sotto > VUOTO && sotto < PIATTA) {
+      if (this.MAT[sotto].genere === GAS || this.lcad[this.quale[fondo + W] - 1]) return;
+      fondo += W;
+      sotto = fondo < ultimaRiga ? mat[fondo + W] : SOLIDO;
     }
-    if (n > this.T.strati && vk >= 0) { sec[vk] = 1; this.viaFuori = 1; }
+    if (sotto === VUOTO) return;
+    let cima = c, sopra = mat[cima - W];
+    while (sopra > VUOTO && sopra < PIATTA && this.MAT[sopra].genere !== GAS && !this.lcad[this.quale[cima - W] - 1]) {
+      cima -= W;
+      sopra = mat[cima - W];
+    }
+    if (fondo - cima < limite * W) return;
+    let vivi = 0;
+    for (let d = cima; d <= fondo; d += W) {
+      const k = this.quale[d] - 1;
+      if (this.lsec[k] || ++vivi <= limite) continue;
+      this.lsec[k] = STRATO_RIMOSSO;
+      this.mIn[d] = 0;     // cancella anche un'eventuale macchia già presente sotto la lettera
+      this.viaFuori = 1;
+    }
   }
 
   // ------------------------------------------------------------------------------------------------ passo
@@ -532,6 +546,7 @@ export class Ascii {
     let su = 0, via = 0, gas = 0;
     for (let o = 0; o < n; o++) {
       const k = ord[o], M = this.MAT[this.lm[k]];
+      if (this.lsec[k] === STRATO_RIMOSSO) continue;
       if (M.genere === GAS) { gas++; continue; }      // il gas va dall'alto in basso, dopo
       const c = this.lc[k], i = c % W, j = (c / W) | 0;
       const sotto = j + 1 < Hc ? c + W : -1, ms = sotto >= 0 ? mat[sotto] : SOLIDO;
@@ -588,6 +603,8 @@ export class Ascii {
         }
       }
       // ferma: il liquido secca in macchia, la polvere svanisce
+      if (!this.lf[k] && this.T.strati > 0) this._strati(c);
+      if (this.lsec[k] === STRATO_RIMOSSO) continue;
       if (++this.lf[k] >= (M.genere === LIQUIDO ? M.seccaS : M.svanisceS) / this.hG) { this.lsec[k] = 1; via++; }
     }
     if (gas) for (let o = n - 1; o >= 0; o--) {
@@ -616,19 +633,19 @@ export class Ascii {
       }
     }
     this.nSu = su;
-    if (!via && !this.viaFuori) return;   // (TAR) viaFuori: strati di troppo segnati al deposito
+    if (!via && !this.viaFuori) return;   // (TAR) viaFuori: strati di troppo segnati al deposito o durante il moto
     this.viaFuori = 0;
     // dall'ultimo al primo: lo scambio con l'ultima porta qui una cella già guardata
     for (let k = this.nCel - 1; k >= 0; k--) {
       if (!this.lsec[k]) continue;
       const c = this.lc[k], M = this.MAT[this.lm[k]];
-      if (M.macchia) this._macchia(c, this.lm[k], this.lq[k]);
+      if (M.macchia && this.lsec[k] !== STRATO_RIMOSSO) this._macchia(c, this.lm[k], this.lq[k]);
       mat[c] = VUOTO; quale[c] = 0;
       const u = --this.nCel;
       if (k !== u) {
         this.lc[k] = this.lc[u]; this.lm[k] = this.lm[u]; this.ls[k] = this.ls[u]; this.ld[k] = this.ld[u]; this.lf[k] = this.lf[u];
         this.la[k] = this.la[u]; this.lk[k] = this.lk[u]; this.lq[k] = this.lq[u]; this.lcad[k] = this.lcad[u]; this.lsec[k] = this.lsec[u]; this.le[k] = this.le[u];
-        this.lvy[k] = this.lvy[u]; this.lac[k] = this.lac[u]; this.lliv[k] = this.lliv[u]; this.lt[k] = this.lt[u];   // (TAR) lt
+        this.lvy[k] = this.lvy[u]; this.lac[k] = this.lac[u]; this.lliv[k] = this.lliv[u];
         quale[this.lc[k]] = k + 1;
       }
       this.lsec[u] = 0;
@@ -637,6 +654,7 @@ export class Ascii {
   _sposta(k, c, d) {
     const m = this.mat;
     m[d] = m[c]; this.quale[d] = k + 1; m[c] = VUOTO; this.quale[c] = 0; this.lc[k] = d;
+    if (!this.lcad[k] && this.T.strati > 0 && this.MAT[m[d]].genere !== GAS) this._strati(d);
   }
   _macchia(c, materia, q) {
     const s = this.mIn[c];
@@ -790,6 +808,7 @@ export class Ascii {
     const W = this.gw, mat = this.mat, cw = this.cw, ch = this.ch;
     let n = 0;
     for (let k = 0; k < this.nCel && n < max; k++) {
+      if (this.lsec[k] === STRATO_RIMOSSO) continue;
       const M = this.MAT[this.lm[k]], cad = this.lcad[k] > 0;
       if ((cad || M.sopra) !== sopra) continue;
       const c = this.lc[k], i = c % W, j = (c / W) | 0, x = i * cw, y = (j + 1) * ch;
@@ -988,6 +1007,7 @@ export class Ascii {
     }
     // materia viva in griglia, con i suoi caratteri di stato
     for (let k = 0; k < this.nCel; k++) {
+      if (this.lsec[k] === STRATO_RIMOSSO) continue;
       const M = this.MAT[this.lm[k]], c = this.lc[k], i = c % W, j = (c / W) | 0;
       if (i < this._i0 || i > this._i1 || j < this._j0 || j > this._j1) continue;
       const cad = this.lcad[k] > 0, su = j > 0 ? mat[c - W] : VUOTO, pienoSu = su > 0 && su < PIATTA;

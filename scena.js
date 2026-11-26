@@ -940,7 +940,7 @@
       lettereSporche = false;
     }
     const ferita = (dir) => { if (lett) lett.K.S.notaFerita(lett.asc, { x: eroe.x, y: eroe.y - 26, dir }, 48, 3); };   // sangue blu
-    const TIPO_SPARO = { carica: 'sasso', sputo: 'cera', lampada: 'brace', scaglie: 'ago' };
+    const TIPO_SPARO = { carica: 'sasso', sputo: 'cera', lampada: 'bomba', scaglie: 'ago' };   // (26/11, Carlo: hero allineata al gioco) Lampada: arco = bomba (ascii-agganci.json → spari.tipi.z24-e07)
     const cvCatene = document.createElement('canvas');
     cvCatene.className = 'apertura__catene';
     cvCatene.setAttribute('aria-hidden', 'true');
@@ -1966,15 +1966,13 @@
         e.tiro -= dt;
         if (e.tiro > 0 || e.h || e.x < 8 || e.x > W - 8) continue;
         e.tiro = caso(3, 6);
-        if (T.modo === 'carica' && dx > 50 && dx < 140) {
-          if (Math.random() < 0.3 && bombe.length < 5) avviaAttacco(e, 'lancio', 1350, [750]);   // il sasso ad arco
-          else avviaAttacco(e, 'carica', 1100, null);
-        } else if (T.modo === 'sputo' && dx > 40 && dx < W * 0.6 && bombe.length < 5) avviaAttacco(e, 'lancio', 1100, [500, 800]);
-        else if (T.modo === 'scaglie' && dx > 30 && dx < W * 0.5 && bombe.length < 6) avviaAttacco(e, 'dardo', 1290, [650, 780]);
-        else if (T.modo === 'lampada' && dx < W * 0.55 && bombe.length < 5) avviaAttacco(e, 'lancio', 1700, [900, 1100, 1300]);   // salva di tre
+        // (26/11, Carlo: hero allineata al gioco) le mosse di oggi (mosseDiOggi, sotto); i colpi da lontano solo con le lettere
+        // del gioco pronte: niente più proiettili disegnati a codice, nemmeno nei primi istanti
+        mosseDiOggi(e, T, dx);
       }
       passoBallo(dt);
       passoRaggi(dt);
+      passoFasci(dt);   // (26/11, Carlo: hero allineata al gioco) laser della Falena e fascio della Lampada, in lettere
 
       // Colpi (tre sottopassi, così non attraversano i nemici sottili); possono far scoppiare i proiettili
       for (const c of colpi) {
@@ -2008,8 +2006,9 @@
       // Proiettili ad arco: esplodono a terra
       for (const b of bombe) {
         if (b.via) continue;
-        if (!b.dritto) b.vy += G_BOMBA * dt;
+        if (!b.dritto) b.vy += (b.g || G_BOMBA) * dt;   // (26/11, Carlo: hero allineata al gioco) b.g: gravità del tiro del gioco
         b.x += b.vx * dt; b.y += b.vy * dt;
+        if (b.vita != null && (b.vita -= dt) <= 0) { b.via = true; continue; }   // (26/11) aghi: durata_ms del gioco, poi spariscono
         const vicino = eroe.az !== 'scatto' && Math.abs(b.x - eroe.x) < 6 && b.y > eroe.y - 46 && b.y < eroe.y;
         if (b.y >= TERRA - 1 || vicino) {
           b.via = true;
@@ -2018,6 +2017,9 @@
             lett.C.scoppioSparo(b.tipoA, b.x, Math.min(b.y, TERRA - 2), b.vx, b.vy, lett.C.nemico(b.id || ''));
             lampi.push({ x: b.x, y: Math.min(b.y, TERRA - 2) - 3, vita: 0.14, r: b.dritto ? 12 : 26 });
             if (vicino) eroe.spinta = (b.vx >= 0 ? 1 : -1) * (b.dritto ? 40 : 90);
+            if (b.scoppio && !vicino && eroe.az !== 'scatto' && Math.abs(eroe.x - b.x) < b.scoppio && eroe.y > TERRA - 4) {   // (26/11) bomba della Lampada: scoppio di 0,9 H
+              const d = eroe.x >= b.x ? 1 : -1; eroe.spinta = d * 90; ferita(d); scossa(1, 0.08);
+            }
           } else if (b.dritto) {
             emetti(STE, b.x, Math.min(b.y, TERRA - 2), 0, 0, 0.08, '#ffe27a', 2);
             scintille(b.x, Math.min(b.y, TERRA - 2), -Math.sign(b.vx) || 1, 3, COL_FUOCO);
@@ -2036,37 +2038,226 @@
       scena(ora);
     }
 
-    // ---- Attacchi dei nemici (MODI) ----
-    // att: contatto | lancio (ad arco, colpi agli istanti colpiMs) | dardo (dritto) | carica | laser | fascio
+    // ---- Attacchi dei nemici ----
+    // (26/11, Carlo: hero allineata al gioco) Le mosse di oggi del gioco (ultimo salvataggio, 224e08f): personaggi/<id>/mosse.json →
+    // attacchi e mosse, comportamenti volo.mjs (Falena) e lampada.mjs (Lampada); tempi delle fasi e velocità dai dati (H = 48 px).
+    // Incatenato (e01): carica, frustata e presa con la catena in lettere · Vigile (e04): carica con la placca (tre | sul bordo) ·
+    // Ceralacca (e02): sputo ad arco con la chiazza d'arrivo in lettere e ventaglio di tre gocce corte · Falena (e06): scaglie (tre
+    // aghi a ventaglio ±12°), ventaglio (tre aghi insieme ±20°), picchiata, laser radente · Lampada (e07): bomba ad arco con la
+    // chiazza e fascio (carica che segue A, fuoco che spazza 12° in giù) · Rilegatore (e09): cucitura col filo. Niente più sassi
+    // (e01 ed e04 non li hanno fra gli attacchi) né salve di brace ad arco. Puntina, Anello e Braccio restano come prima.
+    // att: contatto | lancio | ventaglio | scaglie | aghi | carica | frustata | presa | cuci | picchiata | radente | bomba | fascio
+    // (laser e fascio dei Bracci a muro: e.muro, più sotto, invariati)
+    const HG = 48, RAD = Math.PI / 180;
+    const base = (e) => String(e.tipo.id || '').replace(/-mini$/, '');
+    let nRaggi = 0;
     function avviaAttacco(e, att, durMs, colpiMs) {
       e.stato = 'attacco'; e.st = 0; e.att = att; e.lancia = att !== 'contatto';
       e.durAtt = durMs; e.colpiMs = colpiMs; e.sparati = 0;
+      e.mira = null; e.chiazza = null; e.preso = false; e.arrivato = false; e.dirA = 0; e.lineaA = null; e.strisciata = false;
     }
+    // un solo raggio di nemico volante acceso o in carica per volta (volo.mjs: «mai due insieme»)
+    const raggioInAria = () => nemici.some((x) => !x.muro && x.stato === 'attacco' && (x.att === 'radente' || x.att === 'fascio'));
+    // Scelta della mossa (ogni 3–6 s, come prima), secondo il tipo e la distanza dal protagonista
+    function mosseDiOggi(e, T, dx) {
+      const id = base(e), mini = /-mini$/.test(e.tipo.id || '');
+      if (mini) return;   // i piccoli delle orde hanno solo il morso (a contatto)
+      if (T.modo === 'carica') {
+        if (id === 'z24-e01' && !mini && lett && dx > 1.35 * HG && dx < 3.4 * HG && Math.random() < 0.55) {
+          if (dx > 2.1 * HG) avviaAttacco(e, 'presa', 1060, null); else avviaAttacco(e, 'frustata', 1120, null);
+        } else if (dx > 50 && dx < 140) avviaAttacco(e, 'carica', id === 'z24-e04' ? 1080 : 1850, null);
+        return;
+      }
+      if (!lett) return;
+      if (T.modo === 'sputo') {
+        if (dx > 20 && dx < 2.2 * HG && bombe.length < 10) avviaAttacco(e, 'ventaglio', 1200, [520, 560, 600]);
+        else if (dx > 40 && dx < W * 0.6 && bombe.length < 8) avviaAttacco(e, 'lancio', 1100, [700]);
+      } else if (T.modo === 'scaglie') {
+        const ok = [];
+        if (dx < 4.5 * HG && bombe.length < 10) ok.push(['scaglie', 1290, [650, 740, 830], 3]);
+        if (dx > 2.2 * HG && dx < 6 * HG && bombe.length < 10) ok.push(['aghi', 1350, [750], 2]);
+        if (dx > 1.8 * HG && dx < 6 * HG) ok.push(['picchiata', 1500, null, 2]);
+        if (dx < 4 * HG && !raggioInAria()) ok.push(['radente', 2100, null, 1.5]);
+        let p = Math.random() * ok.reduce((s, q) => s + q[3], 0);
+        for (const q of ok) { if ((p -= q[3]) <= 0) { avviaAttacco(e, q[0], q[1], q[2]); break; } }
+      } else if (T.modo === 'lampada') {
+        if (dx < W * 0.55 && !raggioInAria() && Math.random() < 0.45) avviaAttacco(e, 'fascio', 2160, null);
+        else if (bombe.length < 8) avviaAttacco(e, 'bomba', 900, [600]);
+      } else if (T.modo === 'mischia' && id === 'z24-e09' && dx > 40 && dx < 3.6 * HG) avviaAttacco(e, 'cuci', 1360, null);
+    }
+    // Bocca dei volanti (aghi, laser, fascio, bombe): davanti e un poco sopra il centro del corpo
+    const boccaDi = (e) => { const [cx, cy] = centro(e); return [cx + e.verso * e.tipo.hw * 0.35, cy - e.tipo.hh * 0.15]; };
     function attaccoInCorso(e, dt) {
-      const T = e.tipo;
-      if (e.colpiMs && e.sparati < e.colpiMs.length && e.st >= e.colpiMs[e.sparati]) {
-        e.sparati++;
-        if (e.att === 'dardo') dardo(e); else lancia(e);
+      const T = e.tipo, st = e.st;
+      // avvisi che seguono A fino al blocco: chiazza d'arrivo (sputo, bomba) e mira degli aghi
+      if (e.att === 'lancio' || e.att === 'bomba') {
+        const B = e.att === 'bomba', blocco = B ? 360 : 400;
+        if (!e.chiazza || st < blocco) e.chiazza = { x: eroe.x + (B ? 0 : caso(-4, 4)), r: (B ? 0.9 : 0.55) * HG };
+        if (e.sparati < (e.colpiMs ? e.colpiMs.length : 0)) chiazza(e, Math.min(1, st / e.colpiMs[0]), B);
       }
-      if (e.att === 'carica') {
-        // avviso di 400 ms, poi corsa addosso; al contatto diventa un colpo a contatto (e la respinta)
-        if (e.st < 400) { if (((e.st / 60) | 0) % 2) e.flash = 30; return; }
+      if ((e.att === 'scaglie' || e.att === 'aghi') && (e.dirA === 0 || st < e.colpiMs[0] - 200)) {
+        const [bx, by] = boccaDi(e);
+        e.dirA = Math.atan2(eroe.y - 24 - by, eroe.x - bx);   // mira fissata 200 ms prima del primo ago
         e.verso = eroe.x < e.x ? -1 : 1;
-        e.x += e.verso * (T.vel * 4 + 50) * dt;
-        if (Math.abs(e.x - eroe.x) < e.contatto + 2) avviaAttacco(e, 'contatto', 0, null);
-        if (Math.random() < 0.3) emetti(POL, e.x - e.verso * T.hw, TERRA - 1, -e.verso * 30, -10, 0.3, '#6a625a', 2, 0, 3);
       }
-      if ((e.att === 'laser' || e.att === 'fascio') && e.muro && ((e.st / 300) | 0) !== ((e.st - dt * 1000) / 300 | 0)) {
+      if (e.colpiMs && e.sparati < e.colpiMs.length && st >= e.colpiMs[e.sparati]) {
+        const k = e.sparati++;
+        if (e.att === 'scaglie') ago(e, e.dirA + [-12, 0, 12][k % 3] * RAD, 4.5 * HG, 0.9);
+        else if (e.att === 'aghi') for (const d of [-20, 0, 20]) ago(e, e.dirA + d * RAD, 5 * HG, 1.2);
+        else if (e.att === 'ventaglio') gocciaCorta(e, [-20, 5, 30][k % 3]);
+        else lancia(e);
+      }
+      switch (e.att) {
+        case 'carica': {
+          // avviso (e01 600 ms, e04 560), poi corsa con la mira fissata all'avvio; al contatto diventa un colpo a contatto
+          const e04 = base(e) === 'z24-e04', avv = e04 ? 560 : 600;
+          if (st < avv) { if (((st / 60) | 0) % 2) e.flash = 30; e.verso = eroe.x < e.x ? -1 : 1; return; }
+          const v = e.dirA || (e.dirA = e.verso);
+          e.verso = v;
+          e.x += v * (e04 ? T.vel * 4 + 50 : 6.2 * HG) * dt;   // Incatenato: 6,2 H/s (mosse.json → carica.movimento)
+          if (Math.abs(e.x - eroe.x) < e.contatto + 2) { avviaAttacco(e, 'contatto', 0, null); return; }
+          if ((e.x - eroe.x) * v > 1.3 * HG) e.st = Math.max(e.st, e.durAtt);   // oltre A di 1,3 H: arresto
+          if (Math.random() < 0.3) emetti(POL, e.x - v * T.hw, TERRA - 1, -v * 30, -10, 0.3, '#6a625a', 2, 0, 3);
+          if (e04 && lett) {   // la placca davanti: tre riflessi sul bordo che avanzano col corpo (ascii_colpi → armaCorta «placca»)
+            const N = lett.C.nemico(e.tipo.id), g = lett.C.g, [, cy] = centro(e), X = e.x + v * (T.hw + 2), h = T.alto * 0.27;
+            lett.asc.timbro(g.bar, N.col[2], X, cy - h, 1); lett.asc.timbro(g.bar, N.col[0], X, cy, 1); lett.asc.timbro(g.bar, N.col[3], X, cy + h, 1);
+          }
+          return;
+        }
+        case 'frustata': case 'presa': {
+          // la catena parte dalla mano, si distende fino a 2,1 H (frustata) o 3,3 H (presa) e resta tesa un attimo
+          const P = e.att === 'presa', a0 = P ? 420 : 480, a1 = P ? 540 : 600, L = (P ? 3.3 : 2.1) * HG;
+          if (st < a0) { e.verso = eroe.x < e.x ? -1 : 1; return; }
+          if (st >= a1 + 120 || !lett) return;
+          const [cx, cy] = centro(e), v = e.verso, hx = cx + v * T.hw * 0.5, hy = cy - T.hh * 0.2, N = lett.C.nemico(e.tipo.id);
+          const u = Math.min(1, (st - a0) / (a1 - a0)), punta = hx + v * L * (0.48 + 0.52 * (1 - (1 - u) ** 3)), py = TERRA - 0.8 * HG;
+          lett.C.corda(hx, hy, punta, py, false, N);
+          if (!e.strisciata) { e.strisciata = true; lett.C.catena(hx, TERRA, v, L * 0.8, (a1 - a0) / 1000, false, N, hx, hy); }
+          if (!e.preso && eroe.az !== 'scatto' && (eroe.x - hx) * v > 0 && Math.abs(eroe.x - hx) < Math.abs(punta - hx) + 3 && eroe.y > TERRA - 40) {
+            e.preso = true; ferita(v); eroe.spinta = P ? -v * 6 * HG * 0.5 : v * 110;   // presa: tira A verso di sé (effetto_A.tira_H_s 6)
+            lett.C.segno('lampo', eroe.x, eroe.y - 26);
+          }
+          return;
+        }
+        case 'cuci': {
+          // Rilegatore: il filo corre a terra fino a 3,6 H, teso dalla mano; tocca chi ci sta sopra
+          if (st < 600) { e.verso = eroe.x < e.x ? -1 : 1; return; }
+          if (e.strisciata || !lett) return;
+          e.strisciata = true;
+          const [cx, cy] = centro(e), v = e.verso, L = Math.min(3.6 * HG, Math.abs(eroe.x - cx) + 12);
+          lett.C.catena(cx + v * T.hw * 0.5, TERRA, v, L, 0.16, true, lett.C.nemico(e.tipo.id), cx + v * T.hw * 0.5, cy - T.hh * 0.2);
+          if (eroe.az !== 'scatto' && eroe.aterra && (eroe.x - cx) * v > 0 && Math.abs(eroe.x - cx) < L) { ferita(v); eroe.spinta = v * 80; }
+          return;
+        }
+        case 'picchiata': {
+          // la Falena segue A fino a 200 ms prima della discesa, poi scende dritta a 8,5 H/s fino al punto fissato (approdo)
+          const yA = Math.min(TERRA - T.basso, eroe.y - 22);
+          if (st < 500) { e.verso = eroe.x < e.x ? -1 : 1; e.mira = [eroe.x, yA]; }
+          if (st < 700) { if (((st / 70) | 0) % 2) e.flash = 25; return; }
+          if (e.arrivato || !e.mira) return;
+          const [tx, ty] = e.mira, ddx = tx - e.x, ddy = ty - e.y, d = Math.hypot(ddx, ddy), passo = 8.5 * HG * dt;
+          if (d <= passo) {
+            e.x = tx; e.y = ty; e.arrivato = true; e.st = Math.max(e.st, e.durAtt - 350);
+            polvere(tx, TERRA, 4);
+            if (lett) lett.C.colpoTerra(tx, TERRA, 0, lett.C.nemico(e.tipo.id));
+          } else { e.x += ddx / d * passo; e.y += ddy / d * passo; }
+          if (!e.preso && eroe.az !== 'scatto' && Math.abs(eroe.x - e.x) < 12 && Math.abs(eroe.y - 24 - e.y) < 24) {
+            e.preso = true; ferita(e.verso); eroe.spinta = e.verso * 120;
+          }
+          return;
+        }
+        case 'radente': {
+          // avviso 800 ms: si porta a 1,6 H sopra i piedi di A, a mezza passata (3,2 H) da A; la striscia a terra si fissa a 550 ms
+          const L = 3.2 * HG, v = e.dirA || (e.dirA = e.x < eroe.x ? 1 : -1);
+          e.verso = v;
+          if (st < 550 || e.mira == null) e.mira = eroe.x;
+          if (st < 800) {
+            const k = Math.min(1, dt * 5);
+            e.x += (e.mira - v * L / 2 - e.x) * k; e.y += (TERRA - 1.6 * HG - e.y) * k;
+            return;
+          }
+          if (st < 1600) e.x += v * L / 0.8 * dt;   // passata radente: 3,2 H in 800 ms
+          return;
+        }
+        case 'fascio': {
+          e.verso = eroe.x < e.x ? -1 : 1;
+          return;
+        }
+      }
+      if ((e.att === 'laser' || e.att === 'fascio') && e.muro && ((st / 300) | 0) !== ((st - dt * 1000) / 300 | 0)) {
         // la mano del Braccio si agita: sfiora le catene vicine
         const [hx, hy] = manoDi(e);
         scuotiCatene(hx, hy, 22, 50, 0, true);
       }
     }
-    // Dardo dritto (le scaglie della Falena): veloce, scoppia piccolo a terra
-    function dardo(e) {
-      const [cx, cy] = centro(e), tx = eroe.x + caso(-6, 6), ty = eroe.y - caso(10, 34);
-      const l = Math.hypot(tx - cx, ty - cy) || 1, v = 200;
-      bombe.push({ x: cx, y: cy, vx: (tx - cx) / l * v, vy: (ty - cy) / l * v, dritto: true, tipoA: 'ago', id: e.tipo.id });
+    // Chiazza d'arrivo in lettere (proiettili.mjs → avviso.chiazza: trattini che si chiudono): rossa la bomba, ambra la cera
+    function chiazza(e, k, bomba) {
+      if (!lett || !e.chiazza) return;
+      const C = e.chiazza, R = C.r * (1.25 - 0.25 * k), asc = lett.asc, g = lett.C.g;
+      const col = bomba ? asc.colore('raggio', k > 0.6 ? 3 : 4) : asc.colore('ambra', k > 0.6 ? 1 : 3), passo = Math.max(3, asc.cw * 1.5);
+      for (let x = -R; x <= R; x += passo) asc.timbro(g.meno, col, C.x + x, TERRA - 1.5, 1);
+      if (k > 0.5) asc.timbro(g.und, col, C.x, TERRA - 3, 1);
+    }
+    // Ago dritto (Falena: scaglie e ventaglio) dalla bocca, angolo a, velocità v px/s, vita s (durata_ms del gioco)
+    function ago(e, a, v, vita) {
+      const [bx, by] = boccaDi(e);
+      bombe.push({ x: bx, y: by, vx: Math.cos(a) * v, vy: Math.sin(a) * v, dritto: true, vita, tipoA: 'ago', id: e.tipo.id });
+    }
+    // Goccia corta del ventaglio della Ceralacca: dritta a 4,2 H/s per 520 ms, angolo dal verso (sopra lo zero, sotto il resto)
+    function gocciaCorta(e, gradi) {
+      const [cx, cy] = centro(e), a = -gradi * RAD, v = 4.2 * HG, x = cx + e.verso * e.tipo.hw * 0.5;
+      bombe.push({ x, y: cy - e.tipo.hh * 0.3, vx: Math.cos(a) * v * e.verso, vy: Math.sin(a) * v, dritto: true, vita: 0.52, tipoA: 'cera', id: e.tipo.id });
+    }
+    // Laser radente della Falena e fascio della Lampada: solo lettere (lett.C.raggio con il nucleo in caratteri, come il gioco
+    // con lo strato acceso: SPARI_ASCII.fascio), contatto con scintille e terra bruciata; spingono e feriscono il protagonista
+    function passoFasci(dt) {
+      if (!lett) return;
+      for (const e of nemici) {
+        if (e.muro || e.stato !== 'attacco' || (e.att !== 'radente' && e.att !== 'fascio')) continue;
+        const rid = e.rid || (e.rid = 'v' + (++nRaggi)), st = e.st;
+        if (e.att === 'radente') {
+          const L = 3.2 * HG, v = e.dirA || 1;
+          if (st < 800) {   // la striscia che il raggio percorrerà, a terra: puntini, fitti dopo il blocco
+            const fissa = st >= 550, g = fissa ? lett.C.g.meno : lett.C.g.pun, col = lett.asc.colore('raggio', fissa ? 2 : 4);
+            for (let d = -L / 2; d <= L / 2; d += fissa ? 3 : 6) lett.asc.timbro(g, col, e.mira + v * d, TERRA - 1.5, 1);
+            continue;
+          }
+          if (st >= 1600) continue;
+          const [bx, by] = boccaDi(e), ux = -v * Math.sin(10 * RAD), uy = Math.cos(10 * RAD);   // in giù, inclinato all'indietro di 10°
+          const len = Math.max(0, Math.min(3 * HG, (TERRA - by) / uy));
+          lett.C.raggio(rid, bx, by, ux, uy, len, 'fuoco', st - 800, 0, true);
+          lett.C.nn = 0;
+          if (!e.preso && eroe.az !== 'scatto' && distRaggio({ x: bx, y: by, ang: Math.atan2(uy, ux), len }, eroe.x, eroe.y - 24, 20) < 4) {
+            e.preso = true; ferita(v); eroe.spinta = v * 2.5 * HG;
+          }
+          continue;
+        }
+        // fascio: carica 800 ms (linea sottile che segue A a 60°/s, ferma negli ultimi 200 ms), fuoco 1360 ms (spazza 12° in giù)
+        const [bx, by] = boccaDi(e), voluto = Math.atan2(eroe.y - 24 - by, eroe.x - bx);
+        if (e.lineaA == null) e.lineaA = voluto;
+        if (st < 600) {
+          const d = Math.atan2(Math.sin(voluto - e.lineaA), Math.cos(voluto - e.lineaA)), m = 60 * RAD * dt;
+          e.lineaA += Math.max(-m, Math.min(m, d));
+        }
+        let ang = e.lineaA;
+        if (st >= 800) {
+          const u = Math.min(1, (st - 800) / 1360), giu = Math.cos(e.lineaA) >= 0 ? 1 : -1;
+          ang = e.lineaA + giu * 12 * RAD * u * u * (3 - 2 * u);
+        }
+        const ux = Math.cos(ang), uy = Math.sin(ang);
+        let len = 9 * HG;
+        if (uy > 0.01) len = Math.min(len, (TERRA - by) / uy);
+        if (ux > 0.01) len = Math.min(len, (W - bx) / ux);
+        if (ux < -0.01) len = Math.min(len, -bx / ux);
+        len = Math.max(0, len);
+        if (st < 800) { lett.C.raggio(rid, bx, by, ux, uy, len, 'mira', st, st >= 600 ? 1 : 0, true); continue; }
+        lett.C.raggio(rid, bx, by, ux, uy, len, 'fuoco', st - 800, 0, true);
+        lett.C.nn = 0;
+        e.tocco = (e.tocco || 0) - dt;
+        if (e.tocco <= 0 && eroe.az !== 'scatto' && distRaggio({ x: bx, y: by, ang, len }, eroe.x, eroe.y - 24, 20) < 4) {
+          e.tocco = 0.6; ferita(ux >= 0 ? 1 : -1); eroe.spinta = (ux >= 0 ? 1 : -1) * 70;
+        }
+      }
     }
     // Mano del Braccio (origine del laser) e bocca della Lampada (origine del fascio)
     // Origine del raggio del Braccio: il suo occhio/mano nel fotogramma (dati `occhi`), se no l'estremità del braccio
@@ -2177,9 +2368,15 @@
       return null;
     }
 
-    // Proiettile ad arco verso il protagonista (un poco a caso), in volo 0,75–1,3 s
+    // Proiettile ad arco verso la chiazza d'arrivo (fissata nell'avviso). (26/11, Carlo: hero allineata al gioco) tempi e gravità
+    // del gioco: sputo 850 ms a 14 H/s², bomba della Lampada 900 ms a 14 H/s² con lo scoppio di 0,9 H; senza chiazza come prima
     function lancia(e) {
-      const [cx, cy] = centro(e);
+      const B = e.att === 'bomba', [cx, cy] = B ? boccaDi(e) : centro(e);
+      if (e.chiazza) {
+        const T = B ? 0.9 : 0.85, g = 14 * HG, tx = e.chiazza.x;
+        bombe.push({ x: cx, y: cy, vx: (tx - cx) / T, vy: (TERRA - 1 - cy - 0.5 * g * T * T) / T, g, tipoA: TIPO_SPARO[e.tipo.modo] || 'cera', id: e.tipo.id, scoppio: B ? 0.9 * HG : 0 });
+        return;
+      }
       const tx = eroe.x + caso(-16, 16), T = Math.max(0.75, Math.min(1.3, Math.abs(tx - cx) / 80));
       bombe.push({ x: cx, y: cy, vx: (tx - cx) / T, vy: (TERRA - 1 - cy - 0.5 * G_BOMBA * T * T) / T, tipoA: TIPO_SPARO[e.tipo.modo] || 'cera', id: e.tipo.id });
     }

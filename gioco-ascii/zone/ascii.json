@@ -29,7 +29,7 @@
     "buchi": 48,
     "_buchi": "sagome per fotogramma che bucano lo strato di dietro (asc.buco)",
     "strati": 3,
-    "_strati": "(TAR) lettere a terra impilate per colonna al più: oltre, la più vecchia comincia a seccarsi subito (Carlo, apertura del sito); 0 = senza tetto"
+    "_strati": "(TAR) lettere a terra impilate per colonna al più: oltre, si cancellano le righe inferiori al deposito o durante il moto (Carlo, apertura del sito); 0 = senza tetto"
   },
   "passo": {
     "volo_hz": 60,
@@ -108,6 +108,8 @@
     "_nota": "tipo: liquido (scorre, cola, secca in macchia), polvere (cade, si ammucchia, svanisce), gas (sale, si allarga, svanisce). colori: indici nella sua tavolozza. toni: colore dall'età in volo, [indice, fino a s], l'ultimo vale per sempre; il primo tono è quello di base",
     "sangue": {
       "tipo": "liquido",
+      "luce_ambiente": false,
+      "_luce_ambiente": "Come nella scena del sito, pozze e macchie usano i colori della tavolozza dopo il buio.",
       "tavolozza": "rossi",
       "toni": { "ventaglio": [ [1, 0.05], [2, 0.16], [3, 0.4], [4, 99] ], "ago": [ [0, 0.06], [1, 0.12], [2, 0.2], [3, 99] ], "richiamo": [ [6, 0], [5, 0], [4, 0], [3, 0], [2, 99] ] },
       "_toni": "richiamo: il colore segue il cammino verso il bersaglio (dal bordeaux al vivo), non l'età",
@@ -125,10 +127,10 @@
       "pendenza_passi": 2,
       "colatura_passi": 3,
       "caduta_veloce_passi": 3,
-      "secca_s": 2.6,
+      "secca_s": 1.0,
       "macchia": true,
-      "macchia_scura_s": 4,
-      "macchia_vita_s": 8,
+      "macchia_scura_s": 0.8,
+      "macchia_vita_s": 1.8,
       "_macchia_vita_s_prima": "(Carlo 18/11: macchie e liquidi spariscono in 5-10 s, niente velo a terra) prima scura 6, vita 45",
       "colori": { "cade": 3, "fermo": 3, "aderente": 3, "macchia": 4, "macchia_vecchia": 5 },
       "lettere": { "pesanti": "8%&#", "leggeri": "',.:", "colori": [1, 2, 2, 3, 4] },
@@ -137,6 +139,7 @@
     },
     "sangue_blu": {
       "tipo": "liquido",
+      "luce_ambiente": false,
       "tavolozza": "blu",
       "toni": { "ventaglio": [ [0, 0.05], [2, 0.18], [3, 0.45], [4, 99] ], "ago": [ [0, 0.08], [1, 0.16], [2, 0.3], [3, 99] ] },
       "lascia": {
@@ -168,8 +171,8 @@
     "uscita": 0.35,
     "_uscita": "origine sul lato d'uscita: bx + dir · uscita · w",
     "spada": {
-      "n": 10,
-      "critico": 4,
+      "n": 7,
+      "critico": 3,
       "finale": 1.6,
       "uccide": 2,
       "asse_gradi": 12,
@@ -195,7 +198,7 @@
       "_altre": "onda, urto e fonti sconosciute: ventaglio dimezzato"
     },
     "pistola": {
-      "n": 6,
+      "n": 4,
       "v_H_s": [34, 18],
       "rumore_gradi": 0.6,
       "att_s": 11,
@@ -213,7 +216,7 @@
         "_nota": "(TAR) numero (n, almeno 2) e lunghezza (v_H_s) dello spruzzo secondo l'altezza del bersaglio colpito, in px a H 48 (b.h · 48 / H): sotto 30 piccolo, da 50 grosso, in mezzo medio (Carlo, apertura del sito)"
       }
     },
-    "uccisione": { "celle": [8, 12], "bagliore_r_H": 0.35, "bagliore_forza": 0.55, "bagliore_critico": true },
+    "uccisione": { "celle": [6, 8], "bagliore_r_H": 0.35, "bagliore_forza": 0.55, "bagliore_critico": true },
     "vita": {
       "_vita": "richiamo di vita: il sangue dell'ucciso torna al petto del protagonista, un carattere per punto di vita curato",
       "materia": "sangue",
@@ -243,10 +246,10 @@
     },
     "ferita": {
       "materia": "sangue_blu",
-      "n": 6,
+      "n": 4,
       "danno_soglia": 12,
       "per_danno": 0.25,
-      "max": 12,
+      "max": 8,
       "_ferita": "spruzzo del protagonista colpito: n caratteri dal lato opposto a chi colpisce; oltre danno_soglia una goccia in più ogni 1/per_danno di danno, fino a max",
       "asse_gradi": 30,
       "apertura_gradi": 24,
